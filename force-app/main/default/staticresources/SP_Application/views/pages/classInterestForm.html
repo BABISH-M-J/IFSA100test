@@ -1,0 +1,56 @@
+<!-- Page Content -->
+<h2 class="content-title">Class Interest Form for {{viewModel.programName}}</h2>
+<hr class="hr-gold"/>
+<div class="row" window-size>
+    <div class="col-md-12" ng-if="isComplete">
+        <div class="ui tiny top attached icon message">
+            <i class="green circular check icon"></i>
+            <div class="content">
+                <div class="header">
+                    {{appItem.name}} Completed
+                </div>
+                <p>Your course selections have been submitted. If you'd like to make any changes, please get in touch with your program advisor, {{appItem.advisorFirstName}} {{appItem.advisorLastName}} ({{appItem.advisorEmail}}).</p>
+            </div>
+        </div>
+        <div class="ui center aligned bottom attached very padded segment" ng-if="appItem.pdf">
+            <h2 class="ui icon header">
+                <i class="red pdf file outline icon"></i>
+                {{ appItem.pdf.Name }}
+            </h2>
+            <p>Completed on {{ appItem.pdf.CreatedDate | date:'MM/dd/yyyy' }}</p>
+            <a class="ui huge primary button" ng-class="{ 'loading' : pdfLoading }" ng-href="/studentportal/servlet/servlet.FileDownload?file={{appItem.pdf.Id}}" target="_blank"><i class="download icon"></i> Download</a>	
+        </div>
+    </div>
+    <div ng-if='!isComplete'>
+        <div class="col-md-4 col-lg-3">    
+            <div class="ui fluid steps" ng-class="{ 'ordered vertical large': determineWidth() == 'large', 'unstackable mini': determineWidth() == 'small'}">
+                <a class="cif-step step" ng-repeat="step in steps" ng-class="{ 'active' : view == step, 'completed' : step.isCompleted }" ng-disabled="loadingForm || !step.isCompleted" ng-click="updateView(step)">
+                    <div class="content">
+                        <div class="title visible-md visible-lg">{{step.title}}</div>
+                        <div class="title visible-xs visible-sm">{{step.shortTitle}}</div>
+                        <div class="description visible-md visible-lg">{{step.description}}</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <form name="cifForm" novalidate>
+        <div class="col-md-8 col-lg-9">
+            <ng-include src="view.templateUrl"></ng-include>
+
+            <div class="ui divider"></div>
+            <button class="ui huge right floated right labeled green icon button" ng-click="nextView()" ng-disabled="loadingForm || (view.apiName == 'departments' && cifForm.$invalid) || (view.apiName == 'selections' && (numberOfRemainingCourses() > 0 || numberOfRemainingAlternates() > 0 || !checkRules()))" ng-if="view.apiName != 'sign'">
+                <i class="arrow right icon"></i>
+                Next
+            </button>
+            <!-- <button class="ui huge right floated inverted green button" ng-class="{ 'loading' : savingForLater}" ng-click="saveForm(true)" ng-if="view.apiName != 'introduction'">
+                <i class="save icon"></i>
+                Save for later
+            </button> -->
+            <button class="ui huge right floated right labeled green icon button" ng-class="{ 'loading' : saving}" ng-click="submitForm()" ng-disabled="numberOfRemainingCourses() > 0 || numberOfRemainingAlternates() > 0 || !checkRules()" ng-if="view.apiName == 'sign'">
+                <i class="check icon"></i>
+                Submit
+            </button>
+        </div>
+        </form>
+    </div>
+</div>

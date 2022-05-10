@@ -1,0 +1,124 @@
+<div class="tab-content">
+    <!-- Program Term Dates Data -->
+    <div id="programFeesTable">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Important Cost of Attendance Fees</h3>
+            </div>
+                <table class="table">
+                <tbody>
+                <tr ng-show="viewModel.deposit != null">
+                    <td class="col-md-3">Non-Refundable Deposit</td>
+                    <td class="col-md-9">{{viewModel.deposit | currency:"$":0}}</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3">Tuition <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>If your home institution has a direct billing agreement with IFSA, these cost of attendance fees may vary. Please contact your study abroad advisor for more information.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                    <td class="col-md-9" ng-show="viewModel.tuition != null">{{viewModel.tuition | currency:"$":0}}</td>
+                    <td class="col-md-9" ng-show="viewModel.tuition == null"> Tuition has not been finalized.</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3">Base Housing Fee <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>In order to provide the most reasonable possible housing fee for the largest number of students, we set a baseline fee for housing based on our best estimates of where students will be placed by the university.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                    <td class="col-md-9" ng-show="viewModel.baseHousing != null">{{viewModel.baseHousing | currency:"$":0}}</td>
+                    <td class="col-md-9" ng-show="viewModel.baseHousing == null">Base Housing Fee has not been finalized</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3">Insurance</td>
+                    <td class="col-md-9">Included</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3">Total Base Price</td>
+                    <td class="col-md-9" ng-show="viewModel.totalBaseCosts != null">{{viewModel.totalBaseCosts | currency:"$":0}}</td>
+                    <td class="col-md-9" ng-show="viewModel.totalBaseCosts == null">Total Base Price has not been finalized</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="programHousingTable" ng-show="viewModel.courseCharges != null || (viewModel.suppHousing.length >=2 &&viewModel.displayHousingOptions == true)">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Supplemental Fees</h3>
+            </div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-3" ng-show="viewModel.suppHousing.length >=2 && viewModel.displayHousingOptions == true">Housing Supplemental Fees:</td>
+                    </tr>
+                    <tr ng-repeat="supp in viewModel.suppHousing" ng-show="viewModel.suppHousing.length >=2  && viewModel.displayHousingOptions == true">
+                        <td class="col-md-3">{{supp.Housing_Option__r.Name}}</td>
+                        <td class="col-md-9" ng-show="supp.Supplemental_Housing_Price__c != null">{{supp.Supplemental_Housing_Price__c | currency:"$":0}}</td>
+                        <td class="col-md-9" ng-show="supp.Supplemental_Housing_Price__c == null">Housing Supplemental Fee has not been finalized</td>
+                    </tr>
+                    <tr ng-show="viewModel.suppHousing.length >=2 && viewModel.displayHousingOptions == true && viewModel.courseCharges != null">
+                        <td class="col-md-3"> </td>
+                        <td class="col-md-9"> </td>
+                    </tr>
+                    <tr ng-show="viewModel.courseCharges != null">
+                        <td class="col-md-3">Academic Supplemental Fees</td>
+                        <td class="col-md-9"><p class="bindHtml" ng-bind-html="viewModel.courseCharges"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div id="EOOPEC">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Estimated Out of Pocket Expenses and Costs</h3>
+                </div>
+                <table class="table" ng-if="viewModel.personalExpenses && viewModel.personalExpenses != 0">
+                    <tbody>
+                    <tr ng-show="viewModel.airfare != null && viewModel.airfare != 0">
+                        <td class="col-md-3">Airfare</td>
+                        <td class="col-md-9">{{viewModel.airfare | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.startupCosts != null && viewModel.startupCosts != 0">
+                        <td class="col-md-3">Startup Costs</td>
+                        <td class="col-md-9">{{viewModel.startupCosts | currency:"$":0}}</td>
+                    </tr>
+                    <!-- <tr ng-show="viewModel.visaUS != null && viewModel.visaUS != 0">
+                        <td class="col-md-3">Visa expenses and registration processes in the US</td>
+                        <td class="col-md-9">{{viewModel.visaUS | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.visaAbroad != null && viewModel.visaAbroad != 0">
+                        <td class="col-md-3">Visa expenses and in-country registration processes</td>
+                        <td class="col-md-9">{{viewModel.visaAbroad | currency:"$":0}}</td>
+                    </tr> -->
+                    <tr ng-show="viewModel.visaTotal != null && viewModel.visaTotal != 0">
+                        <td class="col-md-3">Visa <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>Visa costs before and after arrival</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                        <td class="col-md-9">{{viewModel.visaTotal | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.meals != null && viewModel.meals != 0">
+                        <td class="col-md-3">Meals</td>
+                        <td class="col-md-9">{{viewModel.meals | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.booksAndSupplies != null && viewModel.booksAndSupplies != 0">
+                        <td class="col-md-3">Books and Supplies</td>
+                        <td class="col-md-9">{{viewModel.booksAndSupplies | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.localTransport != null && viewModel.localTransport != 0">
+                        <td class="col-md-3">Local Transportation</td>
+                        <td class="col-md-9">{{viewModel.localTransport | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.miscellaneous != null && viewModel.miscellaneous != 0">
+                        <td class="col-md-3">Miscellaneous <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>Includes expected start-up costs, personal items, laundry, entertainment, phone and internet. Does not include personal travel</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                        <td class="col-md-9">{{viewModel.miscellaneous | currency:"$":0}}</td>
+                    </tr>
+                    <tr ng-show="viewModel.personalExpenses != null && viewModel.personalExpenses != 0">
+                        <td class="col-md-3">Personal Expenses <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>Total estimated personal expenses</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                        <td class="col-md-9">{{viewModel.personalExpenses | currency:"$":0}}</td>
+                    </tr>
+                    <!-- <tr ng-show="viewModel.totalEstCosts != null">
+                        <td class="col-md-3">Total Estimated Costs <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>Many IFSA students take advantage of breaks in the host university or program calendar by traveling nearby or to neighboring countries. These personal travel costs vary greatly by student, destination, and length of time. If you would like to factor estimates into your own budgeting process, please contact your Program Advisor for additional information as reported by previous IFSA students.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                        <td class="col-md-9">{{viewModel.totalEstCosts | currency:"$":0}}</td>
+                    </tr> -->
+                    </tbody>
+                </table>
+                <div class="panel-body" ng-if="!viewModel.personalExpenses || viewModel.personalExpenses == 0">
+                    <p>Estimated Out of Pocket Expenses and Costs are not ready at this time. Please check back later.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

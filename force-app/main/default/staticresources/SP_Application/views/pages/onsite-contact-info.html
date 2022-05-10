@@ -1,0 +1,39 @@
+<div id="onsite-contact-info">
+    <div ng-include="urlService.getBaseResourceURL() + '/views/shared/onsite-header.html'"></div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Contact Info</h2>                                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>Please enter the cell phone number (including the country code) you will use while you are studying abroad. This is the number that will be used by IFSA staff to contact you in the case of an emergency.</p>
+            <!-- <p>To better assist IFSA-Butler Health, Safety and Security and Resisdent Staff contact you in an emergency please provide the mobile phone number you are using while abroad. If the phone number field is empty or the information has changed you can update it below.</p> -->
+        </div>
+    </div>
+    <div class="row"> <!-- Use Angular UI alerts to show success messages -->
+        <div class="col-xs-12">
+            <alert ng-repeat="alert in onSiteAlerts" type="{{alert.type}}" close="closeOnSiteAlert($index)">{{alert.msg}}</alert>
+        </div>
+    </div>
+    <div class="row" ng-form="abroadPhoneForm">                            
+        <div class="col-md-12">                                
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                    <label for="abroadPhoneNumberCountry">Country of Phone Number</label>
+                    <select class="form-control" ng-model="viewModel.abroadPhoneNumberCountry" ng-change="setCountryCode(viewModel.abroadPhoneNumberCountry)" required="required" ng-options="country as country.Name for country in viewModel.phoneCountries"></select>
+                </div>
+                <div class="col-md-5">
+                    <label for="abroadPhoneNumber">Phone Number While Abroad</label>
+                    <input id="abroadPhoneNumber" type="text" ng-minlength="6" ng-disabled="!viewModel.abroadPhoneNumberCountry" ng-model="viewModel.abroadPhoneNumber" required="required" class="form-control" /> <!-- placeholder="Jake" -->
+                </div>
+                <div class="col-md-1" style="margin-top:15px">
+                    <button type="button" ng-disabled="isSaving || abroadPhoneForm.$invalid" class="btn ifsa-btn" ng-click="updateAbroadPhoneNumber()">Save <span ng-show="isSaving"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-6" ng-show="isSaving">
+            <img ng-src="{!URLFOR($Resource.ZI_Images, 'loading.gif')}" style="width:50px;"/>
+        </div> -->
+    </div>
+</div>

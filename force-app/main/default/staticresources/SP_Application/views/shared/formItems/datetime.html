@@ -1,0 +1,4 @@
+<div type="text/ng-template" ng-hide="formItem.hidden">
+    <label ng-if="formItem.showLabel">{{formItem.label}}:</label>
+    <input class="form-control" placeholder="{{formItem.label}}" type="datetime-local" ng-model="formItem.response" ng-readonly="formItem.isReadOnly" ng-change="change()"/>
+</div>

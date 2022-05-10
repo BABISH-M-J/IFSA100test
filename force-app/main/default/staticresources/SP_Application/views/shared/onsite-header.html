@@ -1,0 +1,11 @@
+<div id="OnSiteHeader" ng-controller="onsiteTabController">
+    <h2 class="content-title">On Site</h2>
+    <hr class="hr-gold"/>
+    <tabset>
+        <tab ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled" select="switchTab(tab)">
+            <tab-heading>
+                <i ng-class="tab.icon"></i> {{tab.title}}
+            </tab-heading>
+        </tab>
+    </tabset>
+</div>

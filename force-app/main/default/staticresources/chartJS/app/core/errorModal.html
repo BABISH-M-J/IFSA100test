@@ -1,0 +1,31 @@
+<!--
+    Error Modal
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<div type="text/ng-template">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">ERROR | CHART</h5>
+			<button type="button" class="close" ng-click="closeModal()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="ui tiny icon message">
+					<i class="circular exclamation icon"></i>
+					<div class="content">
+						<div class="header">
+						    An error has occurred.
+						</div>
+						<p>{{data.message}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="ui tiny button" type="button" ng-click="closeModal()">Close</button>
+		</div>
+	</div>
+</div>

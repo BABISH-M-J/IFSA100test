@@ -1,0 +1,343 @@
+<!--
+    Class Search Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- Page -->
+<div class="desktop-only">
+    <a id="resultsDesktop"></a>
+</div>
+<div id="body" window-size ng-class="{ 'internalView' : !(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User' || viewModel.userProfileName == 'IFSA CHART Faculty User')}">
+    <div class="container-fluid" style="padding-top:26px;">
+        <div class="ui small icon message" ng-hide="disclaimerDismissed">
+            <i class="exclamation circle icon"></i>
+            <div class="content">
+                <i class="close icon" ng-click="dismissDisclaimer()"></i>
+                <div class="header">
+                    Disclaimer
+                </div>
+                <p ng-bind-html="disclaimerSearchText"></p>
+            </div>
+        </div>
+        <div class="ui stackable grid">
+            <div class="sixteen wide column" ng-if="!(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User' || viewModel.userProfileName == 'IFSA CHART Faculty User')">
+                <h3>Potential {{viewModel.homeInstitutionName}} Class Equivalents</h3>
+            </div>
+            <!-- SORTING AND FILTERS -->
+            <div class="five wide column">
+                <div class="ui fluid vertical accordion menu mb-3">
+                    <div class="item">
+                        <h4 class="ui header" ng-click="showSort = !showSort">
+                            <i class="sort horizontal middle aligned purple-primary icon"></i>
+                            <div class="content">
+                                Sort
+                                <div class="sub header" ng-if="!loading">
+                                    Sorting by {{currentSortName}}.
+                                </div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div ng-if="showSort">
+                        <div class="item" ng-class="{'active': item.enabled}" ng-click="changeSortBy(item)" ng-repeat="item in sortOptions">
+                            {{item.name}}
+                            <span class="right floated" ng-if="item.enabled">
+                                <i class="purple-primary icon sort" ng-class="filterCriteria.reverseSort ? 'up' : 'down'"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui fluid vertical accordion menu mb-3">
+                    <div class="item">
+                        <h4 class="ui header">
+                            <i class="sliders horizontal middle aligned purple-primary icon"></i>
+                            <div class="content">
+                                Filter Results
+                                <div class="sub header" ng-if="!loading">
+                                    {{filteredResults.length}} class<span ng-if="filteredResults.length > 1 || filteredResults.length == 0">es</span> of {{viewModel.courseResults.length}} meet<span ng-if="filteredResults.length <= 1">s</span> this criteria.
+                                </div>
+                                <div class="ui fluid placeholder" ng-if="loading">
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+                        </h4>
+                        <button class="ui fluid small button" ng-class="{'disabled' : loading}" ng-click="refreshCourses()">
+                            <i class="sync icon"></i> Clear Filters 
+                        </button>
+                    </div>
+                    
+                    <!-- Placeholder -->
+                    <div class="item" ng-if="loading" ng-repeat="i in [1,2,3,4,5,6,7]">
+                        <a class="title">
+                            <i class="dropdown icon"></i>
+                            <div class="ui placeholder">
+                                <div class="line"></div>
+                            </div>
+                        </a>
+                    </div><!-- End of Placeholder-->
+                    <div class="item" ng-if="!loading">                        
+                        <a class="title" ng-class="{'active' : myClassesActive}" ng-click="myClassesActive = !myClassesActive">
+                            <i class="dropdown icon"></i>
+                            My Classes
+                        </a>  
+                        <div class="menu scrollable-menu" ng-class="{'active' : myClassesActive}" ng-click="favoritesOnly()" ng-if="myClassesActive || favoritesOnlySelected">
+                            <a class="link item" ng-if="myClassesActive || favoritesOnlySelected" ng-class="{ 'purple-primary active' :  favoritesOnlySelected }" >
+                                <span>My Favorites</span>  
+                                <div class="ui label" ng-class="{ 'purple-primary-label' : favoritesOnlySelected }">{{favorites.length}}</div>
+                            </a>
+                        </div>
+                        <div class="menu scrollable-menu" ng-class="{'active' : myClassesActive}" ng-if="myClassesActive && filterCriteria.courseMatches && (viewModel.ceSearch || cmpProject)">
+                            <a class="link item" uib-tooltip="{{value.name + ': ' + value.description}}" tooltip-placement="bottom" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.courseMatches" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">                                     
+                                    <span ng-bind-html="viewModel.userHomeInstitutionName + ' ' + value.name + 'es'"></span>
+                                </span>   
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                        <div class="menu scrollable-menu" ng-if="myClassesActive && filterCriteria.courseMatches && (viewModel.ceSearch || cmpProject)">
+                            <a href="#/project-request-form" class="link item" uib-tooltip="Follow this link to indicate the type of additional potential matches you would like to see added to the CHART system." tooltip-placement="bottom">
+                                <strong>Add More Potential Matches</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : marketingRegionsIsActive}" ng-click="marketingRegionsIsActive = !marketingRegionsIsActive">
+                        <i class="dropdown icon"></i>
+                        Region
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : marketingRegionsIsActive}" ng-if="marketingRegionsIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.marketingRegions" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span>  
+                                </span>                                
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : countriesIsActive}" ng-click="countriesIsActive = !countriesIsActive">
+                        <i class="dropdown icon"></i>
+                        Country
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : countriesIsActive}" ng-if="countriesIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.countries" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span>  
+                                </span>
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : programsIsActive}" ng-click="programsIsActive = !programsIsActive">
+                        <i class="dropdown icon"></i>
+                        Program
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : programsIsActive}" ng-if="programsIsActive">
+                            <div ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.programs">
+                                <a class="link item" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                    <!-- <i ng-hide="isEmptyObject(value.options)" ng-class="value.options && value.selectedInSearch ? 'caret down icon' : 'caret right icon'"></i> -->
+                                        <span class="text-pre-wrap">
+                                            <span ng-bind-html="value.name"></span>
+                                        </span>                                                                      
+                                    <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                                </a>
+                                <a class="link item" ng-repeat="(k, v) in value.options" ng-click="v.selectedInSearch = !v.selectedInSearch; filterCriteriaChanged()" ng-if="value.selectedInSearch">
+                                    <span>
+                                        <i class="right triangle icon" style="float: left; clear:left; "></i>
+                                        <!--<span ng-bind-html="v.name | limitHtml: 36"></span><span ng-if="v.name.length > 35">...</span>-->
+                                        <span class="text-pre-wrap">
+                                            <span ng-bind-html="v.name" style="float: left;"></span>
+                                        </span>                                        
+                                    </span>
+                                    <div class="ui label" ng-class="{ 'purple-primary-label' : v.selectedInSearch }">{{v.courseCount}}</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : termsIsActive}" ng-click="termsIsActive = !termsIsActive">
+                        <i class="dropdown icon"></i>
+                        U.S. Term(s)
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : termsIsActive}" ng-if="termsIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.terms" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span>
+                                </span>  
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : learningComponentsIsActive}" ng-click="learningComponentsIsActive = !learningComponentsIsActive">
+                        <i class="dropdown icon"></i>
+                        Distinctive Learning Component
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : learningComponentsIsActive}" ng-if="learningComponentsIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.learningComponents" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span>
+                                </span>                                  
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : departmentsIsActive}" ng-click="departmentsIsActive = !departmentsIsActive">
+                        <i class="dropdown icon"></i>
+                        Department
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : departmentsIsActive}" ng-if="departmentsIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.departments" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span> 
+                                </span>
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : areasOfStudyIsActive}" ng-click="areasOfStudyIsActive = !areasOfStudyIsActive">
+                            <i class="dropdown icon"></i>
+                            Area(s) of Study
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : areasOfStudyIsActive}" ng-if="areasOfStudyIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.areasOfStudy" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span>  
+                                </span>
+                                <div class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Language of Instruction filter Begin-->
+                    <div class="item" ng-if="!loading">
+                        <a class="title" ng-class="{'active' : languagesOfInstructionIsActive}" ng-click="languagesOfInstructionIsActive = !languagesOfInstructionIsActive">
+                        <i class="dropdown icon"></i>
+                        Language of Instruction
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : languagesOfInstructionIsActive}" ng-if="languagesOfInstructionIsActive">
+                            <a class="link item" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.languagesOfInstruction" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span> 
+                                </span>
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Language of Instruction End -->
+
+                    <div class="item" ng-if="!loading && filterCriteria.popularClasses">
+                        <a class="title" ng-class="{'active' : popularClassesIsActive}" ng-click="popularClassesIsActive = !popularClassesIsActive">
+                            <i class="dropdown icon"></i>
+                            Popular Classes
+                        </a>
+                        <div class="menu scrollable-menu" ng-class="{'active' : popularClassesIsActive}" ng-if="popularClassesIsActive">
+                            <a class="link item" uib-tooltip="{{value.name + ': ' + value.description}}" tooltip-placement="bottom" ng-if="value.courseCount" ng-class="{ 'purple-primary active' :  value.selectedInSearch }" ng-repeat="(key, value) in filterCriteria.popularClasses" ng-click="value.selectedInSearch = !value.selectedInSearch; filterCriteriaChanged()">
+                                <span class="text-pre-wrap">
+                                    <span ng-bind-html="value.name"></span> 
+                                </span> 
+                                <span class="ui label" ng-class="{ 'purple-primary-label' : value.selectedInSearch }">{{value.courseCount}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-only">
+                    <a id="resultsMobile"></a>
+                </div>
+                
+                <div class="ui fluid vertical accordion menu mb-3" ng-if="cmpProject && !loading">
+                    <div class="item">
+                        <h4 class="ui header">
+                            <i class="folder open outline horizontal middle aligned purple-primary icon"></i>
+                            <div class="content">
+                                <a ng-href="/{{cmpProject.recordId}}">{{cmpProject.recordName}}</a>
+                                <div class="sub header" ng-if="!loading">{{courseEquivalents.length}} class<span ng-if="courseEquivalents.length > 1 || courseEquivalents.length == 0">es</span></div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="item" ng-repeat="ce in courseEquivalents">
+                        <h6 ng-bind-html="ce.hostInstitutionCourse.hostInstitutionName" />
+                        <a class="title" ng-href="#/details/{{ce.hostInstitutionCourse.recordId}}">
+                            <span ng-bind-html="ce.hostInstitutionCourse.courseCode" /> - <span ng-bind-html="ce.hostInstitutionCourse.courseTitle" />
+                        </a>
+                        <div ng-if="ce.homeInstitutionCourse">
+                            <span ng-bind-html="ce.homeInstitutionCourse.courseCode" /> - <span ng-bind-html="ce.homeInstitutionCourse.title" />
+                        </div>
+                    </div>
+                </div>
+                <div class="ui fluid vertical menu mb-3 desktop-only chart-sticky">
+                    <div class="item">
+                        <div class="ui placeholder" ng-if="loading">
+                            <div class="line"></div>
+                        </div>
+                        <a ng-click="scrollToTop()" ng-if="!loading">
+                            <h4 class="ui header">
+                                <i class="arrow up middle aligned purple-primary icon"></i>
+                                Back to top
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+                <p class="text-center mt-3" ng-if="(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User')">{{cmpMessage}} <a href="#/project-request-form">Click Here</a></p>
+            </div> <!-- END OF FILTERS -->
+            <!-- SEARCH RESULTS -->
+            <div class="eleven wide column">
+                <!-- PLACEHOLDERS -->
+                <div class="ui fluid card" ng-repeat="i in [1, 2, 3, 4, 5]" ng-if="loading">
+                    <div class="content">
+                        <div class="ui placeholder">
+                            <div class="header">
+                                <div class="medium line"></div>
+                                <div class="long line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="ui fluid placeholder">
+                            <div class="paragraph">
+                                <div class="full line"></div>
+                                <div class="full line"></div>
+                                <div class="very long line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <button class="ui disabled right labeled right floated icon ifsa-btn tiny button">
+                            <i class="right arrow icon"></i>
+                            View Class Details
+                        </button >
+                    </div>
+                </div>
+
+                <div class="ui message" ng-if="filteredResults.length == 0">
+                    <div class="header">
+                        We do not currently have any class records that match your search criteria.
+                    </div>
+                    <ul class="list">
+                        <ng-bind-html ng-bind-html="noResultsMessage"></ng-bind-html>
+                    </ul>
+                </div>
+                <div class="mobile-only">
+                    <back-top scroll-speed="600" button-theme="ifsa" button-position="left" button-text="Back to top"></back-top>
+                </div>
+                <div infinite-scroll="loadMore()" inifinite-scroll-distance="2"  infinite-scroll-listen-for-event="list:filtered">
+                    <div class="ui fluid card" ng-repeat="c in infiniteScrollResults">
+                        <div ng-include="urlService.getBaseUrl() + '/app/courses/searchResultCard.html'"></div>
+                    </div>
+                </div>
+                <div class="eleven wide column">
+                    <button class="ui right labeled right icon ifsa-btn tiny button" ng-if="!(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User' || viewModel.userProfileName == 'IFSA CHART Faculty User' || loading)" ng-click="addSelectedToCMP()">
+                        <i class="plus icon"></i>
+                        Add Selected to Course Matching Project
+                    </button >
+                </div>
+            </div>
+        </div> <!-- END OF SEARCH RESULTS -->
+    </div> <!-- END OF CONTAINER -->
+</div> <!-- END OF BODY -->

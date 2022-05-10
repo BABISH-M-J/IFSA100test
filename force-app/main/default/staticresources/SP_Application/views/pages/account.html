@@ -1,0 +1,111 @@
+<div id="accountApp" class="mt" ng-app="accountApp">
+    <div ng-controller="accountController">
+        <h2 class="content-title">Account</h2>
+        <hr class="hr-gold"/>
+        <div ng-if="loading">
+            <h3>Loading data....</h3>
+            <i class="spinner big loading icon"></i>
+        </div>
+        <div ng-if="!loading">
+            
+            <div ng-show="viewModel.showDepositMessage">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="text-justify">In order to confirm your place on the program, you will need to submit a $500 deposit within ten days of acceptance. If your home school does not pay this deposit on your behalf, you can submit your payment using the “Pay Now” button below. Please note that credit card payments will incur a convenience fee.</p>
+                        <!--<p class="text-justify">If you prefer, you may also choose to pay by mailing a check to our Indianapolis office:</p>-->
+                        <p class="text-justify">If you prefer, you may also choose to pay by mailing a check to:</p>
+
+                        <address style="padding-left: 20px;">
+                            <strong>Institute for Study Abroad</strong><br/>
+                            PO Box 772788<br/>                            
+                            Detroit, MI 48277-2788
+                        </address>
+                        <p class="text-justify">*This address is to be used for payments only.<br>
+                            Include the student’s name on the check.</p>
+
+                        <!--<address style="padding-left: 20px;">
+                            <strong>Institute for Study Abroad</strong><br/>
+                            6201 Corporate Drive<br/>
+                            Suite 200<br/>
+                            Indianapolis, IN 46278
+                        </address>-->
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row" ng-show="viewModel.paymentProcessor == 'VPS'">
+                <div class="col-xs-12 text-center">
+                    <h4><strong>Account Balance</strong>: {{viewModel.accountTotal | currency}}</h4>
+                    <a href="https://vpspay.com/ifsa" class="btn ifsa-btn">Pay Now</a>
+                    <hr/>
+                </div>
+            </div>
+            <div class="row" ng-show="viewModel.paymentProcessor == 'CashNET'">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4><strong>Account Balance</strong></h4>
+                                <p><b>Total balance:</b> {{viewModel.accountTotal | currency}}</p>
+                                <p><b>Due Date:</b> {{viewModel.dueDate | date: 'shortDate'}}</p>
+                            </div>
+                            <span class="hidden-sm hidden-md hidden-lg"><hr /></span>
+
+                            <div class="col-sm-6">
+                                <h4><strong>Make Payment</strong></h4>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="paymentAmount">Payment Amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            <input id="paymentAmount" required ng-model="viewModel.paymentAmount" class="form-control" />
+                                            <span class="input-group-btn">
+                                                <a ng-href="https://commerce.cashnet.com/cloudaccountingcheckout?addr_g={{viewModel.street}}&amount1={{viewModel.paymentAmount}}&city_g={{viewModel.city}}&desc1=Salesforce+to+CashNet&itemcode1=CA&name_g={{viewModel.studentFirstName}}+{{viewModel.studentLastName}}&PARENT+RECORD+ID={{viewModel.contactId}}&SNAME={{viewModel.studentFirstName}}+{{viewModel.studentLastName}}&state_g={{viewModel.state}}&user_email_g={{viewModel.email}}&zip_g={{viewModel.zipCode}}" ng-disabled="!viewModel.paymentAmount" class="btn btn-success" tooltip="Opens in new window" target="_blank">Pay Now</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>            
+                        </div>
+                    </div>
+                <hr/>
+            </div>
+            <div class="row" ng-if="viewModel.transactions">
+                <div class="col-xs-12">
+                    <h4><strong>Account History</strong></h4>
+                </div>
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong>Transactions</strong></h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Transaction Type</th>
+                                    <th>Document Number</th>
+                                    <th>Reference</th>
+                                    <th>Description</th>
+                                    <th style="text-align: right">Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in viewModel.transactions">
+                                        <td width="12%">{{item.Date__c | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.c2g__Transaction__r.c2g__TransactionType__c}}</td>
+                                        <td>{{item.c2g__Transaction__r.c2g__DocumentNumber__c}}</td>
+                                        <td width="13%">{{item.Reference__c}}</td>
+                                        <td>{{item.Description__c}}</td>
+                                        <td style="text-align: right">{{item.Amount__c | currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p><small><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please allow up to 1 week after payment is made for it to appear on your account.</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

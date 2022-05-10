@@ -1,0 +1,19 @@
+﻿<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title">Switch Application</h3>
+	</div>
+	<div class="modal-body">
+		<h4>Select from the list below to change your active application</h4>
+		Active Application: <span ng-bind-html="data.activeApplication"></span>
+		<hr />
+		<div class="row text-center" ng-repeat="app in data.applications">
+			<button class="btn ifsa-btn" ng-click="setApplication(app.id)"><span ng-bind-html="app.name"></span></button> <br/></br>	
+		</div>
+		<div class="row text-center" ng-hide="data.applications.length > 0">
+			<h4>You do not have any other applications to select. Please click <a href="/studentportal/SP_Select">here</a> to create a back-up application.</h4>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<!-- <a href="/studentportal/SP_Commit" class="btn ifsa-btn-small btn-highlight">OK</a> -->
+	</div>
+</div>

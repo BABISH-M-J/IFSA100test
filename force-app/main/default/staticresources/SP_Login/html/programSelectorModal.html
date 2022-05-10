@@ -1,0 +1,113 @@
+<div class="ui dimmer modals page top aligned transition visible active" style="display: flex !important;">
+    <div class="ui longer modal transition active">
+        <i class="close icon" ng-click="cancel()"></i>
+        <div class="header">
+            <span class="ui medium purple-primary header">Program Search</span>
+        </div>
+        <div class="scrolling content">
+            <div id="program-search" ng-if="phase == 'search' || phase == 'results'">
+                <span class="ui small purple-primary header">Where and when would you like to go?</span>
+                <form name="searchForm" novalidate class="ui form">
+                    <div class="two fields">
+                        <div class="field">
+                            <label for="Country" aria-label="Select a country">Select a country</label>
+                            <select class="ui fluid selection dropdown" name="Country" id="Country" ng-model="selectedCountry" ng-change="getTerms()">
+                                <option ng-repeat="country in viewModel.countryOptions" value="{{country.Id}}">{{country.Name}}</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="Term" aria-label="Select a term">Select a term</label>
+                            <select class="ui fluid selection dropdown" name="Term" id="Term" ng-model="selectedSemester" ng-disabled="!semesterOptions.length">
+                                <option ng-repeat="term in semesterOptions" value="{{term.Id}}">{{term.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="ui fluid button" ng-click="searchPrograms()" ng-disabled="searchForm.$invalid" ng-class="{ 'loading' : searching }">
+                        <span ng-if="!searching"><i class="search icon"></i> Search</span>
+                        <span ng-if="searching" sr-only="true">Loading...</span>
+                    </button>
+                </form>
+            </div>
+            <div id="program-results" ng-if="phase == 'results'">
+                <hr style="margin-top: 5px;"/>
+                <div ng-if="programResults.length == 0">
+                    <p class="text-center">There are no programs related to your search criteria.</p>
+                </div>
+                <div class="ui divided items" ng-if="programResults">
+                    <div class="item" ng-repeat="item in programResults">
+                        <div class="image">
+                            <img ng-src="{{item.Program__r.Host_Institution__r.Picture_URL__c}}">
+                        </div>
+                        <div class="content">
+                            <div class="header" ng-bind-html="item.Program__r.Name"></div>
+                            <div class="extra">
+                                <div class="ui light large label">
+                                    <i class="map signs icon"></i>
+                                    {{item.Country__r.Name}}
+                                </div>
+                                <div class="ui light large label">
+                                    <i class="calendar icon"></i>
+                                    {{item.Term__r.Name}}
+                                </div>
+                            </div>
+                            <div class="description" ng-bind-html="item.Description_Long__c"></div>
+                            <div class="extra">
+                                <div class="ui right labeled right floated grey icon button" ng-click="selectProgram(item)" ng-if="item.hasOptions">
+                                    View Options
+                                    <i class="right chevron icon"></i>
+                                </div>
+                                <div class="ui left labeled right floated positive icon button" ng-click="ok(item)" ng-if="!item.hasOptions">
+                                    <i class="map marker alternate icon"></i>
+                                    Select Program
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end of items -->
+            </div>
+            <div id="program-details" ng-if="phase == 'details'" ng-class="{'ui active dimmer' : loading}">
+                <div ng-class="{'ui loader' : loading}"></div>
+                <div class="ui fluid card">
+                    <div class="content">
+                        <div class="ui large header" ng-bind-html="selectedProgram.Program__r.Name"></div>
+                    </div>
+                    <div class="image">
+                        <img src="{{selectedProgram.Program__r.Host_Institution__r.Picture_URL__c}}">
+                    </div>
+                    <div class="content">
+                        <div class="meta">
+                            <div class="ui light large label">
+                                    <i class="map signs icon"></i>
+                                    {{selectedProgram.Country__r.Name}}
+                                </div>
+                                <div class="ui light large label">
+                                    <i class="calendar icon"></i>
+                                    {{selectedProgram.Term__r.Name}}
+                                </div>
+                        </div>
+                        <div class="description" ng-bind-html="selectedProgram.Description_Long__c"></div>
+                    </div>
+                    <div class="extra content" ng-if="selectedProgram.hasOptions">
+                        <div class="ui two doubling cards">
+                            <div class="card" ng-repeat="item in selectedProgram.programOptions">
+                                <div class="content">
+                                    <div class="header" ng-bind-html="item.Program_Option_Name__c"></div>
+                                    <div class="description" ng-bind-html="item.Description_Long__c"></div>
+                                </div>
+                                <button type="button" class="ui bottom attached positive button" ng-click="ok(item)">
+                                    <i class="map marker alternate icon"></i>
+                                    Select Option
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions" ng-if="phase == 'results' || phase == 'details'">
+            <button type="button" class="ui button" ng-click="cancel()">Cancel</button>
+            <button type="button" class="ui left labeled grey icon button" ng-click="back()" ng-if="phase == 'details'"><i class="left arrow icon"></i>Back</button>
+            <!-- <button type="button" class="ui left labeled positive icon button" ng-click="selected = selectedProgram; ok()" ng-if="phase == 'details' && !selectedProgram.hasOptions"><i class="left map marker alternate icon"></i>Select Program</button> -->
+        </div>
+    </div>
+</div>

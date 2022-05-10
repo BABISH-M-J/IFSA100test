@@ -1,0 +1,130 @@
+<div type="text/ng-template">
+    <div class="modal-header">
+        <h4 ng-show="!trip.travelId && !delete" class="modal-title">New Trip</h4>
+        <h4 ng-show="trip.travelId && !delete" class="modal-title">Edit {{trip.tripName}}</h4>
+        <h4 ng-show="delete" class="modal-title">Delete Trip?</h4>
+    </div>
+    <div class="modal-body">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            {{alert.msg}} <a href="#" ng-hide="alert.showDetails" ng-click="alert.showDetails = true">Show Details</a>
+            <div ng-show="alert.showDetails">                
+                {{alert.internalMsg}}
+            </div>
+        </alert>
+        <form name="tripForm" novalidate="novalidate" ng-show="!delete">
+
+            <!-- Trip Name -->
+            <!-- <div class="form-group"> 
+                <label for="trip_name" class="control-label">Trip Name</label>
+                <input type="text" class="form-control" id="trip_name" name="trip_name" ng-model="trip.tripName">
+            </div> -->
+            <div class="row">
+                <div class="col-md-12" ng-show="newTripsList.length > 0">
+                    <div class="well">
+                        <table class="table table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Stop</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>City</th>
+                                    <th>Country</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="t in newTripsList">
+                                    <td>{{($index + 1)}}</td>
+                                    <td>{{t.startDate | date : "shortDate"}}</td>
+                                    <td>{{t.endDate | date : "shortDate"}}</td>
+                                    <td>{{t.localityName}}</td>
+                                    <td>{{t.countryName}}</td>
+                                    <td><i class="fa fa-times" aria-hidden="true" style="cursor: pointer;" ng-click="yes(t)"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{'has-error': tripForm.country_name.$invalid || trip.countryId == null}"> <!-- Country -->
+                        <label for="country" class="control-label">Country</label>
+                        <!-- <input type="text" class="form-control" id="country" name="country" ng-model="trip.countryName"> -->
+                        <input type="text" autocomplete="off" ng-model="trip.countryName" ng-change="searchForCountries()" typeahead-wait-ms="375" typeahead-on-select="selectCountry($item)" typeahead="item as item.name for item in countryResults" class="form-control" required="required" name="country_name" id="country_name" placeholder="Start typing a country's name and select it from the list."/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{'has-error': trip.countryId != null && tripForm.city_name.$invalid, 'has-warning': !trip.countryId}"> <!-- City -->
+                        <label for="city" class="control-label">City</label>
+                        <!-- <input type="text" class="form-control" id="city" name="city" ng-model="trip.localityName"> -->
+                        <input type="text" autocomplete="off" ng-disabled="trip.countryId == null || trip.countryId == ''" ng-model="trip.localityName" ng-change="searchForCities()" typeahead-wait-ms="375" typeahead-on-select="selectCity($item)" typeahead="item as item.name for item in cityResults" name="city_name" id="city_name" required="required" class="form-control" />
+                        <span class="help-block" ng-hide="trip.countryId">{{cityPlaceholder}}</span>
+                    </div>
+                </div>   
+
+                <div class="col-md-6">
+                    <div class="form-group"> <!-- Start Date -->
+                        <label for="start_date" class="control-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" ng-change="startDateChanged()" name="start_date" ng-model="trip.startDate">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{'has-error': tripForm.end_date.$invalid }"> <!-- End Date-->
+                        <label for="end_date" class="control-label">End Date</label>
+                        <input type="date" class="form-control" min={{trip.startDate}} id="end_date" name="end_date" ng-model="trip.endDate">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{'has-error': tripForm.phone.$invalid}"> <!-- Phone -->
+                        <label for="phone" class="control-label">Phone where you can be reached in case of an emergency (including the country code).</label>
+                        <input id="phone" name="phone" type="tel" class="form-control" rows="3" required="required" ng-model="trip.tripPhone"></input>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group"  ng-class="{'has-error': tripForm.phoneCountry.$invalid}"> <!-- Phone Country -->
+                        <label for="phone" class="control-label">Country of your phone where you can be reached in case of an emergency</label>
+                        <select class="form-control" name="phoneCountry" ng-model="trip.tripPhoneCountry" required="required" ng-options="country.Id as country.Name for country in phoneCountries"></select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group"> <!-- Description -->
+                        <label for="description" class="control-label" >Trip Details (Mode of transportation, lodging, etc.)</label>
+                        <textarea id="description" class="form-control" rows="3" ng-model="trip.description"></textarea>
+                    </div>
+                </div>
+
+                
+                <!-- Email -->
+                <!-- <div class="col-md-6">
+                    <div class="form-group"> 
+                        <label for="email" class="control-label" >Email</label>
+                        <input id="email" class="form-control" rows="3" ng-model="trip.tripEmail"></input>
+                    </div>
+                </div> -->
+
+                <div class="col-md-12 text-right" ng-hide=trip.travelId>
+                    <p>*If your trip includes multiple cities, press the plus button to add each additional stop.</p>
+                    <!-- <button class="btn btn-default" ng-click="addTrip()"><i class="fa fa-plus" aria-hidden="true"></i></button> -->
+                </div>
+            </div>
+        </form>
+        <div ng-show="delete">
+            Are you sure you want to delete the trip to {{trip.localityName}}, {{trip.countryName}}?
+        </div>
+    </div>
+    <div class="modal-footer" style="background-color:#efefef">
+        <div class="btn-group" role="group">
+            <button class="btn btn-default" type="button" ng-hide="delete || trip.travelId" ng-disabled="tripForm.$invalid" ng-click="addTrip(false)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+            <button class="btn btn-success" type="button" ng-hide="newTripsList.length > 0 || delete" ng-disabled="tripForm.$invalid" ng-click="save('single')">Save</button>
+            <button class="btn btn-default" type="button" ng-hide="newTripsList.length > 0 || !delete" ng-click="yes(trip)">Yes</button>
+            <button class="btn btn-default" type="button" ng-hide="newTripsList.length > 0" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-success" type="button" ng-show="newTripsList.length > 0" ng-disabled="tripForm.$invalid" ng-click="save('single')">Save and Done</button>
+            <button class="btn btn-default" type="button" ng-show="newTripsList.length > 0" ng-click="done()">Done</button>
+        </div>
+    </div>
+</div>

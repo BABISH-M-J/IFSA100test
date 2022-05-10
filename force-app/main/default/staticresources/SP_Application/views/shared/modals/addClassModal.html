@@ -1,0 +1,110 @@
+<div type="text/ng-template">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{data.title}}</h4>
+    </div>    
+    <form name="addClassForm" ng-submit="submit()" novalidate>
+        <div class="modal-body">
+            <p>{{data.prompt}}</p>
+            <div class="ui form reg-font-size">
+                <div class="required field">
+                    <label>Host Institution</label>
+                    <!-- suggestion by powerfluence 0001 starts here-->
+                    <!-- <select class="ui fluid dropdown" name="hostInstitution" ng-model="newCourse.hostInstitution.Id" 
+                            ng-change="populateLocationOfInstruction(newCourse.hostInstitution.Id)" required>
+                        <option ng-repeat="hostInstitution in data.institutions" ng-value="hostInstitution.Id" ng-bind-html="hostInstitution.Name" /> -->
+                    <select class="ui fluid dropdown" name="hostInstitution" ng-model="selectedHostInstitution" 
+                            ng-change="populateLocationOfInstruction(selectedHostInstitution)"
+                            data-ng-options="hostInstitution as hostInstitution.Name for hostInstitution in data.institutions"
+                            required>
+                        <!-- <option value="">Select Institution</option> -->
+                    </select>
+                    <!-- suggestion by powerfluence 0001 ends here-->
+                </div>
+                <div class="required field" ng-if="data.spanishTitles">
+                    <label>Spanish Class Title</label> <i class="glyphicon glyphicon-question-sign" tooltip-placement="left" tooltip="Please enter your class titles in Spanish."></i> <!-- Insert hover definition from Abby -->
+                    <!--<input type="text" name="classTitleSpanish" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" ng-model="newCourse.untranslatedCourseTitle" ng-change="searchForCoursesUntranslated()" typeahead-wait-ms="375" typeahead-on-select="selectCourse($item)" typeahead="item as item.untranslatedTitle for item in untranslatedCourseResults" autocomplete="off" class="form-control" placeholder="Spanish Class Title..." required="required">-->
+                    <input type="text" name="classTitleSpanish" ng-disabled="!selectedHostInstitution" ng-model="newCourse.untranslatedCourseTitle" ng-change="searchForCoursesUntranslated()" typeahead-wait-ms="375" typeahead-on-select="selectCourse($item)" typeahead="item as item.untranslatedTitle for item in untranslatedCourseResults" autocomplete="off" class="form-control" placeholder="Spanish Class Title..." required="required">
+                </div>
+                <div class="required field">
+                    <label>Class Title</label> <i class="glyphicon glyphicon-question-sign" tooltip-placement="left" tooltip='Please enter your class title in English and use local spelling (e.g. "colour")'></i><!-- Insert hover definition from Abby -->
+                    <!--<input type="text" name="classTitle" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" ng-model="newCourse.encodedCourseName" ng-change="searchForCourses()" typeahead-wait-ms="375" typeahead-on-select="selectCourse($item)" typeahead="item as item.courseName for item in courseResults" autocomplete="off" class="form-control" placeholder="English Class Title..." required="required">-->
+                    <input type="text" name="classTitle" ng-disabled="!selectedHostInstitution" ng-model="newCourse.encodedCourseName" ng-change="searchForCourses()" typeahead-wait-ms="375" typeahead-on-select="selectCourse($item)" typeahead="item as item.courseName for item in courseResults" autocomplete="off" class="form-control" placeholder="English Class Title..." required="required">
+                </div>
+                <div class="field">
+                    <label>Class Code</label>
+                    <!--<input type="text" name="classCode" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" class="form-control" ng-model="newCourse.courseCode" placeholder="Class Code..." maxlength="20" ng-maxlength="20">-->
+                    <input type="text" name="classCode" ng-disabled="!selectedHostInstitution" class="form-control" ng-model="newCourse.courseCode" placeholder="Class Code..." maxlength="20" ng-maxlength="20">
+                </div>
+                <div class="field" ng-class="{ 'error' : addClassForm.hostCredits.$invalid && !addClassForm.hostCredits.$pristine }" ng-if="!data.isSubmitting">
+                    <div ng-if="!data.oxbridge">
+                        <label>Host Credits</label>
+                        <!--<input type="number" min="0" name="hostCredits" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" class="form-control" ng-model="newCourse.credits" placeholder="Host Credits..." ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/" ng-if="!data.oxbridge">-->
+                        <input type="number" min="0" name="hostCredits" ng-disabled="!selectedHostInstitution" class="form-control" ng-model="newCourse.credits" placeholder="Host Credits..." ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/" ng-if="!data.oxbridge">
+                    </div>
+                    <div ng-if="data.oxbridge">
+                        <div class="inline fields">
+                            <label>Tutorial Type</label>
+                            <div class="field">
+                                <div class="ui slider checkbox">
+                                    <input type="radio" name="hostCredits" checked="checked" ng-value="2" ng-model="newCourse.credits">
+                                    <label>Primary</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui slider checkbox">
+                                    <input type="radio" name="hostCredits" ng-value="1" ng-model="newCourse.credits">
+                                    <label>Secondary</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p ng-if="addClassForm.hostCredits.$invalid && !addClassForm.hostCredits.$pristine"><small>Credits should have 1 or 2 digits and up to 2 decimal places.</small></p>
+                </div>
+                <!-- <div class="field" ng-class="{ 'error' : addClassForm.usCredits.$invalid && !addClassForm.usCredits.$pristine }" ng-if="!data.isSubmitting">
+                    <label>U.S. Credits</label>
+                    <input type="number" min="0" name="usCredits" ng-disabled="!newCourse.hostInstitutionId" class="form-control" ng-model="newCourse.usCredits" placeholder="U.S. Credits..." ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/">
+                    <p ng-if="addClassForm.usCredits.$invalid && !addClassForm.usCredits.$pristine"><small>Credits should have 1 or 2 digits and up to 2 decimal places.</small></p>
+                </div> -->
+                <div class="required field" ng-show="locations.length > 1">
+                    <label>Location of Instruction</label> <i class="glyphicon glyphicon-question-sign" tooltip-placement="left" tooltip="Tell us, which campus location are you taking this class"></i><!-- Insert hover definition from Abby -->
+                    <select class="ui selection dropdown" name="class-institution" ng-model="newCourse.locationId" ng-required="locations.length > 1"> <!-- ng-show="locations.length" -->
+                        <option ng-repeat="location in locations" value="{{location.Id}}" ng-bind-html="location.Name" />
+                    </select>
+                </div>
+                <div class="field" ng-if="!data.isSubmitting">
+                    <label>Instructor First Name</label>
+                    <!--<input type="text" name="instructorFirstName" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" class="form-control" ng-model="newCourse.instructorFirstName" placeholder="Instructor First Name" maxlength="25" ng-maxlength="25"></input>-->
+                    <input type="text" name="instructorFirstName" ng-disabled="!selectedHostInstitution" class="form-control" ng-model="newCourse.instructorFirstName" placeholder="Instructor First Name" maxlength="25" ng-maxlength="25"></input>
+                </div>
+                <div class="field" ng-if="!data.isSubmitting">
+                    <label>Instructor Last Name</label>
+                    <!--<input type="text" name="instructorLastName" ng-disabled="!newCourse.hostInstitutionId && !initialCourse.hostInstitutionId" class="form-control" ng-model="newCourse.instructorLastName" placeholder="Instructor Last Name" maxlength="25" ng-maxlength="25"></input>-->
+                    <input type="text" name="instructorLastName" ng-disabled="!selectedHostInstitution" class="form-control" ng-model="newCourse.instructorLastName" placeholder="Instructor Last Name" maxlength="25" ng-maxlength="25"></input>
+                </div>
+                <div class="required field" ng-show="data.isSubmitting" required="required">
+                    <label>Please provide the reason you are not taking this class:</label>
+                    <select class="ui fluid dropdown" ng-model="response.reason" name="reason">
+                        <option value="">Choose Option...</option>
+                        <option ng-repeat="reason in data.reasons" value="{{reason}}">{{reason}}</option>
+                    </select>
+                </div>
+                <div class="required field" ng-show="response.reason == 'Other'" required="required">
+                    <label>Explanation</label>
+                    <input type="text" name="reasonOtherExplanation" ng-model="response.reasonOtherExplanation">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="ui huge button" ng-click="close()">Cancel</button>
+            <!--<button type="submit" ng-disabled="addClassForm.$invalid" class="ui green huge button">Add</button>-->
+            <!-- modified by powerfluence dt - 02/16/2022 starts -->
+            <button type="submit" ng-click="submitNewCourse()" ng-disabled="addClassForm.$invalid" class="ui green huge button" ng-hide="loading">Add</button>
+            <button type="button"  ng-disabled="loading" class="ui green huge button" ng-show="loading">
+                <i class="fa fa-spinner fa-pulse fa-2x"></i>
+                Wait
+            </button>
+            <!-- modified by powerfluence dt - 02/16/2022 ends -->
+        </div>
+    </form>    
+</div>

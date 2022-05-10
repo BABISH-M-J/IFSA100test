@@ -1,0 +1,20 @@
+<div class="ui doubling fluid card" style="min-height: 100%;" ng-if="selectedFile">                    
+    <div class="content">
+        <div class="header">
+            <i class="big file outline icon" ng-class="getFileType(selectedFile.FileExtension)"></i>
+            <span ng-bind-html="selectedFile.Title"></span>
+        </div>
+        <div class="meta">
+            <span><label>Publish Date:</label> {{selectedFile.LatestPublishedVersion.CreatedDate | date: 'shortDate'}}</span>
+            <span><label>Size:</label> {{selectedFile.ContentSize / 1000000 | number:2}}MB</span>
+            <!-- <span><label>Type:</label> {{selectedFile.FileExtension | lowercase}}</span> -->
+        </div>
+        <div class="description">
+            <p ng-bind-html="selectedFile.Description"></p>
+        </div>                        
+    </div>
+    <a class="ui bottom attached button" ng-href="/advisorportal/sfc/servlet.shepherd/version/download/{{selectedFile.LatestPublishedVersionId}}" target="_blank">
+        <i class="download icon"></i>
+        Download
+    </a>
+</div>

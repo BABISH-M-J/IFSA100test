@@ -1,0 +1,64 @@
+<div class="tab-content">
+    <!-- Panel Group --> 
+    <script type="text/ng-template" id="group-template.html">
+        <div class="panel {{panelClass || 'panel-default'}}">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" accordion-transclude="heading">
+                        <span accordion-header ng-class="{'text-muted': isDisabled}">
+                            {{heading}}
+                        </span>
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse" collapse="!isOpen">
+                <div class="panel-body" style="text-align: right" ng-transclude></div>
+            </div>
+        </div>
+    </script>
+    <accordion close-others="oneAtATime" ng-if="viewModel.categories">
+        <div ng-repeat="c in viewModel.categories">
+            <accordion-group is-open="status.open">
+                <accordion-heading>
+                    {{c}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                </accordion-heading>		        		
+                <accordion>
+                    <div ng-repeat="r in viewModel.resourceList | filter: { Category__c: c }">
+                        <accordion-group is-open="r.status.open">
+                            <accordion-heading>
+                                {{r.Name}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': r.status.open, 'glyphicon-chevron-right': !r.status.open}"></i>
+                            </accordion-heading>
+                            <div ng-bind-html='r.Content__c | fixHTMLTags'> </div>
+                        </accordion-group>
+                    </div>
+                </accordion>
+            </accordion-group>
+        </div>
+    </accordion>
+    <div class="row">
+        <div class="col-xs-12" ng-if="viewModel.attachments.length">
+            <h1 class="mt-small">Linked Resources</h1>
+            <hr/>                    
+        </div>
+        <div class="col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="attachment in viewModel.attachments">
+                    <a ng-href="{{urlService.getPortalURL() + '/servlet/servlet.FileDownload?file=' + attachment.Id}}" target="_blank">{{attachment.Name}}</a>
+                    <span ng-if="attachment.description != null"> - {{attachment.Description}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12" ng-if="viewModel.files.length">
+            <h1 class="mt-small">Personal Files</h1>
+            <hr/>
+        </div>
+        <div class="col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="file in viewModel.files">
+                    <a ng-href="{{urlService.getPortalURL() + '/sfc/servlet.shepherd/version/download/' + file.ContentDocument.LatestPublishedVersionId}}" target="_blank">{{file.ContentDocument.Title}}</a>
+                    <span ng-if="file.ContentDocument.Description != null"> - {{file.ContentDocument.Description}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div><!-- END OF TAB CONTENT -->

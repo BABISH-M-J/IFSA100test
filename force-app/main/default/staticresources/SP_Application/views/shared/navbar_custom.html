@@ -1,0 +1,52 @@
+<!-- NAVBAR -->
+<nav class="navbar navbar-default navbar-fixed-top ifsa-navbar-primary">
+	<!-- SECONDARY NAV -->
+    <div class="row hidden-xs hidden-sm hidden-md">
+		<div id="navbar-top" class="col-xs-12">
+			<!-- <form action="/studentportal/secur/logout.jsp">
+				<button class="btn btn-default btn-xs pull-right">Log Out</button>
+			</form> -->
+      	</div>
+    </div>
+		<div class="container-fluid">
+        	<!-- Brand and toggle get grouped for better mobile display -->
+        	<div class="navbar-header">
+        		<!-- TOGGLE BUTTON FOR MOBILE -->
+				<button id="mobile-toggle" type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#collapse" aria-expanded="false" ng-if="viewModel.contactId != null">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!-- BRAND CONTENT -->
+				<a class="navbar-brand" href="#">
+					<img alt="Brand" ng-src="{{brandImageURL}}"/>
+				</a>
+        	</div>
+			<!-- PRIMARY NAV -->
+			<div class="collapse navbar-collapse" id="collapse">
+			<!-- Student Authenticated | SHOW ONLY IF STUDENT IS LOGGED IN -->
+			<span id="student-nav">
+				<ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/">My Documents</a></li>
+					<li><a href="#/resources">My Resources</a></li>
+					<li ng-if="viewModel.applicationCount > 1"><a ng-click="switchApplication(viewModel.contactId)"><span class="fa fa-refresh"></span> Switch Application</a></li>
+                    <li ng-if="viewModel.isOnSite" class="dropdown primary-nav-dropdown" ng-if="viewModel.isLockDownActive == false">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">On Site<span class="caret"></span></a>                        
+						<ul id="primary-nav" class="dropdown-menu">
+							<li ng-repeat="tab in tabs"><a ng-href="#{{tab.page}}">{{tab.title}}</a></li>
+						</ul>
+					</li>
+                    <li class="dropdown primary-nav-dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-fw fa-lg fa-user-circle"></span> <span>{{getFirstName()}}</span> <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#/profile">Profile</a></li>
+							<li ng-if="viewModel.showAccountTab"><a href="#/account">Account</a></li>
+							<li><a id="logout-li" ng-href="{{urlService.getPortalURL()}}/secur/logout.jsp"><span class="fa fa-sign-out"></span> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</span>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>

@@ -1,0 +1,229 @@
+<div id="onsite-learning-plan">
+    <div ng-include="urlService.getBaseResourceURL() + '/views/shared/onsite-header.html'"></div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Learning Plan</h2>
+        </div>
+    </div>
+    <div class="ui segment" style="font-size: 1.12em !important;" ng-if="loading">
+        <div class="ui active inverted dimmer">
+          <div class="ui text loader">Loading</div>
+        </div>
+        <div ng-repeat="item in loadingItems">
+            <div class="header">
+                {{item.heading}}
+            </div>
+            <div class="ui fluid placeholder">
+                <div class="paragraph">
+                    <div class="line" ng-repeat="lines in item.lines"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!hasLearningPlan && !loading">
+        <p>You were not required to fill out a learning plan as part of the application process.</p>
+    </div>
+    <div ng-if="hasLearningPlan && !loading">
+        <div class="row">
+            <div class="col-xs-12">
+                <p ng-if="!viewModel.learningPlan.hideStudyAbroadWording">IFSA is committed to helping you achieve your personal, academic and professional goals while you’re abroad and beyond. Our Resident Staff will support you in achieving your objectives and to help you adapt while on site. During your time abroad, we encourage you to review and update your Learning Plan to fit your needs and new goals as they arise.</p>
+                <p>Your original Learning Plan will be kept so you can track your progress. After your time abroad, you can download a PDF of your most recent responses to reflect on your personal journey and continue toward your future achievements. Your future-self will thank you!</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6" style="margin-top:15px">
+                <button type="button" class="btn ifsa-btn" ng-click="viewModel.learningPlan.isLocked = !viewModel.learningPlan.isLocked" ng-hide="!viewModel.learningPlan.isLocked || viewModel.locked">Edit</button>
+                &nbsp;
+                <a ng-href="/studentportal/SP_LearningPlanPDF?id={{viewModel.learningPlan.id}}" class="btn ifsa-btn">View/Download PDF</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>1. Academic goals <span ng-if="!viewModel.learningPlan.hideStudyAbroadWording">while abroad</span></h4>
+            </div>
+            <div class="col-xs-12">
+                a. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.academicGoalsA}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.academicGoalsA}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.academicGoalsAOriginal == viewModel.learningPlan.academicGoalsA">
+                    <br />
+                    Initial - {{viewModel.learningPlan.academicGoalsAOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.academicGoalsA" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                b. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.academicGoalsB}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.academicGoalsB}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.academicGoalsBOriginal == viewModel.learningPlan.academicGoalsB">
+                    <br />
+                    Initial - {{viewModel.learningPlan.academicGoalsBOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.academicGoalsB" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                c. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.academicGoalsC}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.academicGoalsC}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.academicGoalsCOriginal == viewModel.learningPlan.academicGoalsC">
+                    <br />
+                    Initial - {{viewModel.learningPlan.academicGoalsCOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.academicGoalsC" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                <h4>2. Personal goals <span ng-if="!viewModel.learningPlan.hideStudyAbroadWording">while abroad</span></h4>
+            </div>
+            <div class="col-xs-12">
+                a. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.personalGoalsA}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.personalGoalsA}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.personalGoalsAOriginal == viewModel.learningPlan.personalGoalsA">
+                    <br />
+                    Initial - {{viewModel.learningPlan.personalGoalsAOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.personalGoalsA" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                b. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.personalGoalsB}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.personalGoalsB}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.personalGoalsBOriginal == viewModel.learningPlan.personalGoalsB">
+                    <br />
+                    Initial - {{viewModel.learningPlan.personalGoalsBOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.personalGoalsB" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                c. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.personalGoalsC}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.personalGoalsC}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.personalGoalsCOriginal == viewModel.learningPlan.personalGoalsC">
+                    <br />
+                    Initial - {{viewModel.learningPlan.personalGoalsCOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.personalGoalsC" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                <h4>3. Professional development goals <span ng-if="!viewModel.learningPlan.hideStudyAbroadWording">(while abroad and when returning home)</span></h4>
+            </div>
+            <div class="col-xs-12">
+                a. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.professionalGoalsA}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.professionalGoalsA}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.professionalGoalsAOriginal == viewModel.learningPlan.professionalGoalsA">
+                    <br />
+                    Initial - {{viewModel.learningPlan.professionalGoalsAOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.professionalGoalsA" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                b. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.professionalGoalsB}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.professionalGoalsB}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.professionalGoalsBOriginal == viewModel.learningPlan.professionalGoalsB">
+                    <br />
+                    Initial - {{viewModel.learningPlan.professionalGoalsBOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.professionalGoalsB" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                c. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.professionalGoalsC}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.professionalGoalsC}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.professionalGoalsCOriginal == viewModel.learningPlan.professionalGoalsC">
+                    <br />
+                    Initial - {{viewModel.learningPlan.professionalGoalsCOriginal}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.professionalGoalsC" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                <h4>OPTIONAL: If you already know specific actions you plan to take to reach your goals, please list them below.</h4>
+            </div>
+            <div class="col-xs-12">
+                1. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.specificActions1}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.specificActions1}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.specificActions1Original == viewModel.learningPlan.specificActions1">
+                    <br />
+                    Initial - {{viewModel.learningPlan.specificActions1Original}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.specificActions1" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                2. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.specificActions2}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.specificActions2}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.specificActions2Original == viewModel.learningPlan.specificActions2">
+                    <br />
+                    Initial - {{viewModel.learningPlan.specificActions2Original}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.specificActions2" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                3. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.specificActions3}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.specificActions3}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.specificActions3Original == viewModel.learningPlan.specificActions3">
+                    <br />
+                    Initial - {{viewModel.learningPlan.specificActions3Original}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.specificActions3" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                4. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.specificActions4}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.specificActions4}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.specificActions4Original == viewModel.learningPlan.specificActions4">
+                    <br />
+                    Initial - {{viewModel.learningPlan.specificActions4Original}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.specificActions4" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                5. <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.specificActions5}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.specificActions5}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.specificActions5Original == viewModel.learningPlan.specificActions5">
+                    <br />
+                    Initial - {{viewModel.learningPlan.specificActions5Original}}
+                </span>
+            </div>
+            <div class="col-xs-12">
+                <input type="text" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.specificActions5" ng-hide="viewModel.learningPlan.isLocked" />
+            </div>
+            <div class="col-xs-12">
+                <h4>OPTIONAL: Please share anything else about your goals<span ng-if="!viewModel.learningPlan.hideStudyAbroadWording"> for study abroad</span>. For example: timelines for accomplishing your goals, specific resources or guidance you plan to seek out on site, or obstacles that may stand between you and your achievement of goals.</h4>
+            </div>
+            <div class="col-xs-12">
+                <span ng-show="viewModel.learningPlan.isLocked">{{viewModel.learningPlan.otherInformation}}</span>
+                <span ng-show="!viewModel.learningPlan.isLocked">Current - {{learningPlan.otherInformation}}</span>
+                <span ng-hide="viewModel.learningPlan.isLocked || viewModel.learningPlan.otherInformationOriginal == viewModel.learningPlan.otherInformation">
+                    <br />
+                    Initial - {{viewModel.learningPlan.otherInformationOriginal}}
+                </span>
+                <br />
+                <textarea rows="4" class="form-control" ng-disabled="isSaving" ng-model="viewModel.learningPlan.otherInformation" ng-hide="viewModel.learningPlan.isLocked"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="margin-top:15px">
+                <button type="button" ng-disabled="isSaving" class="btn ifsa-btn" ng-hide="viewModel.learningPlan.isLocked" ng-click="updateLearningPlan()">Save <span ng-show="isSaving"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                &nbsp;
+                <button type="button" ng-disabled="isSaving" class="btn ifsa-btn" ng-hide="viewModel.learningPlan.isLocked" ng-click="viewModel.learningPlan.isLocked = !viewModel.learningPlan.isLocked" >Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

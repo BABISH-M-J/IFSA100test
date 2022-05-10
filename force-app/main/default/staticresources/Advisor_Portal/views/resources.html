@@ -1,0 +1,75 @@
+<loading is-loading="loading">
+    <div class="ui grid">
+        <div class="one column row">
+            <div class="ui big breadcrumb">
+                <a  href="#/" class="section">Home</a>
+                <div class="divider"> / </div>
+                <div class="active section">Advisor Resources</div>
+            </div>    
+        </div>
+        <div class="one column row">
+            <h2 class="content-title">Advisor Resources</h2>
+        </div>
+        <div class="one column row" ng-if="!resourceFiles.length">
+            <div class="ui content header">
+                Comming Soon
+            </div>
+        </div>
+        <div class="one column row" ng-if="resourceFiles.length">
+            <p>
+                Below you will find a series of downloadable resources organized by category to make your advising process easier. 
+            </p>
+        </div>
+    </div>
+    <div class="ui mobile only one column grid" ng-if="resourceFiles.length">
+        <div class="column" ng-class="{ 'hidden': selectedCategory}">
+            <div ng-include="templateURL + 'resources-categories.html'"></div>
+        </div>
+        <div class="column" ng-class="{ 'hidden': selectedFile}">
+            <div class="mobile only" style="margin-bottom: 5px;" ng-if="selectedCategory">
+                <button type="button" class="ui icon labeled fluid button" ng-click="unselect('category')">
+                    <i class="arrow left icon"></i>
+                    Back to categories
+                </button>
+            </div>
+            <div ng-include="templateURL + 'resources-files.html'"></div>
+        </div>
+        <div class="column">
+            <div class="mobile only" style="margin-bottom: 5px;" ng-if="selectedFile">
+                <button type="button" class="ui icon labeled fluid button" ng-click="unselect('file')">
+                    <i class="arrow left icon"></i>
+                    Back to files
+                </button>
+            </div>
+            <div ng-include="templateURL + 'resources-file-detail.html'"></div>
+        </div>
+    </div>
+    <div class="ui tablet only two column grid" ng-if="resourceFiles.length">
+        <div class="column" ng-class="{ 'hidden': selectedFile}">
+            <div ng-include="templateURL + 'resources-categories.html'"></div>
+        </div>
+        <div class="column">
+            <div class="tablet only" style="margin-bottom: 5px;" ng-if="selectedFile">
+                <button type="button" class="ui icon labeled fluid button" ng-click="unselect('file')">
+                    <i class="arrow left icon"></i>
+                    Back to categories
+                </button>
+            </div>
+            <div ng-include="templateURL + 'resources-files.html'"></div>
+        </div>
+        <div class="column">
+            <div ng-include="templateURL + 'resources-file-detail.html'"></div>
+        </div>
+    </div>
+    <div class="ui tablet or lower hiddenIFSA grid" ng-if="resourceFiles.length">
+        <div class="three wide column">
+            <div ng-include="templateURL + 'resources-categories.html'"></div>
+        </div>
+        <div class="seven wide column">
+            <div ng-include="templateURL + 'resources-files.html'"></div>
+        </div>
+        <div class="six wide column">
+            <div ng-include="templateURL + 'resources-file-detail.html'"></div>
+        </div>
+    </div>
+</loading>

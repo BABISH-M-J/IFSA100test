@@ -1,0 +1,131 @@
+<div class="content-panel-primary">
+    <h2 class="content-title">Select Program</h2>
+    <hr class="hr-gold"/>
+    <div ng-if="loading">
+        <h3>Loading data....</h3>
+        <i class="spinner big loading icon"></i>
+    </div>
+    <section id="select" ng-if="!loading">
+        <div ng-show="viewModel.isProgramSelected && viewModel.applicationStatus != 'Dropped' && !startingNewApp">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4> Not sure what program will be the best fit or having trouble making changes? Contact <a href="mailto:{!viewModel.advisorEmail}"> your program advisor</a> to discuss your application(s).</h4>
+                    <hr/>
+                    <h3>Your IFSA Applications</h3> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 col-offset-xs-1">
+                    <h4>Active Application:</h4>
+                    <span ng-bind-html="viewModel.applications.activeApplication"></span>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Backup application:</h4>
+                    <div class="row" ng-repeat="app in viewModel.applications.applications">
+                        <div class="col-xs-12">
+                            <span ng-bind-html="app.name"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>                
+            <hr />
+            <div class="row text-center">
+                <div ng-hide="viewModel.hasManyApplications">
+                    <p>Select this option if you wish to continue to apply to your current program, but would also like a back-up application with another program.</p>
+                    <p>Please contact your program advisor if you would like to consider other programs.</p>
+                    <button id="BackupProgram" class="btn ifsa-btn" ng-click="createSecondaryApp()">Back-up Program <span ng-show="submittingData"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                </div>
+                <div ng-show="viewModel.hasManyApplications">
+                    <p>Click here to toggle between your active applications.</p>
+                    <button class="btn ifsa-btn" ng-click="switchApplication()">My Open Applications</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="startingNewApp || !viewModel.isProgramSelected">
+            <div class="col-xs-12">                
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        <h3>Do you know where you want to go?</h3>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <h4>I know where I want to go</h4>
+                        <p>You can select your program of interest immediately.</p>
+                        <button type="button" class="btn ifsa-btn" ng-click="beginProgramSelection()">Select Program</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>I want to explore my options</h4>
+                        <p>Feel free to look around IFSA's offerings with Global Wayfinder.</p>
+                        <a href="https://www.ifsa-butler.org/" target="_blank" class="btn ifsa-btn">Find a Program</a>
+                    </div>
+                </div>
+                <form>
+                    <div class="row" ng-show="programVisible">
+                        <hr/>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <label class="control-label" for="selectCountry">Where would you like to go?</label>
+                                    <select id="selectCountry" ng-model="viewModel.CountryName" class="form-control" ng-options="item for item in viewModel.countryOptions" ng-change="selectCountry()"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="termVisible">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1" ng-hide="viewModel.TermOptions.length > 0">
+                                    There are not any programs for the selected country
+                                </div>
+                                <div class="col-md-10 col-md-offset-1" ng-show="viewModel.TermOptions.length > 0">
+                                    <label class="control-label" for="selectTerm">When would you like to go?</label>
+                                    <select id="selectTerm" ng-model="viewModel.TermName" class="form-control" ng-options="item for item in viewModel.TermOptions" ng-change="selectTerm()"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="programTermVisible">
+                        <hr/>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1" ng-hide="viewModel.ProgramTermOptions">
+                                    There are not any programs for the selected term
+                                </div>
+                                <div class="col-md-10 col-md-offset-1" ng-show="viewModel.ProgramTermOptions">                                    	
+                                    <label class="control-label" for="selectProgramTerm">What program would you like to experience?</label>
+                                    <div id="selectProgramTerm" class="row" ng-repeat="item in viewModel.ProgramTermOptions">
+                                        <div class="col-md-8">
+                                            <h3>
+                                                <div ng-bind-html="item.programName"/>
+                                            </h3>
+                                        </div>
+                                        <div class="col-md-4" style="padding-top:10px;">
+                                            <button type="button" class="btn ifsa-btn" ng-click="selectProgramTerm(item.id)">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div ng-show="viewModel.applicationStatus == 'Dropped'">            	
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Sorry for the inconvenience, our records show your application has been withdrawn. You can contact your program advisor or start a new application</h4>
+                </div>
+            </div>
+            <div class="row">					
+                <div class="col-xs-12 text-center">
+                    <a href="mailto:{{viewModel.advisorEmail}}" class="btn btn-conf btn-highlight">Email</a>
+                    <a href="{{viewModel.advisorCalendlyLink}}" class="btn btn-conf btn-highlight">Schedule a Call</a>
+                    <button class="btn btn-conf btn-highlight" ng-click="createSecondaryApp()">Start new application</button>
+                    <button class="btn btn-conf btn-highlight" ng-show="viewModel.hasManyApplications" ng-click="switchApplication()">Switch backup application</button>
+                </div>
+            </div>		
+        </div>
+        
+    </section>
+</div><!-- END OF PRIMARY CONTENT -->

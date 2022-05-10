@@ -1,0 +1,48 @@
+<div class="ui two cards">
+    <div class="raised card" ng-repeat="favorite in activeStudent.favoritePrograms | filter:{Remove_Access_Favorite_Programs__c:false}">
+        <div class="content" ng-if="!favorite.cmsData">
+            <div class="ui active inverted dimmer">
+              <div class="ui medium text loader">Loading</div>
+            </div>
+            <div class="header">
+                {{favorite.Program_Name__c}}
+            </div>
+            <div class="ui placeholder">
+                <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+        <div class="content" ng-if="favorite.cmsData">
+            <div class="header">
+                {{favorite.Program_Name__c}}
+            </div>
+            <h2 class="ui sub header">
+                <span ng-bind-html="favorite.cmsData.Country_Text__c"></span> - <span ng-bind-html="favorite.cmsData.Locality_Text__c"></span>
+            </h2>
+            <div class="meta" ng-if="favorite.cmsData.Application_Deadline_Academic_Year__c || favorite.cmsData.Application_Deadline_Calendar_Year__c || favorite.cmsData.Application_Deadline_Fall__c || favorite.cmsData.Application_Deadline_Spring__c || favorite.cmsData.Application_Deadline_Summer__c || favorite.cmsData.Application_Deadline_Winter__c">
+                <span class="ui small header">Deadlines: </span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Academic_Year__c">Academic Year: {{favorite.cmsData.Application_Deadline_Academic_Year__c }}</span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Calendar_Year__c">Calendar Year: {{favorite.cmsData.Application_Deadline_Calendar_Year__c}}</span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Fall__c">Fall: {{favorite.cmsData.Application_Deadline_Fall__c}}</span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Spring__c">Spring: {{favorite.cmsData.Application_Deadline_Spring__c}}</span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Summer__c">Summer: {{favorite.cmsData.Application_Deadline_Summer__c}}</span>
+                <span ng-if="favorite.cmsData.Application_Deadline_Winter__c">Winter: {{favorite.cmsData.Application_Deadline_Winter__c}}</span>
+            </div>
+            <div class="meta" ng-if="favorite.cmsData.Term_Year__c || favorite.cmsData.Term_Fall__c || favorite.cmsData.Term_Spring__c || favorite.cmsData.Term_Summer__c || favorite.cmsData.Term_Winter__c">
+                <span class="ui small header">Terms: </span>
+                <span ng-if="favorite.cmsData.Term_Year__c">Year</span>
+                <span ng-if="favorite.cmsData.Term_Fall__c">Fall</span>
+                <span ng-if="favorite.cmsData.Term_Spring__c">Spring</span>
+                <span ng-if="favorite.cmsData.Term_Summer__c">Summer</span>
+                <span ng-if="favorite.cmsData.Term_Winter__c">Winter</span>
+            </div>
+            <div class="ui divider"></div>
+            <div class="desciption" ng-bind-html="favorite.cmsData.Program_Description__c | fixHTMLTags | apostraphe | ampersand"></div>
+        </div>
+    </div>
+</div>

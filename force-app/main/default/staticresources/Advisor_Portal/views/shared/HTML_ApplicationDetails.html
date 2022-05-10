@@ -1,0 +1,269 @@
+﻿<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title"ng-bind-html="data.StudentFirstName + ' ' + data.StudentLastName + ' ' + data.ApplicationProgramTermProgram + ' ' + data.ApplicationProgramTermSection + ' ' + data.ApplicationProgramTermYear + ' Details'"></h3>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-pills nav-justified">
+					<li role="presentation" class="pillButton" ng-class="{'active':tab == 'Application Items'}">
+						<a class="pillSelector" ng-click="goToAppItems()">Application Items</a>
+					</li>
+					<li role="presentation" class="pillButton" ng-class="{'active':tab == 'Personal Data'}">
+						<a class="pillSelector" ng-click="goToPersonal()">Personal Data</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row" ng-show="tab == 'Application Items'">
+			<hr/>
+			<div class="col-md-12">
+				<div class="ui three doubling cards">
+					<div class="ui raised link card" ng-class="{'grey app-item-incomplete': !item.isComplete && !item.isStarted, 'green app-item-complete': item.isComplete}" ng-click="viewAppItem(item)" ng-repeat="item in data.appItems">
+						<div class="content app-item-content">
+							<div class="header">
+								<span ng-bind-html="item.name"></span>
+								<i class="spinner loading icon" ng-if="item.isLoading"></i>
+							</div>
+						</div>
+						<div class="extra content">
+							<div class="author">
+								<span class="category" ng-show="!item.isComplete && !item.isStarted"><i class="fa fa-exclamation-circle"/> Not Started</span>
+								<span class="category" ng-show="item.isComplete"><i class="fa fa-check-circle"/> Complete</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-xs-12 mt centered">
+				<div class="tile-container" ng-repeat="item in data.appItems">
+					<div class="tile" ng-class="{'tile-incomplete': !item.isComplete, 'tile-complete': item.isComplete}" ng-click="viewAppItem(item)">
+						<h3 class="tile-title">{{item.name}}</h3>
+						<i class="ion-label ion-checkmark-round" ng-show="item.isComplete"/>
+						<i class="ion-label ion-alert" ng-show="!item.isComplete"/>
+					</div>
+				</div>
+			</div> -->
+		</div>
+		<div class="row" ng-show="tab == 'Personal Data'">
+			<hr/>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-12" ng-show="data.StudentFirstName">
+						<h5><strong>First Name</strong></h5>
+						<p>{{data.StudentFirstName}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentPreferredName">
+						<h5><strong>Preferred Name</strong></h5>
+						<p>{{data.StudentPreferredName}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMiddleName">
+						<h5><strong>Middle Name</strong></h5>
+						<p>{{data.StudentMiddleName}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentLastName">
+						<h5><strong>Last Name</strong></h5>
+						<p>{{data.StudentLastName}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentSuffix">
+						<h5><strong>Suffix</strong></h5>
+						<p>{{data.StudentSuffix}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentBirthdate">
+						<h5><strong>Birthdate</strong></h5>
+						<p>{{data.StudentBirthdate | date:'MM/dd/yyyy'}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentSex">
+						<h5><strong>Sex</strong></h5>
+						<p>{{data.StudentSex}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentEmail">
+						<h5><strong>Email</strong></h5>
+						<p>{{data.StudentEmail}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentPhone">
+						<h5><strong>Phone</strong></h5>
+						<p>{{data.StudentPhone}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentTwitterHandle">
+						<h5><strong>Twitter Handle</strong></h5>
+						<p>{{data.StudentTwitterHandle}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-12" ng-show="data.StudentMailingStreet">
+						<h5><strong>Address</strong></h5>
+						<p>{{data.StudentMailingStreet}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMailingCity">
+						<h5><strong>City</strong></h5>
+						<p>{{data.StudentMailingCity}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMailingState">
+						<h5><strong>State</strong></h5>
+						<p>{{data.StudentMailingState}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMailingPostalCode">
+						<h5><strong>Zip/Postal Code</strong></h5>
+						<p>{{data.StudentMailingPostalCode}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMailingCountry">
+						<h5><strong>Country</strong></h5>
+						<p>{{data.StudentMailingCountry}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentHomeInstitutionName">
+						<h5><strong>Home Institution</strong></h5>
+						<p>{{data.StudentHomeInstitutionName}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentGradeLevel">
+						<h5><strong>Grade Level</strong></h5>
+						<p>{{data.StudentGradeLevel}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentDegree">
+						<h5><strong>Degree</strong></h5>
+						<p>{{data.StudentDegree}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentMajor">
+						<h5><strong>Major</strong></h5>
+						<p>{{data.StudentMajor}}</p>
+					</div>
+					<div class="col-md-12" ng-show="data.StudentGPA">
+						<h5><strong>GPA</strong></h5>
+						<p>{{data.StudentGPA}}</p>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- <div class="col-md-6">
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentFirstName">First Name</label>
+						<h5 id="studentFirstName">{{data.StudentFirstName}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentPreferredName">Preferred Name</label>
+						<h5 id="studentPreferredName">{{data.StudentPreferredName}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMiddleName">Middle Name</label>
+						<h5 id="studentMiddleName">{{data.StudentMiddleName}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentLastName">Last Name</label>
+						<h5 id="studentLastName">{{data.StudentLastName}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentSuffix">Suffix</label>
+						<h5 id="studentSuffix">{{data.StudentSuffix}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentBirthdate">Birthdate</label>
+						<h5 id="studentBirthdate">{{data.StudentBirthdate | date:'MM/dd/yyyy'}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentSex">Sex</label>
+						<h5 id="studentSex">{{data.StudentSex}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentEmail">Email Address</label>
+						<h5 id="studentEmail">{{data.StudentEmail}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentPhone">Phone Number</label>
+						<h5 id="studentPhone">{{data.StudentPhone}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentTwitterHandle">Twitter Handle</label>
+						<h5 id="studentTwitterHandle">{{data.StudentTwitterHandle}}</h5>
+					</div>
+				</div>
+			</div> -->
+			<!-- <div class="col-md-6">
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMailingStreet">Address</label>
+						<h5 id="studentMailingStreet">{{data.StudentMailingStreet}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMailingCity">City</label>
+						<h5 id="studentMailingCity">{{data.StudentMailingCity}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMailingState">State</label>
+						<h5 id="studentMailingState">{{data.StudentMailingState}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMailingPostalCode">ZIP/Postal Code</label>
+						<h5 id="studentMailingPostalCode">{{data.StudentMailingPostalCode}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMailingCountry">Country</label>
+						<h5 id="studentMailingCountry">{{data.StudentMailingCountry}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="homeInstitutionName">Home Institution</label>
+						<h5 id="homeInstitutionName">{{data.HomeInstitutionName}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentGradeLevel">Grade Level</label>
+						<h5 id="studentGradeLevel">{{data.StudentGradeLevel}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentDegree">Degree</label>
+						<h5 id="studentDegree">{{data.StudentDegree}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentMajor">Major</label>
+						<h5 id="studentMajor">{{data.StudentMajor}}</h5>
+					</div>
+				</div>
+				<div class="row mt-small">
+					<div class="col-md-10 col-md-offset-1">
+						<label for="studentGPA">GPA</label>
+						<h5 id="studentGPA">{{data.StudentGPA}}</h5>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a class="btn ifsa-btn" ng-click="exit()">Back</a>
+	</div>
+</div>

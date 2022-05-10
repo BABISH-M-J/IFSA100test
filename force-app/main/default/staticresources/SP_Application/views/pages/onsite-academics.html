@@ -1,0 +1,187 @@
+<div id="onsite-academics" style="padding-bottom:20px;">
+    <div ng-include="urlService.getBaseResourceURL() + '/views/shared/onsite-header.html'"></div>
+    <div ng-if="loading" class="ui basic very padded segment">
+        <div class="ui large active centered inline loader"></div>
+    </div>
+    <div ng-if="!loading">
+        <h2>Class Registration Form</h2>
+        <div class="ui message" style="margin-bottom: 10px;">
+            <!-- CRF Alerts -->
+            <div class="header">
+                Alerts
+            </div>
+            <ul>
+                <li class="crfAlert" ng-if="crfEditable && viewModel.isCourseRegEditable && !error">
+                    Please complete your required Class Registration Form by {{crfCutoffDate | date : 'MM/dd/yyyy'}}.
+                </li>
+                <li class="crfAlert" ng-if="!crfEditable && viewModel.isCourseRegEditable && !error">
+                    <span ng-bind-html="viewModel.crfCutoffDatePast"></span>
+                </li>
+                <li class="crfAlert" ng-if="!viewModel.isCourseRegEditable && !error">
+                    Thank you for submitting your Class Reigistration Form! If you need to make any changes, please contact your Resident Staff.
+                </li>
+                <li class="crfAlert" ng-if="viewModel.applicationStatus != 'On Site' && viewModel.applicationStatus != 'Program Completed' && !error">
+                    You are not able to enter your class information at this time.
+                </li>
+                <li class="crfAlert" ng-if="error">
+                    The was an error loading your class registrations. Please try again later.  If you still have difficulties, please contact IFSA Resident Staff.
+                </li>
+            </ul>
+            <!-- CRF Instructions -->
+            <div ng-if="viewModel.applicationStatus == 'On Site' && viewModel.isCourseRegEditable && crfEditable">
+                <div class="ui divider"></div>
+                <div class="header">
+                    Instructions
+                </div>
+                <!-- For All Students While Editable -->
+                <div ng-bind-html="viewModel.crfInstructions" ng-if="viewModel.isCourseRegEditable"></div>
+                <!-- For AY/CY Students While Editable-->
+                <span ng-if="viewModel.isCourseRegEditable && viewModel.isSecondTermStarted">
+                    Your second term has begun! Add the classes you are taking this term to your CRF.
+                </span>
+            </div>
+        </div>
+        <div ng-if="viewModel.isCourseRegEditable && crfEditable">
+            <!-- New Class Registrations -->
+            <div class="reg-font-size"> <!-- ui segment -->
+                <!-- <h1 class="ui header">New Classes</h1> -->
+                <div class="ui one cards">
+                    <!-- modified by powerfluence - req dt.01/28/2022 - 001 - starts -->
+                    <!-- <div class="card" ng-class="{'crf-card': !$first}" ng-repeat="item in viewModel.courses  | newCoursesFilter | orderBy: '-isRegistered' as newCourses"> -->
+                    <div class="card" ng-class="{'crf-card': !$first}" ng-repeat="item in viewModel.courses | newCoursesFilter | orderBy: '-isRegistered' as newCourses track by $index">
+                    <!-- modified by powerfluence - req dt.01/28/2022 - 001 - ends -->
+                    <div class="content">
+                            <div class="header">
+                                <span class="ui label" ng-class="{'green' : item.isRegistered}" >
+                                    <i ng-class="item.isRegistered ? 'check square icon' : 'square outline icon'"></i>
+                                    <span ng-if="!item.isRegistered"> Not</span> Registered
+                                </span>
+                                <strong><span ng-bind-html="item.courseTitle"></span>  <span class="text-muted" ng-bind-html="item.courseCode"></span></strong>
+                            </div>
+                            <div class="computer large monitor only widescreen monitor ui right floated buttons" style="padding-top: 5px;" ng-include="urlService.getBaseResourceURL() + '/views/shared/crf-buttons.html'"></div>
+                            <div class="meta">
+                                <span class="institution"><i class="map marker icon"></i> <span ng-bind-html="item.hostInstitutionName"></span></span>
+                                <span class="instructor"><i class="user icon"></i> 
+                                    <span ng-if="item.instructorFirstName || item.instructorLastName">{{item.instructorFirstName}} {{item.instructorLastName}}</span>
+                                    <span ng-if="!item.instructorFirstName && !item.instructorLastName">-unknown-</span>
+                                </span>
+                                <span class="untranslatedTitle" ng-if="spanishTitles && item.untranslatedTitle">
+                                    <i class="language icon"></i><span ng-bind-html="item.untranslatedTitle"></spanng-bind-html>
+                                </span>
+                            </div>
+                            <div class="description">
+                                <div class="ui huge horizontal list">
+                                    <div class="item">Host Credits: {{item.credits}}</div>
+                                    <!-- <div class="item">US Semester Credits:  {{item.usCredits}}</div> -->
+                                </div>
+                            </div>
+                            <div class="extra content mobile tablet only">
+                                <div class="two ui buttons" ng-include="urlService.getBaseResourceURL() + '/views/shared/crf-buttons.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui three huge compact icon bottom attached buttons" style="padding-top: 10px;">
+                    <button id="addButton" type="button" class="ui button" ng-click="addCourse()" ng-if="!saving || !savingForLater">
+                        <i class="plus icon"></i> Add unlisted class
+                    </button>
+                    <button class="ui button" ng-class="{ 'loading' : saving, 'green' : calculateCIFItemsRemaining() == 0 }" ng-disabled="savingForLater || calculateCIFItemsRemaining() > 0 || !getNumberOfCourses()" ng-click="submitCourseRegistration(true)">
+                        <i ng-if="calculateCIFItemsRemaining() > 0" class="hourglass half icon"></i>
+                        <i ng-if="calculateCIFItemsRemaining() == 0" class="check icon"></i>
+                        <span ng-if="calculateCIFItemsRemaining() > 0" >Add or remove {{calculateCIFItemsRemaining()}} class(es) to submit</span>
+                        <span ng-if="calculateCIFItemsRemaining() == 0">Submit</span>
+                    </button>
+                    <button class="ui button" ng-class="{ 'loading' : savingForLater }" ng-disabled="saving  || !getNumberOfCourses()" ng-click="submitCourseRegistration(false)">
+                        <i class="save icon"></i>
+                        Save for later
+                    </button>
+                </div>
+            </div>
+            <!-- Save/Submit Buttons -->
+        </div>
+        
+        <!-- Submitted Course Registrations -->
+        <div class="ui segment reg-font-size" ng-show="submittedCourses.length > 0">
+            <h1 class="ui header">Submitted Classes</h1>
+            <p>Please contact your resident staff office to make changes to your CRF.</p>
+            <table class="table table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Host Institution</th>
+                        <th>Instructor</th>                                       
+                        <th>Credits</th>
+                        <th>U.S. Term</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="tr-condensed" ng-repeat="item in viewModel.courses | submittedCoursesFilter as submittedCourses">
+                        <td><strong><span ng-bind-html="item.courseTitle | apostraphe"></span> <span class="text-muted" ng-bind-html="item.courseCode"></span></strong></td>
+                        <td ng-bind-html="item.hostInstitutionName"/>
+                        <td>{{item.instructorFirstName}} {{item.instructorLastName}}</td>
+                        <td>
+                            <div class="ui list">
+                                <div class="item">Host: {{item.credits}}</div>
+                                <div class="item">US:  {{item.usCredits}}</div>
+                            </div>
+                        </td>
+                        <td>{{item.courseTerm}}</td>
+                        <td>{{item.courseStatus}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Graded Course Registrations -->
+        <div class="ui segment reg-font-size" ng-show="gradedCourses.length > 0">
+            <div id="unofficialGradesIntro" >
+                <h1 class="ui header">IFSA Unofficial Grades</h1>
+                <p>These are your unofficial grades. IFSA automatically mails an official Butler University transcript to your home school for transfer credit. It may take additional time before you see your home school's records updated.</p>
+                <p>If you need additional official Butler University transcripts (for scholarships, graduate school applications) you can order more via the <a href="https://tsorder.studentclearinghouse.org/school/select" target="_blank">National Student Clearinghouse</a>. Find more details about ordering transcripts on <a href="https://www.ifsa-butler.org/transcripts-and-academic-information/#sct-2" target="_blank">IFSA's website.</a></p>
+                <p><strong>Butler University Student ID#:</strong> {{viewModel.butlerId}}</p>
+            </div>
+
+            <div ng-if="!viewModel.hasFinancialHold" style="float: right">
+                <button type="button" class="ui huge labeled red icon button" ng-click="generatePDF()" ng-disabled="!showViewPDF">
+                    <i class="file pdf outline icon"></i>
+                    Unofficial Grade Report
+                </button>
+                <a ng-if="!showViewPDF" tooltip="PDF generation is not supported by your browser. Please try Chrome, Firefox or Opera." tooltip-placement="left">
+                    <i class="question circle icon"></i>
+                </a>
+            </div>
+
+            <table class="table table-condensed table-responsive" id="unofficialGrades">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Host Institution</th>
+                        <th>Instructor</th>                                        
+                        <th>Credits</th>
+                        <th>U.S. Term</th>
+                        <th>Unofficial Grade</th>
+                        <th />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="tr-condensed" ng-repeat="item in viewModel.courses | gradedCoursesFilter as gradedCourses">
+                        <td><strong><span ng-bind-html="item.courseTitle"></span> <span class="text-muted" ng-bind-html="item.courseCode"></span></strong></td>
+                        <td ng-bind-html="item.hostInstitutionName"/>
+                        <td>{{item.instructorFirstName}} {{item.instructorLastName}}</td>
+                        <td>
+                            <div class="ui list">
+                                <div class="item">Host: {{item.credits}}</div>
+                                <div class="item">US:  {{item.usCredits}}</div>
+                            </div>
+                        </td>
+                        <td>{{item.courseTerm}}</td>
+                        <td>
+                            <span ng-if="viewModel.hasFinancialHold"><i class="exclamation circle icon"></i> Financial Hold</span>
+                            <span ng-if="!viewModel.hasFinancialHold">{{item.courseGrade}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

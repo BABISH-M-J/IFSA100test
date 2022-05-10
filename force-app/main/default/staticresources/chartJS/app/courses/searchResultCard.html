@@ -1,0 +1,87 @@
+<div class="ui fluid card">
+    <div class="content">
+        <div class="ui right floated basic tiny icon button" ng-click="updateFavorite(c)">
+            <i class="icon" ng-class="c.isFavorite ? 'star favorite' : 'star grey'" ng-if="showFavorites && !c.savingFavorite"></i>
+            <i class="icon" ng-class="c.isFavorite ? 'star loading favorite' : 'star loading grey'" ng-if="showFavorites && c.savingFavorite"></i>
+        </div>
+        <div id="host-title" class="header ng-cloak">
+            <span class="text-uppercase" ng-if="c.programs.length > 0">
+                <span ng-if="c.programs.length > 1">Multiple Programs |</span>
+                <span ng-if="c.programs.length == 1" ng-bind-html="c.programs[0].recordName + ' |'"></span>
+            </span>
+            <span ng-if="c.city || c.courseLocations.length">{{getCity(c) | uppercase}} | </span><span ng-if="c.country">{{c.country | uppercase}}</span>
+        </div>
+        <div id="class-title" class="header mt-1">
+            <span ng-if="!(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User' || viewModel.userProfileName == 'IFSA CHART Faculty User' || c.addedToProject)">
+                <input type="checkbox" ng-model="c.selectedForCMP"> 
+            </span>
+            <a class="purple-primary" ng-href="#/details/{{c.recordId}}">
+                <span class="text-uppercase" ng-if="c.courseCode" ng-bind-html="c.courseCode"></span> {{ c.courseCode ? '|' : ''}} <span ng-bind-html="c.courseTitle"></span>
+            </a>
+        </div>
+    </div>
+    <div class="content">
+            <div class="ui small horizontal divided list">
+                <div class="item" ng-if="c.usTerms">
+                    <span>{{c.usTerms | replace : ';' : ', ' }}</span>
+                </div>
+                <div class="item">
+                    {{c.usSemesterCreditHours}} US Semester Credits
+                </div>
+            </div>
+        <div class="description">
+            <p ng-bind-html="c.courseDescriptionShort | fixHTMLTags | stripPTags" ng-if="c.courseDescriptionShort"></p>
+        </div>
+    </div>
+    <div class="extra content">
+        <div class="ui small horizontal list">
+            <div id="ifsa-taught-label" class="item" ng-if="c.isIFSAClass" uib-popover='IFSA Exclusive: Only available through IFSA' popover-placement="top" popover-trigger="'mouseenter outsideClick'"><!-- <i class="globe icon"></i> --></div>
+            <div id="popular-label" class="item" ng-if="c.popularClass" uib-popover='Popular Class' popover-placement="top" popover-trigger="'mouseenter outsideClick'"><i class="chart line icon class-attribute"></i></div>
+            <div id="expired-label" class="item" ng-if="c.isExpired && c.expirationReason == '5 years since last renewal'" uib-popover='The Expired notification indicates that this class record is more than five years old. Please follow the Academics link within the Class Details to find the most current information.' popover-placement="top" popover-trigger="'mouseenter outsideClick'"><i class="clock icon class-attribute"></i></div>            
+            <div id="pre-req-match-label" class="item" ng-if="c.knownPreReqsAndRestrictions" uib-popover='This class may have pre-reqs. View the Known Prerequisites and Restrictions section of the class record for full details.' popover-placement="top" popover-trigger="'mouseenter outsideClick'"><i class="clipboard list icon class-attribute"></i></div>
+            <div id="course-match-label" class="item" ng-if="c.courseMatches.length && c.loadingEquivalents && (viewModel.ceSearch || cmpProject)">
+                <div class="item">
+                    <i class="check icon"></i>
+                    Loading Equivalents...
+                </div>
+            </div>
+            <div class="item" ng-if="c.courseMatches.length && !c.loadingEquivalents && (viewModel.ceSearch || cmpProject)">
+                <div class="ui tiny menu" ng-if="c.courseEquivalents.length > 1 && (viewModel.ceSearch || cmpProject)" uib-popover='For planning purposes, this class has been linked to a specific class at your home institution.' popover-placement="top" popover-trigger="'mouseenter outsideClick'">
+                    <div id="course-match-label" class="ui simple dropdown item">
+                        <i class="check icon"></i>
+                        Class Equivalencies
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                        <span class="item" style="cursor: default;" ng-repeat="eq in c.courseEquivalents">
+                            {{viewModel.userHomeInstitutionName}} {{eq.status}}:&nbsp;
+                            <span ng-if="eq.homeInstitutionCourseCode">
+                                {{eq.homeInstitutionCourseCode}} |&nbsp;
+                            </span>
+                            {{eq.homeInstitutionCourseTitle}}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="c.courseEquivalents.length == 1 && (viewModel.ceSearch || cmpProject)" class="ui tiny menu" uib-popover='For planning purposes, this class has been linked to a specific class at your home institution.' popover-placement="top" popover-trigger="'mouseenter outsideClick'">
+                    <div id="course-match-label" class="item">
+                        <i class="check icon"></i>
+                        {{viewModel.userHomeInstitutionName}} {{c.courseEquivalents[0].status}}:&nbsp;
+                        <span ng-if="c.courseEquivalents[0].homeInstitutionCourseCode">
+                            {{c.courseEquivalents[0].homeInstitutionCourseCode}} |&nbsp;
+                        </span>
+                        {{c.courseEquivalents[0].homeInstitutionCourseTitle}}
+                    </div>
+                </div>
+                <span style="display: none;">{{getCourseEquivalents(c)}}</span>
+            </div>
+        </div>
+        <a class="ui right labeled right floated tiny icon button ifsa-btn search-card-button" ng-href="#/details/{{c.recordId}}">
+            <i class="right arrow icon"></i>
+            View Class Details
+        </a >
+        <button class="ui right labeled right floated tiny icon button ifsa-btn search-card-button" ng-if="!(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User' || viewModel.userProfileName == 'IFSA CHART Faculty User' || c.addedToProject)" ng-click="addToCMP(c)">
+            <i class="plus icon"></i>
+            Add to Course Matching Project
+        </button >
+    </div>
+</div>

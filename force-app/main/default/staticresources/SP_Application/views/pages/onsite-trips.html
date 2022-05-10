@@ -1,0 +1,87 @@
+<div id="onsite-trips">
+    <div ng-include="urlService.getBaseResourceURL() + '/views/shared/onsite-header.html'"></div>
+    <div>
+        <h3>Trips</h3>
+        <p>Please inform us of all travel outside of your program city so we can contact you in the event of an emergency. Be sure to update your travel information if your itinerary changes by clicking the edit button next to your trip.</p>
+
+        <!-- Temporarily removed until a better link may be found.
+        <p>Check out the following link for important travel safety tips and reminders:
+        <a href="https://instituteforstudyabroad.sharepoint.com/_layouts/15/guestaccess.aspx?docid=0352e8501299545bc80a456bbe2dde022&authkey=AQyKygZfPJBcm-s8ArJQCT0" target="_blank">Travel Safety Tips and Reminders</a> <i class="fa fa-file-pdf-o" style="color:red" aria-hidden="true"></i></p>
+        -->
+    </div>                                                                                                      
+    <div class="panel panel-info"><!--  ng-hide="!viewModel.upcomingTrips"> -->
+        <div class="panel-heading">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <h3 class="panel-title"><i class="fa fa-suitcase" aria-hidden="true"></i> <strong>Upcoming Trips</strong></h3>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" ng-click="open(true, null, false)" class="btn btn-default btn-sm pull-right" ng-disabled="viewModel.locked"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th class="hidden-xs">Country</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th class="visible-md visible-lg">Trip Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="t in trips| orderBy:'startDate' | filter:{ selectedStatus: 'Upcoming'} as upcomingTrips">
+                        <td>{{t.localityName}}</td>
+                        <td class="hidden-xs">{{t.countryName}}</td>
+                        <td>{{t.startDate | date: 'EEE, MMM d, y'}}</td>
+                        <td>{{t.endDate | date: 'EEE, MMM d, y'}}</td>
+                        <td class="visible-md visible-lg">{{t.description  | words:15}}</td>
+                        <td class="visible-xs visible-sm visible-md visible-lg text-right">
+                            <button class="btn btn-sm btn-default" ng-disabled="viewModel.locked" ng-click="open(false, t, false)" type="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                            <button class="btn btn-sm btn-danger" ng-disabled="viewModel.locked" ng-click="open(false, t, true)" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer clearfix" ng-hide="showPast || !viewModel.pastTrips">
+            <p class="pull-right"><small><i class="fa fa-history" aria-hidden="true"></i> <span ng-click="showPast=!showPast">View Trip History</span></small></p>
+        </div>
+    </div>   
+    <div class="panel panel-success clearfix" ng-hide="!showPast">
+        <div class="panel-heading clearfix">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="panel-title"><i class="fa fa-history" aria-hidden="true"></i> <strong>Trip History</strong></h3>
+            </div>
+            <div class="col-md-6">
+                <button type="button" ng-click="showPast=!showPast" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+        </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th class="hidden-xs">Country</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th class="visible-md visible-lg">Trip Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="t in trips| orderBy:'startDate' | filter:{ selectedStatus: 'Upcoming'} as pastTrips">
+                    <td>{{t.localityName}}</td>
+                    <td class="hidden-xs">{{t.countryName}}</td>
+                    <td>{{t.startDate | date: 'EEE, MMM d, y'}}</td>
+                    <td>{{t.endDate | date: 'EEE, MMM d, y'}}</td>
+                    <td class="visible-md visible-lg">{{t.description  | words:15}}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<!-- <div class="ui active centered inline loader" ng-if="loadingForm"></div> -->
+<div id="introduction" class="cif-form-body ui basic segment" style="font-size: 1.12em;">
+    <h1 class="ui header">Departments</h1>
+    <div class="ui active centered inline loader" ng-if="loadingForm"></div>
+    <div ng-if="!loadingForm">
+        <p ng-bind-html="appItem.form.formData.departments.noResText"></p>
+        <div ng-if="!appItem.form.formData.departments.selectDesignations">
+            <div class="row">
+                <div class="col-xs-12" style="margin-bottom: 5px;">
+                    <div class="ui huge label" ng-repeat="dept in appItem.form.formData.departments.selectedDepartments">
+                        <span ng-bind-html="dept.Name"></span> 
+                        <span ng-if="dept.Program_Option__c != viewModel.programOptionId"><ng-bind-html ng-bind-html="dept.Program_Option__r.Name"/> </span>
+                        <span ng-if="dept.designation">| {{dept.designation}}</span>
+                        <i class="delete icon" ng-click="removeFromSelected($index)"></i>
+                    </div>
+                </div>
+            </div>
+            <input style="display: none;" type="number" name="itemsCount" ng-model="appItem.form.formData.departments.selectedDepartments.length" max={{appItem.form.formData.departments.maxDepts}} min="{{appItem.form.formData.departments.minDepts}}" required>
+            <div class="btn-group" dropdown is-open="deptPickerStatus.isopen">
+                <button id="single-button" type="button" class="btn btn-default" dropdown-toggle ng-disabled="appItem.form.formData.departments.selectedDepartments.length == appItem.form.formData.departments.maxDepts">
+                    <span ng-bind-html="appItem.form.formData.departments.departmentLabel"></span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                    <li ng-repeat="dept in appItem.form.formData.departments.departmentsArray  | orderBy: 'Name'">
+                        <a ng-click="addToSelected(dept)">
+                            <span ng-bind-html="dept.Name"></span>&nbsp;
+                            <span ng-if="dept.Program_Option__c != viewModel.programOptionId" ng-bind-html="dept.Program_Option__r.Name"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="appItem.form.formData.departments.selectDesignations">
+            <div class="ui form" style="font-size: 1.0em;">
+                <div class="field" ng-class="{'required' : designation.designationRequired}" ng-repeat="designation in appItem.form.formData.departments.designations">
+                    <label ng-bind-html="designation.name"></label>
+                    <select class="ui dropdown" ng-model="designation.selectedOption" ng-change="addToSelectedWithDesignation(designation.selectedOption, designation)" ng-required="designation.designationRequired" >
+                        <option value="">Select a department...</option>
+                        <option ng-repeat="dept in appItem.form.formData.departments.departmentsArray" value="{{dept.Id}}" ng-disabled="dept.selected && dept.Id != designation.selectedOption" ng-bind-html="dept.deptLabel" />
+                    </select>
+                </div>
+                <button class="ui large right floated button" ng-class="{ 'loading' : clearingDepartments}" ng-disabled="clearingDepartments" ng-click="clearDepartmentSelections()">Clear Selections</button><br />
+            </div>            
+        </div>
+    </div>
+</div>

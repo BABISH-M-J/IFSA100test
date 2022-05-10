@@ -1,0 +1,211 @@
+<!--
+    Course Matching Project Request Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- Page -->
+<div id="body">
+<div class="container-fluid">
+    <div class="ui stackable secondary menu mt-3">
+        <div class="ui medium header item text-uppercase">
+            <span ng-if="userType == 'Student'">IFSA Class Equivalency Request Form</span>
+            <span ng-if="userType == 'Advisor'">IFSA Curriculum Integration Request Form</span>
+        </div>
+    </div> 
+
+    <div class="ui basic segment mt-0">
+        <div class="ui very padded segment">
+            <form name="cmpForm" ng-submit="submitProject(project)" novalidate>
+                <div class="ui form">
+                    <h4 class="ui dividing header purple-primary">Instructions</h4>
+                    <p>{{welcomeMessage}} Please follow up with <span ng-if="userType == 'Advisor'">your IFSA Field Director or with our curricular matching expert,</span> {{ciceName}} with any questions: <a ng-href="mailto:{{ciceEmail}}">{{ciceEmail}}</a></p>
+                    <h4 class="ui dividing header purple-primary">Personal Information</h4>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>First Name</label>
+                            <input type="text" name="FirstName" placeholder="First Name" ng-model="project.firstName" readonly="">
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input type="text" name="LastName" placeholder="Last Name" ng-model="project.lastName" readonly="">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>E-mail</label>
+                        <input type="email" name="Email" placeholder="School Email" ng-model="project.email" readonly="">
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Home Institution</label>
+                            <input type="text" name="HomeInstitution" placeholder="Home Institution" ng-model="project.homeInstitutionName" readonly="">
+                        </div>
+                        <!-- <div class="field" ng-if="userType == 'Student'">
+                            <label>Major</label>
+                            <input type="text" name="Major" required placeholder="Major" ng-model="project.major" readonly="">
+                        </div> -->
+                        <div class="required field" ng-if="userType == 'Student'">
+                            <label>Major</label>
+                            <select class="ui dropdown" name="Major" ng-model="project.major" placeholder="Major" ng-model="project.major" ng-options="x for x in viewModel.majors" required="true"/>
+                        </div>
+                    </div>
+                    <h4 class="ui dividing header purple-primary">Academic Information</h4>
+                    <div class="required grouped fields" ng-if="userType == 'Student'">
+                        <label>What year are you in school?</label>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="yearInSchool" value="1" ng-model="project.yearInSchool" checked="" class="hidden" id="radioYearInSchool1" required="true">
+                            <label class="form-check-label" for="radioYearInSchool1">1</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="yearInSchool" value="2" ng-model="project.yearInSchool" class="hidden" id="radioYearInSchool2" required="true">
+                            <label class="form-check-label" for="radioYearInSchool2">2</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="yearInSchool" value="3+" ng-model="project.yearInSchool" class="hidden" id="radioYearInSchool3" required="true">
+                            <label class="form-check-label" for="radioYearInSchool3">3+</label>
+                        </div>
+                    </div>
+                    <div class="required field" ng-if="userType == 'Advisor'">
+                        <label>Major for this project:</label>
+                        <select class="ui dropdown" ng-model="project.major" placeholder="Major" ng-model="project.major" ng-options="x for x in viewModel.majors" required="true"/>
+                    </div>
+                    <div class="grouped fields" ng-if="userType == 'Advisor'">
+                        <label for="programListOnlyYesNo">
+                                Are you interested in exploring options outside of your pre-approved list of IFSA programs? If yes, an IFSA staff member will follow up for details, or you may wish to elaborate in the final text box at the end of the form.
+                        </label>
+                        <div class="form-check">
+                            <input type="radio" id="programListOnlyYes" class="form-check-input" name="includeNonApprovedPrograms" ng-model="project.includeNonApprovedPrograms" value="true" required="true">
+                            <label for="programListOnlyYes" class="form-check-label">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="programListOnlyNo" class="form-check-input" name="includeNonApprovedPrograms" ng-model="project.includeNonApprovedPrograms" value="false" required="true">
+                            <label for="programListOnlyNo" class="form-check-label">No</label>
+                        </div>
+                    </div>
+                    <div class="grouped fields" ng-if="userType == 'Student'">
+                        <label>What year do you intend to go abroad? Select all that apply:</label>
+                        <div class="form-check" ng-repeat="year in years">
+                            <input type="checkbox" class="form-check-input" ng-change="yearsChanged(year)" ng-model="year.isSelected" id="{{year.year}}">
+                            <label class="form-check-label" for="{{year.year}}">{{year.year}}</label>
+                        </div>
+                    </div>
+                    <div class="grouped fields">
+                        <label ng-if="userType == 'Student'">What US term(s) are you considering going abroad?</label>
+                        <label ng-if="userType == 'Advisor'">For which US term(s) should we find classes on offer: (Select all that apply)</label>
+                        <div class="form-check" ng-repeat="term in terms">
+                            <input type="checkbox" class="form-check-input" ng-change="termsChanged(term)" ng-model="term.isSelected" id="{{term.term}}">
+                            <label class="form-check-label" for="{{term.term}}">{{term.term}}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Are you interested in a specific region, country or IFSA program? If yes, choose from below:</label>
+                        <!-- <label>If you are interested in classes in specific regions, countries or at a specific IFSA program, select from below:</label> -->
+                        <div class="form-check" ng-repeat="region in regions | chartRegionFilter:{'terms': terms, 'userType': userType, 'outsideApproved':project.includeNonApprovedPrograms} | filter: {visible: true} | orderBy: 'region'">
+                            <input type="checkbox" class="form-check-input" ng-change="regionChanged(region)" ng-model="region.isSelected" id="{{region.region}}">
+                            <label class="form-check-label" for="{{region.region}}">{{region.region}}</label>
+                            <i ng-if="region.countries.length" class="caret icon" ng-class="region.isSelected ? 'down' : 'right'"></i>
+                            <div class="form-check" ng-repeat="country in region.countries | filter: {visible: true} | orderBy: 'name'" ng-if="country.programsToDisplay.length && region.isSelected">
+                                <input type="checkbox" class="form-check-input" ng-change="countryChanged(country)" ng-model="country.isSelected" id="{{country.name}}">
+                                <label class="form-check-label" for="{{country.name}}">{{country.name}}</label>
+                                <i ng-if="country.programsToDisplay.length" class="caret icon" ng-class="country.isSelected ? 'down' : 'right'"></i>
+                                <div class="form-check" ng-repeat="program in country.programsToDisplay | orderBy: 'name'" ng-if="country.isSelected">
+                                    <input type="checkbox" class="form-check-input" ng-change="programsChanged(program)" ng-model="program.isSelected" id="{{program.name}}">
+                                    <label class="form-check-label" for="{{program.name}}">{{program.name}}</label>
+                                </div>
+                            </div>                                
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label ng-if="userType == 'Advisor'">
+                                Please tell us which classes at your home institution you would to us to research to find potential matches for programs abroad:
+                                <ul style="font-weight: 400;">
+                                    <li>List the specific class code and class title for each class at your home institution that you would like matched.</li>
+                                    <li>Please provide a link(s) to your degree plan and class descriptions/syllabi. If relevant, you can also email pdfs to Academic Affairs: <a href="mailto:aa@ifsa-butler.org">aa@ifsa-butler.org</a></li>
+                                    <li>If the classes you listed should be taken in a specific U.S. term, please provide those details here:</li>
+                                </ul>
+                            </span>
+                        </label>
+                        <label ng-if="userType == 'Student'">
+                                Please list the specific class code(s) and class name(s) at your home school that you would like to take abroad, if an equivalent can be found.
+                        </label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Class Code</th>
+                                    <th>Class Name</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="class in project.homeClasses">
+                                    <td ng-bind="class.courseCode"></td>
+                                    <td ng-bind="class.courseTitle"></td>
+                                    <td></td>
+                                    <td><button type="button" class="ui tiny fluid red inverted button" ng-click="removeClass(class)">Remove</button></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" ng-model="newClass.courseCode" autocomplete="off" /></td>
+                                    <td><input type="text" ng-model="newClass.courseTitle" autocomplete="off"/></td>
+                                    <td><button type="button" class="ui small fluid green inverted button" ng-click="addClass(newClass)">Add</button></td>
+                                    <td><button type="button" class="ui small fluid red inverted button" ng-click="clearClass(newClass)">Clear</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <textarea rows="3" name="degreeReqs" ng-model="project.degreeReqs" placeholder="Please share any additional class details here..." ng-if="userType == 'Advisor'"></textarea>
+                    </div>
+                    <div class="grouped fields" ng-if="userType == 'Advisor'">
+                        <label for="workingWithFacultyYesNo">Are you working with a faculty member or academic department on your campus for this project? </label>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="workingWithFacultyYesNo" ng-click="viewModel.workingWithFaculty = 'Yes'" id="workingWithFacultyYes" required="required">
+                            <label for="workingWithFacultyYes" class="form-check-label">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" name="workingWithFacultyYesNo" ng-click="viewModel.workingWithFaculty = 'No'" id="workingWithFacultyNo" required="required">
+                            <label for="workingWithFacultyNo" class="form-check-label">No</label>
+                        </div>
+                    </div>
+                    <div class="field" ng-show="userType == 'Advisor' && viewModel.workingWithFaculty == 'Yes'">
+                        <p>Please list any faculty member involved in the project (include name and department). We will not contact the faculty member regarding this project:</p>
+                        <textarea rows="3" name="facultyNames" ng-model="project.facultyNames" ng-required="workingWithFaculty == 'Yes'"></textarea>
+                    </div>
+                    <div class="grouped fields" ng-if="userType == 'Student'">
+                        <p>Please provide the name and email address of your academic or study abroad advisor helping you determine what classes to take abroad.</p>                    
+                        <div class="required field" ng-class="{ 'error' : cmpForm.AdvisorName.$invalid && !cmpForm.AdvisorName.$pristine}">
+                            <label>Advisor Name</label>
+                            <input type="text" name="AdvisorName" placeholder="Advisor Name" ng-model="project.facultyNames" required="true">
+                        </div>
+                        <div class="field" ng-class="{ 'error' : cmpForm.AdvisorEmail.$invalid }">
+                            <label>E-mail</label>
+                            <input type="email" name="AdvisorEmail" placeholder="Advisor Email" ng-model="project.academicAdvisorEmail">
+                            <p class="error" ng-show="cmpForm.AdvisorEmail.$invalid">Please enter only one email address</p>
+                        </div>
+                    </div>
+                    <div class="grouped fields" ng-if="userType == 'Advisor'">
+                        <label for="additionalInfo">Are there any additional pertinent details regarding your request?</label>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="additionalInfo" ng-model="project.includeDirectedResearch" class="hidden" id="additionalInfo1">
+                            <label class="form-check-label" for="additionalInfo1" >Include directed research</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="additionalInfo" ng-model="project.includeInternshipOptions" class="hidden" id="additionalInfo2">
+                            <label class="form-check-label" for="additionalInfo2" >Include internship options</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="additionalInfo" ng-model="viewModel.additionalInfoOtherShow" class="hidden" id="additionalInfo3">
+                            <label class="form-check-label" for="additionalInfo3" >Other</label>
+                        </div>
+                    </div>
+                    <div class="field" >
+                        <label ng-if="userType == 'Advisor'" for="additionalInfo">Please provide any other additional information for your request.</label>
+                        <label ng-if="userType == 'Student'" for="additionalInfo">Please add any additional information that would assist IFSA in conducting research on your behalf (additional details, link to your degree plan or class descriptions, etc.):</label>
+                        <textarea rows="3" name="additionalInfo" ng-model="project.additionalInformation"></textarea>
+                    </div>
+                    <div class="ui item">
+                        <button type="submit" ng-class="{ 'loading' : saving }" ng-disabled="cmpForm.$invalid || !project.homeClasses.length" class="ui fluid green inverted button">Submit</button>
+                    </div>
+                </div> <!-- End of Form -->
+            </form>
+        </div>
+    </div> <!-- End of Segment -->
+</div><!-- End of Container -->
+</div>

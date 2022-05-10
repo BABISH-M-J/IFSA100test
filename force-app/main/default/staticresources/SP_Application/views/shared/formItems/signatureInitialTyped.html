@@ -1,0 +1,8 @@
+<div type="text/ng-template" ng-hide="formItem.hidden">
+    <label ng-if="formItem.showLabel">{{formItem.lable}}:</label>
+    <input class="form-control"  placeholder="{{formItem.lable}}" type="text" ng-model="formItem.response" ng-change="change()"/>
+    <br />
+    <span class="handwritten" ng-if="formItem.fieldType == 'Signature_Typed' || formItem.fieldType == 'Initial'">
+        {{formItem.response}}
+    </span>
+</div>

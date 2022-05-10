@@ -1,0 +1,14 @@
+<div class="ui doubling two cards" ng-if="selectedCategory">
+    <div class="ui card" ng-repeat="file in selectedCategory.files | orderBy : 'Title'" ng-click="selectFile(file)">
+        <div class="content">
+            <div class="header">
+                <i class="big file outline icon" ng-class="getFileType(file.FileExtension)"></i>
+                <span ng-bind-html="file.Title"></span>
+            </div>
+            <div class="meta">
+                <span><label>Publish Date:</label> {{file.LatestPublishedVersion.CreatedDate | date: 'shortDate'}}</span>
+                <span><label>Size:</label> {{file.ContentSize / 1000000 | number:2}}MB</span>
+            </div>
+        </div>
+    </div>
+</div>

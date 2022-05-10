@@ -1,0 +1,22 @@
+<h2 class="content-title">Upload File</h2>
+<hr class="hr-gold"/>
+<div class="row">
+    <div class="col-xs-12">
+        <hr/>
+        <form name="uploadForm" ng-submit="save()">
+            <div class="row">
+                <input type="file" file-model="fileToUpload" accept="image/*, .pdf, .doc, .docx, .xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" ng-upload-change="checkFileType" />
+            </div>
+            <div class="row top-buffer text-center">
+                <div class="col-xs-12">
+                    <div ng-show="fileToUpload.size > 2621440 && !isImage" class="ui negative message">The file you have choosen is too large. Please select a file that is less than 2.5 MB</div>
+                    <i class="fa fa-spinner fa-pulse fa-2x" ng-if="isProcessing" />
+                    <button type="submit" ng-disabled="modalForm.$invalid || fileToUpload.size > 2621440 && !isImage || !fileToUpload || isProcessing" class="btn ifsa-btn">
+                        Submit
+                    </button>
+                    <a href="#/"><button type="button" class="btn btn-default">Cancel</button></a>      
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

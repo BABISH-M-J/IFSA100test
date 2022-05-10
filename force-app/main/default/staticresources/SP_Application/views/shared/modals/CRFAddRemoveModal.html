@@ -1,0 +1,68 @@
+<div type="text/ng-template">
+    <form ng-submit="submit()" novalidate name="AddRemoveClassForm">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{data.title}}</h4>
+        </div>
+        <div class="modal-body" ng-if="data.type == 'Add'">
+            <div class="ui form reg-font-size">
+                Please provide the following details about the class:
+                <div class="field required" ng-if="data.course.childClasses && data.course.childClasses.length">                    
+                    <label> Please select the exact class you are taking from the dropdown. </label>
+                    <select name="childClasses"
+                            ng-model="data.course.courseId" 
+                            ng-options="class.Id as class.Course_Title_2__c | apostraphe for class in data.course.childClasses"  
+                            ng-change="changeCourseRegistration()"
+                            ng-required="data.course.childClasses && data.course.childClasses.length"> 
+                    </select>                    
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label for="instructorFirstName">Instructor First Name (Optional)</label>
+                        <input type="text" class="form-control" name="instructorFirstName" ng-model="data.course.instructorFirstName"  maxlength="25" ng-maxlength="25"/>
+                    </div>
+                    <div class="field">
+                        <label for="instructorLastName">Instructor Last Name (Optional)</label>
+                        <input type="text" class="form-control" name="instructorLastName" ng-model="data.course.instructorLastName"  maxlength="25" ng-maxlength="25"/>
+                    </div>
+                </div>
+                <div class="field" ng-if="locations.length > 1">
+                        <label for="locationOfInstruction">Location of Instruction</label>
+                        <select class="ui selection dropdown" name="class-institution" ng-model="data.course.locationId"> <!-- ng-show="locations.length" -->
+                            <option ng-repeat="location in locations" value="{{location.Id}}" ng-bind-html="location.Name" />
+                        </select>
+                    </div>
+                <!-- <div class="two fields"> -->
+                    <div class="field" ng-class="{ 'error' : AddRemoveClassForm.hostCredits.$invalid && !AddRemoveClassForm.hostCredits.$pristine }">
+                        <label for="hostCredits">Host Institution Credits</label>
+                        <input type="number" min="0" name="hostCredits" class="form-control" ng-model="data.course.credits" placeholder="Host Credits..." ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/" ng-if="data.oxbridge">
+                        <select class="ui selection dropdown" name="hostCredits" ng-model="data.course.credits" ng-if="data.oxbridge">
+                            <option value="2">Primary</option>
+                            <option value="1">Secondary</option>
+                        </select>
+                        <p ng-if="AddRemoveClassForm.hostCredits.$invalid && !AddRemoveClassForm.hostCredits.$pristine"><small>Credits should have 1 or 2 digits and up to 2 decimal places.</small></p>
+                    </div>
+                    <!-- <div class="field" ng-class="{ 'error' : AddRemoveClassForm.usCredits.$invalid && !AddRemoveClassForm.usCredits.$pristine }">
+                        <label for="usCredits">U.S. Semester Credit Hours</label>
+                        <input type="number" min="0" name="usCredits" class="form-control" ng-model="data.course.usCredits" placeholder="U.S. Credits..." ng-pattern="/^[0-9]{1,2}(\.[0-9]{1,2})?$/">
+                        <p ng-if="AddRemoveClassForm.usCredits.$invalid && !AddRemoveClassForm.usCredits.$pristine"><small>Credits should have 1 or 2 digits and up to 2 decimal places.</small></p>
+                    </div> -->
+                <!-- </div> -->
+            </div>
+        </div>
+        <div class="modal-body" ng-if="data.type == 'Remove'">
+            <label for="reason">Please provide a reason you are not taking {{data.course.courseTitle}}:</label>
+            <select ng-model="response.reason" name="reason" class="form-control" required>
+                <option ng-repeat="reason in data.reasons" value="{{reason}}">{{reason}}</option>
+            </select>
+            <div ng-show="response.reason == 'Other'">
+                <label for="reasonOtherExplanation">Explanation</label>
+                <input type="text" class="form-control" name="reasonOtherExplanation" ng-model="response.reasonOtherExplanation" ng-required="response.reason == 'Other'" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="ui huge button" ng-click="close()">Cancel</button>
+            <button type="submit" ng-disabled="AddRemoveClassForm.$invalid || data.course.parent" class="ui green huge button">Save</button>
+        </div>
+    </form>
+</div>

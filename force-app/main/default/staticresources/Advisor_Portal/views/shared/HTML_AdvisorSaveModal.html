@@ -1,0 +1,34 @@
+<!-- <div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title"><span ng-show="successful">Saved Successfully</span><span ng-show="!successful">Submission Failed</span></h3>
+	</div>
+	<div class="modal-body">
+		<h4 ng-show="successful"> Your data was submitted successfully.</h4>
+		<h4 ng-show="!successful">There was an error submitting your data. Please try again. If you continue to have problems, contact IFSA-Butler.</h4>
+	</div>
+	<div class="modal-footer">
+		<a class="btn btn-conf-small btn-highlight" ng-click="exit()">OK</a>
+	</div>
+</div> -->
+<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title" ng-show="!afterSave">Confirmation</h3>
+		<h3 class="modal-title" ng-show="afterSave"><span ng-show="successful">Submission Saved!</span><span ng-show="!successful">Submission Failed</span></h3>
+	</div>
+	<div class="modal-body">
+		<div ng-show="!afterSave">
+			<h4>{{message}} </h4>
+		</div>
+		<div ng-show="afterSave">
+			<h4 ng-show="successful">Your changes have been saved. {{message}}</h4>
+			<h4 ng-show="!successful">There was an error submitting your data. Please try again. If you continue to have problems, contact IFSA.</h4>
+		</div>
+	</div>
+	<div class="modal-footer" ng-hide="afterSave">
+		<button class="btn ifsa-btn" ng-click="save(true)">Yes</button>
+		<button class="btn ifsa-btn" ng-click="cancel()">No</button>
+	</div>
+	<div class="modal-footer" ng-show="afterSave">
+		<button class="btn ifsa-btn" ng-click="exit()">Ok</button>
+	</div>
+</div>

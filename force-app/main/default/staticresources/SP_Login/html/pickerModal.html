@@ -1,0 +1,35 @@
+<form ng-submit="submit()" name="termSelectorForm">
+    <div class="ui dimmer modals page top aligned transition visible active" style="display: flex !important;">
+        <div class="ui longer modal transition active">
+            <i class="close icon" ng-click="cancel()"></i>
+            <div class="header">
+                Select a {{title}}
+            </div>
+            <div class="scrolling content">
+                <div class="ui fluid vertical menu">
+                    <div class="item">
+                        <div class="ui fluid icon input">
+                            <input type="text" ng-model="filterText" placeholder="Search..." />
+                            <i class="search icon"></i>
+                          </div>
+                        
+                    </div>
+                    <span class="item" ng-class="{'active': item.active}" ng-repeat="item in (filteredItems = (pickerOptions | filter:listFilter(filterText, labelField))) | orderBy:labelField" ng-click="select(item)">
+                        <i class="green check icon" ng-if="item.active"></i> 
+                        <a ng-bind-html="item[labelField]"></a>
+                    </span>
+                    <span class="item" ng-class="{'active': unlistedSelected}" ng-if="!filteredItems.length && pickerType == 'home_institution'" ng-click="selectUnlisted(filterText)">
+                        <i class="green check icon" ng-if="unlistedSelected"></i>
+                        <a ng-bind-html="filterText"></a>
+                    </span>
+                    </div>
+            </div>
+            <div class="actions">
+                <button type="button" class="ui right floated button" ng-click="cancel()">Cancel</button>
+                <button type="button" class="ui left labeled positive icon button" ng-click="selected = selectedOption; ok()" ng-disabled="!selectedOption"><i class="left map marker alternate icon"></i>Select {{title}}</button>
+                <!-- <button type="button" class="ui left labeled positive icon button" ng-click="selected = selectedOption; ok()" ng-disabled="!selectedOption" ng-if="filteredItems.length"><i class="left map marker alternate icon"></i>Select {{title}}</button>
+                <button type="button" class="ui left labeled positive icon button" ng-click="ok()" ng-disabled="!filteredItems.length" ng-if="!filteredItems.length"><i class="left map marker alternate icon"></i>Select {{title}}</button> -->
+            </div>
+        </div>
+    </div>
+</form>

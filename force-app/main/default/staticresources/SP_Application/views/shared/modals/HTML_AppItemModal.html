@@ -1,0 +1,2183 @@
+<div type="text/ng-template">
+	<div ng-show="loading">
+		<div class="modal-header">
+			<div class="row">
+				<div class="col-xs-11">
+					<h3 class="modal-title">Loading...</h3>
+				</div>
+				<div class="col-xs-1 pull-right">
+					<i tooltip="Close" style="cursor:pointer" ng-click="closeModal()" class="glyphicon glyphicon-remove"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<i class="fa fa-spinner fa-pulse fa-3x" />
+		</div>
+	</div>
+	<div ng-hide="loading">
+		<form name="modalForm" novalidate="novalidate">
+		<div class="modal-header">
+			<div class="row">
+				<div class="col-xs-11">
+					<h3 class="modal-title" ng-bind-html="appItemTitle"></h3>
+				</div>
+				<div class="col-xs-1 pull-right">
+					<i tooltip="Close" style="cursor:pointer" ng-click="closeModal()" class="glyphicon glyphicon-remove"></i>
+				</div>
+			</div>
+		</div>
+		<div ng-if="!data.form || data.form && data.isComplete">
+			<div class="modal-body" ng-show="data.fastFormsHTML" ng-bind-html="data.fastFormsHTML">
+				<!--<script type="text/javascript" id="jsFastForms" ng-src="{{data.fastFormsURL}}"> </script>-->
+			</div>
+			<div class="modal-body" ng-hide="data.fastFormsHTML">
+				<!--Directions-->
+				<div ng-hide="data.directions == null || data.isComplete || (isAdvisor && data.recordType == 'Program_Approval') || (data.recordType == 'No_Action' && data.isTranscript) || data.recordType == 'Travel_Plan' || data.recordType == 'Form'">
+					<h4>Instructions</h4>
+					<p ng-bind-html="data.directions"></p>
+				</div>
+				<!-- No Action Transcript -->
+				<div ng-show="data.recordType == 'Form'">
+					<span ng-bind-html="data.directions"></span>
+				</div>
+
+				<div ng-show="data.recordType == 'No_Action' && data.isTranscript">
+					<h4>
+						<!-- <b>Instructions:</b> Please contact the registrar at each college or university you have attended to order official transcripts for all work you have completed to date. If the registrar can send your official transcript electronically, it should be sent to {{data.advisorFirstName + " " + data.advisorLastName}} at <a ng-href="mailto:{{data.advisorEmail}}">{{data.advisorEmail}}</a>. Otherwise, please send transcripts to: <br /><br /> {{data.advisorFirstName + " " + data.advisorLastName}} <br /> Institute for Study Abroad<br/>6201 Corporate Drive, Suite 200<br/>Indianapolis, IN 46278-9202<br/>United States<br/> -->
+						<!-- <b>Instructions:</b> Please contact the registrar at each college or university you have attended to order official transcripts for all work you have completed to date. If the registrar can send your official transcript electronically, it should be sent to IFSA at <a ng-href="mailto:admissions@ifsa-butler.org">admissions@ifsa-butler.org</a>. Otherwise, please send transcripts to: <br /><br /> {{data.advisorFirstName + " " + data.advisorLastName}} <br /> Institute for Study Abroad<br/>6201 Corporate Drive, Suite 200<br/>Indianapolis, IN 46278-9202<br/>United States<br/> -->
+						<b>Instructions:</b> Please contact the registrar at each college or university you have attended to order official transcripts for all work you have completed to date. If the registrar can send your official transcript electronically, it should be sent to IFSA at <a ng-href="mailto:admissions@ifsa-butler.org">admissions@ifsa-butler.org</a>. Otherwise, please send transcripts to: <br /><br /> Institute for Study Abroad<br/>6201 Corporate Drive, Suite 200<br/>Indianapolis, IN 46278-9202<br/>United States<br/>
+						<br />
+						<p>Please note that it can take up to 2 weeks for a paper transcript to reach us via regular postal service, but you could choose to expedite for faster delivery if needed.</p>
+					</h4>
+				</div>
+				<div ng-hide="data.directions == null || data.isComplete || !isAdvisor || data.recordType != 'Program_Approval'">
+					<h4>
+						<b>Instructions:</b> The above student is applying for a full-time program of undergraduate study abroad sponsored by the Institute for Study Abroad, with the expectation that the U.S. equivalent of the semester hours of credit earned abroad will be transferred toward his or her academic program in progress at home. Your student’s application cannot be considered until we receive this form from you. IFSA is a national nonprofit organization regularly serving students from accredited colleges and universities. We require that all applicants be degree-seeking undergraduate students currently enrolled and in good standing at an accredited U.S. or Canadian college or university. By signing this form, you approve transfer of credit earned abroad as shown on the Butler University transcript. <br/><br/> After the student completes the study abroad program, the Butler University Registrar will provide an official transcript for credit transfer. This transcript will show the institution attended abroad and the U.S. equivalent grades and semester hours of credit earned in all courses attempted. An original Butler University transcript will be forwarded to the student’s permanent home address and the designated transcript recipient on your campus. If your university has previously designated a single recipient for all transcripts, we will send the transcript to that address. Otherwise, IFSA will be in contact with your institution before the transcript is ready to be mailed.
+					</h4>
+				</div>
+				<!--Errors-->
+				<div class="alert alert-danger" ng-show="errorMessage != ''">
+					<a ng-click="dismissError()" class="close"><i class="ion-close-round" /></a>
+					{{errorMessage}}
+				</div>
+
+				<!--Download Link-->
+				<div class="top-buffer" ng-show="data.recordType == 'Download_Upload' || data.recordType == 'Course_Preference_Form' || data.recordType == 'Confidentiality_Disclosure_Form' || data.recordType == 'Financial_Obligation_Form' || data.recordType == 'Visa_Form' || data.recordType == 'Tutorial_Request_Form'">
+					<hr/>
+					<h3 ng-hide="data.isComplete">Download the file <a ng-href="{{data.contentLink}}" target="_blank">here.</a></h3>
+					<h3 ng-show="data.isComplete">Download original file <a ng-href="{{data.contentLink}}" target="_blank">here.</a></h3>
+				</div>
+
+				<!--Upload Link-->
+				<div class="top-buffer" ng-show="(data.recordType == 'Free_Form_Upload' || data.recordType == 'Financial_Obligation_Form' || data.recordType == 'Download_Upload' || data.recordType == 'Upload' || data.recordType == 'Course_Preference_Form' || data.recordType == 'English_Language_Results' || data.recordType == 'Confidentiality_Disclosure_Form' || data.recordType == 'Visa_Form' || data.recordType == 'Tutorial_Request_Form' || (data.recordType == 'Passport_Copy' && (data.passportDataSubmitted || (data.status == 'Started' && data.passportReadyForUpload)))) && !data.isComplete">
+					<hr/>
+					<h3 ng-if="data.recordType != 'Passport_Copy'">When you are ready you can upload the file <a ng-href="#/upload?parentId={{data.id}}">here.</a></h3>
+					<h3 ng-if="data.recordType == 'Passport_Copy'">Upload a copy of your passport <a ng-href="#/upload?parentId={{data.id}}">here.</a></h3>
+				</div>
+				<!-- Download Uploaded File -->
+				<div class="top-buffer" ng-hide="!data.isComplete" ng-show="data.files.length > 0 && (data.recordType == 'Free_Form_Upload' || data.recordType == 'Financial_Obligation_Form' || data.recordType == 'Download_Upload' || data.recordType == 'Upload' || data.recordType == 'Course_Preference_Form' || data.recordType == 'English_Language_Results' || data.recordType == 'Confidentiality_Disclosure_Form' || data.recordType == 'Visa_Form' || data.recordType == 'Tutorial_Request_Form' || (data.recordType == 'Passport_Copy' && data.passportDataSubmitted) || data.recordType == 'Class_Interest_Form') || (data.recordType == 'No_Action' && data.isTranscript)  && data.isComplete">
+					<h3 ng-show="data.files.length > 0">Retrieve Uploaded Files</h3><br />
+					<div ng-repeat="file in data.files">				
+						<a ng-href="/{{portal}}/servlet/servlet.FileDownload?file={{file.Id}}" target="_blank">{{file.Name}}</a>				
+					</div>
+					
+				</div>		
+				
+				<!--Upload-->
+				<div class="top-buffer" ng-show="false">
+					<hr/>
+					<div ngf-drop ngf-select ng-model="file" class="drop-box" ngf-drag-over-class="dragover" ngf-multiple="false" ngf-allow-dir="false">Drag files here or click to select a file.</div>
+					<div ngf-no-file-drop="true">File Drag/Drop is not supported for this browser.</div>
+					<h5>File: {{file.name}}</h5>
+				</div>
+
+				<!--Passport Copy-->
+				<div class="top-buffer" ng-if="data.recordType == 'Passport_Copy' && !data.passportDataSubmitted">
+					<div ng-bind-html="additionalInstructions" ng-if="additionalInstructions"></div>
+					<hr/>
+					<h3>Passport Information</h3>
+					<div class="row">
+						<div class="col-md-12">
+							<span><input type="checkbox" id="passportDoNotHave" ng-model="data.passportDoNotHave" /> I don't have a passport</span>
+						</div>
+						<div class="col-md-12">
+							<span><input type="checkbox" id="passportInRenewal" ng-model="data.passportInRenewal" /> Passport is being renewed</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<h5>Passport Number</h5>
+							<input type="text" class="form-control" ng-model="data.passportNumber" ng-disabled="data.passportDataSubmitted || data.passportDoNotHave || data.passportInRenewal"></input>
+						</div>
+						<div class="col-md-4">
+							<h5>Country Of Issuance</h5>
+							<select id="passportCountry" class="form-control" ng-model="data.passportCountry" ng-options="item for item in data.passportCountryOptions"
+								ng-disabled="data.passportDataSubmitted || data.passportDoNotHave || data.passportInRenewal" />
+						</div>
+						<div class="col-md-4">
+							<h5>Expiration Date</h5>
+							<p class="input-group">
+								<input type="text" id="passportExpirationDate" class="form-control visible-md-block visible-lg-block" ng-click="openDatepicker($event)"
+									datepicker-popup="MM-dd-yyyy" datepicker-mode="'year'" ng-disabled="true" show-weeks="false" ng-model="data.expirationDate"
+									is-open="datePickerOpen" placeholder="MM-DD-YYYY" close-text="Close" ng-disabled="data.passportDataSubmitted || data.passportDoNotHave" />
+								<input type="date" id="passportExpirationDateMobile" class="form-control visible-sm-block visible-xs-block" ng-model="data.expirationDate"
+									ng-disabled="data.passportDataSubmitted || data.passportDoNotHave" />
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default form-control visible-md-block visible-lg-block" ng-click="openDatepicker($event)" ng-disabled="data.passportDataSubmitted || data.passportDoNotHave || data.passportInRenewal"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" ng-show="data.passportDoNotHave || data.passportInRenewal">
+							<p>
+								If you do not currently have a passport, or if your passport is not valid for at least 6 months past your program end date and you need to renew it, please check the corresponding box to indicate that you are obtaining a new passport. You need to get started right away on your application for a new passport. <a href="ifsa.my.salesforce.com/sfc/p/#61000000Hzj3/a/61000000HTGF/05hnJmko5Imq0TyeEPunXHhMp89idHU17s4RxCjpDdQ" target="_blank">Click here</a> for some tips and resources to help you get started. If you have any concerns or questions, please contact your Program Advisor.
+							</p>
+							<p>
+								Please update your passport information once your new passport has arrived. Uncheck “Passport is being renewed” or “I don’t have a passport” to continue. Please enter the details from your new passport, then click ‘submit’ to move to the next page to upload a copy of the photo and signature pages of your passport. Please make sure the signature page is signed.
+							</p>
+							<div ng-bind-html="additionalDoNotHaveOrRenewalInstructions" ng-if="additionalDoNotHaveOrRenewalInstructions"></div>
+						</div>
+					</div>
+				</div>
+
+				<!--Rich Text-->
+				<div class="top-buffer" ng-show="data.recordType == 'Free_Form_Upload'">
+					<hr/>
+					<div text-angular="text-angular" text-angular-name="richTextInput" ta-disabled="data.isComplete" ng-model="data.content"
+						id="richTextInput"></div>
+				</div>
+
+				<!--Personal Essay-->
+				<div class="top-buffer" ng-show="data.recordType == 'Personal_Essay' && !data.isComplete">
+					<hr/>
+					<div ng-repeat="question in data.essayQuestions">
+						<h6>{{question.question}}</h6>
+						<text-angular text-angular-name="richTextInput" ta-disabled="data.isComplete" ng-model="question.response" id="richTextInput"></text-angular>
+						<hr/>
+					</div>
+				</div>
+				<div class="top-buffer" ng-show="data.recordType == 'Personal_Essay' && data.isComplete">
+					<hr/>
+					<div ng-bind-html="data.content"></div>
+				</div>
+
+				<!-- Addresses -->
+				<div class="top-buffer" ng-show="data.recordType == 'Addresses'">
+					<hr/>
+					<tabset>
+						<tab>
+							<tab-heading>
+								Addresses <i ng-show="addressForm.$valid" class="glyphicon glyphicon-ok"></i>
+							</tab-heading>
+							<div ng-form="addressForm">
+								<h4>Permanent/Home Address</h4>
+								<div class="row">
+									<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.mailingStreet.$invalid}">
+										<h5>Street</h5>
+										<input type="text" class="form-control" required="required" name="mailingStreet" ng-disabled="data.isComplete" ng-model="data.mailingStreet" />
+									</div>
+									<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.mailingCity.$invalid}">
+										<h5>City</h5>
+										<input type="text" class="form-control" required="required" name="mailingCity" ng-disabled="data.isComplete" ng-model="data.mailingCity" />
+									</div>
+									<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.mailingState.$invalid}">
+										<h5>State/Province</h5>
+										<input type="text" class="form-control" required="required" name="mailingState" ng-disabled="data.isComplete" ng-model="data.mailingState" />
+									</div>					
+								</div>
+								<div class="row">
+									<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.mailingZip.$invalid}">
+										<h5>ZIP/Postal Code</h5>
+										<input type="text" class="form-control" required="required" name="mailingZip" ng-disabled="data.isComplete" ng-model="data.mailingZip" />
+									</div>
+									<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.mailingCountry.$invalid}">
+										<h5>Country</h5>
+										<input type="text" class="form-control" required="required" name="mailingCountry" ng-disabled="data.isComplete" ng-model="data.mailingCountry" />
+									</div>
+								</div>
+								<hr/>
+								<h4>School/University Address</h4>
+								<div class="row">
+									<div class="col-xs-12">
+										<h5>My address while at school is the same as my permanent address.</h5>
+										<input type="checkbox" class="checkbox" ng-disabled="data.isComplete" ng-model="data.sameOtherAddress" ng-change="toggleOtherHomeAddress()"/>
+									</div>
+								</div>
+								<div ng-hide="data.sameOtherAddress">
+									<div class="row">
+										<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.otherStreet.$invalid}">
+											<h5>Street</h5>
+											<input type="text" class="form-control" ng-required="!data.sameOtherAddress" name="otherStreet" ng-disabled="data.isComplete" ng-model="data.otherStreet" />
+										</div>
+										<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.otherCity.$invalid}">
+											<h5>City</h5>
+											<input type="text" class="form-control" ng-required="!data.sameOtherAddress" name="otherCity" ng-disabled="data.isComplete" ng-model="data.otherCity" />
+										</div>
+										<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.otherState.$invalid}">
+											<h5>State/Province</h5>
+											<input type="text" class="form-control" ng-required="!data.sameOtherAddress" name="otherState" ng-disabled="data.isComplete" ng-model="data.otherState" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.otherZip.$invalid}">
+											<h5>ZIP/Postal Code</h5>
+											<input type="text" class="form-control" ng-required="!data.sameOtherAddress" name="otherZip"  ng-disabled="data.isComplete" ng-model="data.otherZip" />
+										</div>
+										<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.otherCountry.$invalid}">
+											<h5>Country</h5>
+											<input type="text" class="form-control" ng-required="!data.sameOtherAddress" name="otherCountry" ng-disabled="data.isComplete" ng-model="data.otherCountry" />
+										</div>
+									</div>
+								</div>
+								<hr/>
+								<h4>Billing Address</h4>							
+								<div>
+									<div class="row">
+										<div class="col-xs-12">
+											<h5>My billing address is the same as my permanent address.</h5>
+											<input type="checkbox" class="checkbox" ng-disabled="data.isComplete" ng-model="data.sameBillingAddress" ng-change="toggleBillingHomeAddress()" />
+										</div>
+									</div>
+									<div ng-hide="data.sameBillingAddress">
+										<div class="row">
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.billingStreet.$invalid}">
+												<h5>Street</h5>
+												<input type="text" class="form-control" ng-required="!data.sameBillingAddress" name="billingStreet" ng-disabled="data.isComplete" ng-model="data.billingStreet" />
+											</div>
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.billingCity.$invalid}">
+												<h5>City</h5>
+												<input type="text" class="form-control" ng-required="!data.sameBillingAddress" name="billingCity" ng-disabled="data.isComplete" ng-model="data.billingCity" />
+											</div>
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.billingState.$invalid}">
+												<h5>State/Province</h5>
+												<input type="text" class="form-control" ng-required="!data.sameBillingAddress" name="billingState" ng-disabled="data.isComplete" ng-model="data.billingState" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.billingZip.$invalid}">
+												<h5>ZIP/Postal Code</h5>
+												<input type="text" class="form-control" ng-required="!data.sameBillingAddressy" name="billingZip" ng-disabled="data.isComplete" ng-model="data.billingZip" />
+											</div>
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : addressForm.billingCountry.$invalid}">
+												<h5>Country</h5>
+												<input type="text" class="form-control" ng-required="!data.sameBillingAddress" name="billingCountry" ng-disabled="data.isComplete" ng-model="data.billingCountry" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</tab>
+						<tab>
+							<tab-heading>
+								Parent/Guardian/Emergency Contact Information <i ng-show="numberOfEmergencyContacts() > 1" class="glyphicon glyphicon-ok"></i>
+								</tab-heading> 			    		
+							<h4>Parent/Guardian/Emergency Contact Information</h4>
+							<div>
+								<table class="table table-responsive"><!-- ng-hide="data.contacts.length > 0">-->
+									<thead>
+										<th></th>
+										<th>Name</th>
+										<th>Relationship</th>
+										<th>Receive Parent/Guardian Information</th>
+										<th>Emergency Contact</th>
+										<th></th>
+										<th></th>
+									</thead>
+									<tr ng-repeat="contact in data.relatedContacts" ng-class="{'warning' : contact.isInvalid}">
+										<td>
+											<i style="font-size: 12px" class="ion-label ion-alert" ng-show="contact.isInvalid" tooltip="Click edit button to fill in missing information" tooltip-placement="top" tooltip-trigger="mouseenter"></i>
+										</td>
+										<td>{{contact.firstName + ' ' + contact.lastName}}</td>
+										<td>{{contact.relationshipWithStudent}}</td>
+										<td><i ng-show="contact.sendMarketingMaterials" class="glyphicon glyphicon-ok"></i></td>
+										<td><i ng-show="contact.isEmergencyContact" class="glyphicon glyphicon-ok"></i></td>
+										<td><button class="btn btn-sm btn-default" ng-click='editExistingContact(contact)' type="button">Edit</button></td>
+										<td><button class="btn btn-sm btn-danger" ng-click='deleteContact(contact)' type="button">Delete</button></td>
+									</tr>
+								</table>
+								<div class="row">
+									<div class="col-sm-2 col-md-offset-5" ng-hide="data.showAddContactForm">
+										<button class="btn ifsa-btn" type="button" ng-click="data.showAddContactForm = true">Add Contact</button>
+									</div>
+								</div>
+								<div ng-show="data.showAddContactForm">
+									<ng-form name="addContactForm">
+										<div class="row">
+											<div class="col-sm-3 form-group" ng-class="{'has-error' : addContactForm.parentGuardianFirstName.$invalid}">
+												<h5>First Name</h5>							
+												<input type="text" ng-model="data.editContact.firstName" required="required" name="parentGuardianFirstName" class="form-control" ng-disable="data.isComplete">
+											</div>
+											<div class="col-sm-3 form-group" ng-class="{'has-error' : addContactForm.parentGuardianLastName.$invalid}">
+												<h5>Last Name</h5>							
+												<input type="text" ng-model="data.editContact.lastName" required="required" name="parentGuardianLastName" class="form-control" ng-disable="data.isComplete">
+											</div>
+											<div class="col-sm-3 form-group" ng-class="{'has-error' : addContactForm.parentGuardianRelationship.$invalid ||  !data.editContact.relationshipWithStudent}">
+												<h5>Relationship</h5>
+												<select class="form-control" ng-disabled="data.isComplete" name="relationshipWithStudent" required="required" ng-options="item for item in data.pContactRelationshipOptions"
+													ng-model="data.editContact.relationshipWithStudent"></select>												
+											</div>
+											<div class="col-sm-3 form-group" ng-class="{'has-error' : addContactForm.parentGuardianEmail.$invalid && !data.noEmail}">
+												<h5>Email Address</h5>							
+												<input type="email" ng-model="data.editContact.email" ng-required="!data.noEmail" name="parentGuardianEmail" class="form-control" ng-disable="data.isComplete">
+												<span><input type="checkbox" ng-model="data.noEmail" ng-disabled="data.isComplete"/>This contact does not have an email address or I do not know it. (If this box is checked you will be asked to update your emergency contacts later in the application process.)</span>
+											</div>
+										</div>
+										<div class="row col-sm-12" ng-show="!(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)">
+											<p class="text-danger">You must provide at least one phone number</p>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : !(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)}">
+												<h5>Cell Phone</h5>
+												<input type="text" ng-model="data.editContact.mobilePhone" name="parentGuardianMobile" ng-required="!(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)" class="form-control" ng-disable="data.isComplete">
+											</div>
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : !(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)}">
+												<h5>Home Phone</h5>
+												<input type="text" ng-model="data.editContact.homePhone" name="parentGuardianHomePhone" ng-required="!(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)" class="form-control" ng-disable="data.isComplete">
+											</div>
+											<div class="col-sm-4 form-group" ng-class="{'has-error' : !(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)}">
+												<h5>Work Phone</h5>
+												<input type="text" ng-model="data.editContact.workPhone" name="parentGuardianPhone" ng-required="!(data.editContact.mobilePhone.length || data.editContact.homePhone.length || data.editContact.workPhone.length)" class="form-control" ng-disable="data.isComplete">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="checkbox" ng-model="data.sameAsHomeAddress" ng-change="toggleParentHomeAddress()"
+													class="checkbox" /><b>My parent/guardian address is the same as my permanent/home address.</b>
+											</div>
+										</div>
+										<div> <!-- ng-hide="sameAsHomeAddress"> -->
+											<div class="row">
+												<div class="col-sm-4 form-group" ng-class="{'has-error' : addContactForm.parentGuardianStreet.$invalid}">
+													<h5>Street</h5>
+													<input type="text" class="form-control" required="required" name="parentGuardianStreet" ng-disabled="data.isComplete" ng-model="data.editContact.mailingStreet" />
+												</div>
+												<div class="col-sm-4 form-group" ng-class="{'has-error' : addContactForm.parentGuardianCity.$invalid}">
+													<h5>City</h5>
+													<input type="text" class="form-control" required="required" name="parentGuardianCity" ng-disabled="data.isComplete" ng-model="data.editContact.mailingCity" />
+												</div>
+												<div class="col-sm-4 form-group" ng-class="{'has-error' : addContactForm.parentGuardianState.$invalid}">
+													<h5>State/Province</h5>
+													<input type="text" class="form-control" required="required" name="parentGuardianState" ng-disabled="data.isComplete" ng-model="data.editContact.mailingState" />
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-4 form-group" ng-class="{'has-error' : addContactForm.parentGuardianZip.$invalid}">
+													<h5>ZIP/Postal Code</h5>
+													<input type="text" class="form-control" required="required" name="parentGuardianZip" ng-disabled="data.isComplete" ng-model="data.editContact.mailingPostalCode" />
+												</div>
+												<div class="col-sm-4 form-group" ng-class="{'has-error' : addContactForm.parentGuardianCountry.$invalid}">
+													<h5>Country</h5>
+													<input type="text" class="form-control" required="required" name="parentGuardianCountry" ng-disabled="data.isComplete" ng-model="data.editContact.mailingCountry" />
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="checkbox" ng-model="data.editContact.isEmergencyContact"> Emergency Contact
+												<p>
+													You must have at least two people marked as emergency contacts. You currently have {{numberOfEmergencyContacts()}} emergency contacts.
+												</p>
+											</div>									
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+												<input type="checkbox" ng-model="data.editContact.sendMarketingMaterials"> Send IFSA Parent/Guardian Information
+												<p>
+													We know that your parents or guardians may have lots of questions about your study abroad plans, so we encourage you to check the box above. By checking the box above, you acknowledge that you want your parents to receive communications from IFSA regarding our services, pre-arrival advising, program and country information, fees and payment options, and health insurance.
+												</p>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-3">
+												<button class="btn ifsa-btn" type="button" ng-click="addContact()" ng-disabled="addContactForm.$invalid">
+												<span ng-show="!data.isEditMode">Add</span>
+												<span ng-show="data.isEditMode">Update</span>
+												</button>
+											</div>
+											<div class="col-sm-3">
+												<button class="btn btn-default" type="button" ng-click="cancelNewContact()">Cancel</button>
+											</div>
+										</div>
+									</ng-form>
+								</div>
+							</div>							
+						</tab>
+					</tabset>			
+				</div>
+
+				<!--Update Emergency Contact Information-->
+				<div class="top-buffer" ng-show="data.recordType == 'Update_Emergency_Contact'">
+					<hr />			
+					<table class="table table-responsive table-condensed"><!-- ng-hide="data.contacts.length > 0">-->
+						<thead>
+							<th>Name</th>
+							<th>Cell Phone</th>
+							<th>Home Phone</th>
+							<th>Work Phone</th>
+							<th>Email Address</th>
+							<th>Emergency Contact</th>
+						</thead>
+						<tr ng-repeat="contact in data.relatedContacts">
+							<td>{{contact.firstName + ' ' + contact.lastName}}</td>
+							<td><input type="text" class="form-control" ng-disabled="data.isComplete" name="eContactCellPhone" ng-model="contact.mobilePhone" /></td>
+							<td><input type="text" class="form-control" ng-disabled="data.isComplete" name="eContactHomePhone" ng-model="contact.homePhone" /></td>
+							<td><input type="text" class="form-control" ng-disabled="data.isComplete" name="eContactWorkPhone" ng-model="contact.workPhone" /></td>
+							<td><input type="email" class="form-control" ng-disabled="data.isComplete" name="eContactEmailAddress" ng-model="contact.email" /></td>
+							<td><i ng-show="contact.isEmergencyContact" class="glyphicon glyphicon-ok"></i></td>
+						</tr>
+					</table>
+				</div>
+
+				<!--Contract/Agreement Text-->
+				<div class="top-buffer" ng-show="data.recordType == 'Signature' || data.recordType == 'Agreements_and_Releases'">
+					<hr/>
+					<div ng-bind-html="data.textToSign" />
+					<div ng-show="data.isComplete || data.attachments.length() > 1">
+						<h3>Signature</h3><br />
+						<img ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+					</div>
+				</div>
+
+				<!--C&C Toggle-->
+				<div class="top-buffer" ng-show="data.recordType == 'C_C_Form'">
+					<hr/>
+					<h3>Please Select Your C&amp;C Enrollment Status.</h3> If you enroll for academic credit, you will receive 3 additional U.S. semester credit hours for your work in the C&amp;C
+					course. If you enroll for a certificate, you will not receive additional academic credit for your participation in the
+					program.
+
+					<div class="row">
+						<div class="col-md-6 col-md-offset-2">
+							<select id="ccParticipation" class="form-control" ng-model="data.ccParticipation" ng-options="item for item in data.ccParticipationOptions"
+								ng-disabled="data.isComplete" />
+						</div>
+						<div ng-show="data.isComplete" class="col-md-8">
+							<br /><h3>Signature</h3><br />
+							<img ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+						</div>
+					</div>
+				</div>
+
+				<!--Arabic Language Form-->
+				<div class="top-buffer" ng-show="data.recordType == 'Arabic_Language_Form'">
+					<hr/>
+					<div class="row">
+						<div class="col-xs-12">
+							<h3>Which languages have you formally studied?</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<input type="checkbox" class="checkbox" ng-model="data.speaksArabic" ng-disabled="data.isComplete" /> Modern Standard
+							Arabic <strong>(A)</strong>
+						</div>
+						<div class="col-md-3">
+							<input type="checkbox" class="checkbox" ng-model="data.speaksColloquialEgyptian" ng-disabled="data.isComplete" /> Colloquial
+							Egyptian <strong>(CE)</strong>
+						</div>
+						<div class="col-md-3">
+							<input type="checkbox" class="checkbox" ng-model="data.speaksHebrew" ng-disabled="data.isComplete" /> Hebrew <strong>(H)</strong>
+						</div>
+						<div class="col-md-3">
+							<input type="checkbox" class="checkbox" ng-model="data.speaksPalestinian" ng-disabled="data.isComplete" /> Palestinian
+							<strong>(P)</strong>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h3>Rate your language proficiency in each category, with 0 being least fluent.</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<table class="table table-responsive">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Modern Standard Arabic</th>
+										<th>Colloquial Egyptian</th>
+										<th>Hebrew</th>
+										<th>Palestinian</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Reading</td>
+										<td><select id="msaReading" ng-model="data.msaReading" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="ceReading" ng-model="data.ceReading" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="hReading" ng-model="data.hReading" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="pReading" ng-model="data.pReading" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+									</tr>
+									<tr>
+										<td>Writing</td>
+										<td><select id="msaWriting" ng-model="data.msaWriting" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="ceWriting" ng-model="data.ceWriting" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="hWriting" ng-model="data.hWriting" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="pWriting" ng-model="data.pWriting" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+									</tr>
+									<tr>
+										<td>Speaking</td>
+										<td><select id="msaSpeaking" ng-model="data.msaSpeaking" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="ceSpeaking" ng-model="data.ceSpeaking" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="hSpeaking" ng-model="data.hSpeaking" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="pSpeaking" ng-model="data.pSpeaking" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+									</tr>
+									<tr>
+										<td>Aural Comprehension</td>
+										<td><select id="msaAuralComprehension" ng-model="data.msaAuralComprehension" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="ceAuralComprehension" ng-model="data.ceAuralComprehension" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="hAuralComprehension" ng-model="data.hAuralComprehension" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+										<td><select id="pAuralComprehension" ng-model="data.pAuralComprehension" class="form-control" ng-options="item for item in data.competencyOptions"
+												ng-disabled="data.isComplete" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h3>How did you learn these languages? Check all that apply.</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<input type="checkbox" class="checkbox" ng-model="data.commercialTeachingRosettaStoneEtc" ng-disabled="data.isComplete" />					Commercial Teaching / Rosetta Stone
+						</div>
+						<div class="col-md-4">
+							<input type="checkbox" class="checkbox" ng-model="data.communityCourses" ng-disabled="data.isComplete" /> Community
+							Courses
+						</div>
+						<div class="col-md-4">
+							<input type="checkbox" class="checkbox" ng-model="data.heritageSpeaker" ng-disabled="data.isComplete" /> Heritage Speaker
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<input type="checkbox" class="checkbox" ng-model="data.highSchoolCourses" ng-disabled="data.isComplete" /> High School
+							Courses
+						</div>
+						<div class="col-md-4">
+							<input type="checkbox" class="checkbox" ng-model="data.universityCourses" ng-disabled="data.isComplete" /> University
+							Courses
+						</div>
+						<div class="col-md-4">
+							Regularly Speak:
+							<select class="form-control" ng-model="data.regularlySpeak" ng-options="item for item in data.regularlySpeakOptions" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+				</div>
+
+				<!--Medical Form-->
+				<div class="top-buffer" ng-show="data.recordType == 'Medical_Form' || data.recordType == 'Custom_Medical_Form'">
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question1Override">Check this box if you have any medical, psychological or psychiatric condition(s) that could interfere with your participation in our <span ng-if="!data.hideStudyAbroadWording">study abroad</span> program.</span>
+								<span ng-show="data.question1Override" ng-bind-html="data.question1Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.medicalPsychConditions" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.medicalPsychConditions">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question2Override">Please describe any condition(s).</span>
+								<span ng-show="data.question2Override" ng-bind-html="data.question2Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.medicalPsychConditionsExplanation" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<div class="row" ng-show="data.medicalPsychConditions">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question3Override">Check this box if you plan on continuing this treatment abroad.</span>
+								<span ng-show="data.question3Override" ng-bind-html="data.question3Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.medicalPsychConditionsTreatment" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question4Override">Check this box if you have a learning disability that could interfere with your academic activities while you are on the <span ng-if="!data.hideStudyAbroadWording">study abroad</span> program.</span>
+								<span ng-show="data.question4Override" ng-bind-html="data.question4Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.learningDisability" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.learningDisability">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question5Override">Please describe any disabilities.</span>
+								<span ng-show="data.question5Override" ng-bind-html="data.question5Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.learningDisabilityDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question6Override">Check this box if you are currently undergoing any medical or psychological treatment (including counseling) for any of the conditions described above.</span>
+								<span ng-show="data.question6Override" ng-bind-html="data.question6Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.currentTreatment" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.currentTreatment">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question7Override">Please describe any current treatment.</span>
+								<span ng-show="data.question7Override" ng-bind-html="data.question7Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.currentTreatmentDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question8Override">Check this box if you require any ongoing medical attention (e.g., injections, prescriptions).</span>
+								<span ng-show="data.question8Override" ng-bind-html="data.question8Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.ongoingMedicalAttention" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.ongoingMedicalAttention">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question9Override">Please describe any ongoing medical attention.</span>
+								<span ng-show="data.question9Override" ng-bind-html="data.question9Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.ongoingMedicalAttentionDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question10Override">Check this box if you have any physical or medical restrictions on physical activity.</span>
+								<span ng-show="data.question10Override" ng-bind-html="data.question10Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.physicalActivityRestrictions" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.physicalActivityRestrictions">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question11Override">Please describe any physical activity restrictions.</span>
+								<span ng-show="data.question11Override" ng-bind-html="data.question11Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.physActivityRestrictionsDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question12Override">Check this box if your medical or physical restrictions influence your housing needs or participation in orientation, where activities may include hiking, kayaking, etc. (Students may live in buildings that are several stories high and have small toilets and/or shower stalls.)</span>
+								<span ng-show="data.question12Override" ng-bind-html="data.question12Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.housingRestrictions" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.housingRestrictions">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question13Override">Please describe any any housing restrictions or needs.</span>
+								<span ng-show="data.question13Override" ng-bind-html="data.question13Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.housingRestrictionsDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question14Override">Check this box if you have any food allergies or other non-medication allergies.</span>
+								<span ng-show="data.question14Override" ng-bind-html="data.question14Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.foodAllergies" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question15Override">I am allergic to:</span>
+								<span ng-show="data.question15Override" ng-bind-html="data.question15Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.allergicTo" class="form-control" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question16Override">My typical reaction when exposed is:</span>
+								<span ng-show="data.question16Override" ng-bind-html="data.question16Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.typicalReaction" class="form-control" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question17Override">Emergency treatment for my allergies are:</span>
+								<span ng-show="data.question17Override" ng-bind-html="data.question17Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.emergencyTreatment" class="form-control" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question18Override">Check this box if you will have an EpiPen with you.</span>
+								<span ng-show="data.question18Override" ng-bind-html="data.question18Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.epiPen" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question19Override">Check this box if you need special arrangements that IFSA can assist you with.</span>
+								<span ng-show="data.question19Override" ng-bind-html="data.question19Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.foodAllergySpecialArrangments" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.foodAllergies && data.foodAllergySpecialArrangments">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question20Override">Please describe these special arrangments:</span>
+								<span ng-show="data.question20Override" ng-bind-html="data.question20Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.foodAllergyArrangementDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question21Override">Check this box if you have a medical dietary restriction.</span>
+								<span ng-show="data.question21Override" ng-bind-html="data.question21Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.medicalDietaryRestriction" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.medicalDietaryRestriction">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question22Override">Please describe your medical dietary restrictions.</span>
+								<span ng-show="data.question22Override" ng-bind-html="data.question22Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.medicalDietaryRestrictionDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question23Override">Check this box if you are allergic to any medications.</span>
+								<span ng-show="data.question23Override" ng-bind-html="data.question23Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.medicationAllergies" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.medicationAllergies">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question24Override">Please list and describe your medication allergies.</span>
+								<span ng-show="data.question24Override" ng-bind-html="data.question24Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.medicationAllergiesDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question25Override">Check this box if there is anything else that would be useful for IFSA to know regarding your physical, psychological, or academic needs.</span>
+								<span ng-show="data.question25Override" ng-bind-html="data.question25Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.otherMedicalData" ng-disabled="data.isComplete" />
+						</div>
+					</div>
+					<div class="row" ng-show="data.otherMedicalData">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>
+								<span ng-show="!data.question26Override">Please elaborate.</span>
+								<span ng-show="data.question26Override" ng-bind-html="data.question26Override"></span>
+							</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.otherMedicalDataDescription" class="form-control" ng-disabled="data.isComplete"
+							/>
+						</div>
+					</div>
+					<div class="row top-buffer">
+						<div class="col-md-10 col-md-offset-1">
+							<b>I authorize IFSA and its directors, officers, employees, agents, volunteers, successors, and assigns, to provide to me, through medical personnel of their choice, customary medical assistance, transportation, and emergency medical services should I require such assistance, transportation, or services as a result of injury or damage related to my participation in the study abroad program. This consent does not impose a duty upon IFSA, or upon any of the individuals mentioned above to provide such assistance, transportation, or services. <br />
+							In addition, I give my consent to IFSA to disclose the information that I have provided in this form to IFSA employees, relevant employees of the Affiliate Institution, relevant health professionals, and my host family, as necessary, in order to plan for and accommodate my needs while I am participating in the study abroad program. I also authorize IFSA to disclose this information to relevant health professionals in the event of an emergency while I am participating in the study abroad program. I understand that information disclosed to third parties under this authorization may be re-disclosed by those third parties, and I release IFSA from liability resulting from such third party disclosures.</b>
+						</div>
+					</div>
+					<div ng-show="data.isComplete">
+						<h3>Signature</h3><br />
+						<img ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+					</div>
+				</div>
+
+				<!--URL-->
+				<div class="top-buffer text-center" ng-show="data.recordType == 'URL'">
+					<hr/>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<h3>Provide a link in the box below.</h3>
+							<input type="text" class="form-control" ng-model="data.contentLink" ng-disabled="data.isComplete" placeholder="https://dropbox.com/0000000, https://drive.google.com/0000000..."
+							/>
+						</div>
+					</div>
+				</div>
+
+				<!--Program Approval-->
+				<div class="top-buffer" ng-show="data.recordType == 'Program_Approval' && isAdvisor == true" ng-form="programApprovalForm">
+					<hr/>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-1">
+							<b>Check if any of these conditions apply to your program approval for this student:</b>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="data.pendingHomeInstitutionFinalApproval" /> Final approval is pending completion of home institution approval process.
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="data.requiredAcademicConditions" /> Student is required to meet certain academic conditions while abroad (for example taking a minimum number of credit hours while abroad, earning a minimum grade or better in courses while abroad, or taking courses in particular subjects or departments).
+								</label>
+							</div>
+						</div>
+					</div>
+					<!-- Q1 -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.discipline.$invalid }">
+						<label>Has the student received any serious disciplinary action while attending your institution?</label>
+						<select ng-model="data.discipline" name="discipline" class="form-control" required="required" ng-disabled="data.isComplete">
+							<option value="Yes">Yes</option>
+							<option value="No">No</option>
+							<option value="Unknown">Unknown</option>
+						</select>
+					</div>
+					<!-- TODO: Update this question with language from Health and Safety -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.disciplinaryActionExplanation.$invalid }" ng-show="data.discipline == 'Yes'">
+						<label>If yes, please describe all instances of disciplinary action to include when the violations occurred, what sanctions were levied, if the sanctions were completed, and the precise nature of any violations.  Please provide any context that might be helpful in determining whether the student is prepared to study abroad and to interact productively with the host culture, institution, and fellow participants. </label>
+						<textarea rows="4" cols="40" name="disciplinaryActionExplanation" class="form-control" ng-required="data.discipline == 'Yes'" ng-model="data.disciplinaryActionExplanation" ng-disabled="data.isComplete" />
+						<br />
+					</div>
+					<!-- Q2 -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.goodStanding.$invalid }">
+						<label>Is the student enrolled full-time and in good standing at your institution?</label>
+						<select ng-model="data.goodStanding" name="goodStanding" class="form-control" required="required" ng-disabled="data.isComplete">
+							<option value="Yes">Yes</option>
+							<option value="No">No</option>
+							<option value="Unknown">Unknown</option>
+						</select>
+					</div>
+					<!-- TODO: Update this question with language from Student Engagement -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.goodStandingExplanation.$invalid }" ng-show="data.goodStanding == 'No'">
+						<label>If no, please provide additional details about what is preventing this student from being in good standing with your institution (GPA, disciplinary action, delinquent fees, etc.), what would need to occur for the student to regain good standing, and any plans or agreements in place with the student to regain good standing. </label>
+						<textarea rows="4" cols="40" name="goodStandingExplanation" class="form-control" ng-required="data.goodStanding == 'No'" ng-model="data.goodStandingExplanation" ng-disabled="data.isComplete" />
+						<br />
+					</div>
+					<!-- Q3 -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.academicProbation.$invalid }">
+						<label>Has the student been on academic probation at any point in time while attending your institution?</label>
+						<select ng-model="data.academicProbation" name="academicProbation" class="form-control" required="required" ng-disabled="data.isComplete">
+							<option value="Yes">Yes</option>
+							<option value="No">No</option>
+							<option value="Unknown">Unknown</option>
+						</select>
+					</div>
+					<!-- TODO: Update this question with language from Academic Programs -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.academicProbationExplanation.$invalid }" ng-show="data.academicProbation == 'Yes'">
+						<label>If yes, please list the semester(s) or term(s) when the student was on academic probation and whether the student is at risk for academic dismissal from the institution. If the student is currently on academic probation, please describe any plans or agreements in place with the student to regain good academic standing.</label>
+						<textarea rows="4" cols="40" name="academicProbationExplanation" class="form-control" ng-required="data.academicProbation == 'Yes'" ng-model="data.academicProbationExplanation" ng-disabled="data.isComplete" />
+						<br />
+					</div>
+					<!-- Q4 -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.approvalToStudy.$invalid }">
+						<label>Does the student have approval to study abroad from your institution?</label>
+						<select ng-model="data.approvalToStudy" name="approvalToStudy" class="form-control" required="required" ng-disabled="data.isComplete">
+							<option value="Yes">Yes</option>
+							<option value="Yes, with reservations">Yes, with reservations</option>
+							<option value="No">No</option>
+						</select>
+					</div>
+					<!-- TODO: Update this question with language from Student Engagement -->
+					<div class="form-group" ng-class="{ 'has-error' : programApprovalForm.approvalToStudyExplanation.$invalid }">
+						<label>If no, please provide any additional context to help us understand why you are not approving the student at this time and if you might approve the student in the future. Please be specific about violations, behavioral patterns, or other concerns and the severity, frequency and recency of these concerns.</label>
+						<textarea rows="4" name="approvalToStudyExplanation" cols="40" class="form-control" ng-required="data.approvalToStudy != 'Yes'" ng-model="data.approvalToStudyExplanation" ng-disabled="data.isComplete" />
+					</div>
+				</div>
+
+				<!--Recommendation-->
+				<div class="top-buffer text-center" ng-show="data.recordType == 'Recommendation'">
+					<hr/>
+					<div class="row" ng-show="data.recommendationWaived == 'Not Selected'">
+						<div class="col-md-10 col-md-offset-1">
+							Before you can submit recommendations, you must elect or decline to waive your right to view any recommendations submitted.
+							Your recommenders will see the option you select here.
+						</div>
+					</div>
+					<br/>
+					<div class="row" ng-show="data.recommendationWaived == 'Not Selected'">
+						<div class="col-md-7 col-md-offset-1">
+							<b>Do you waive your right to view any of your completed recommendations?</b>
+						</div>
+						<div class="col-md-2">
+							<select class="form-control" ng-model="form.recommendationWaived">
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</div>
+					</div>
+					<div class="row" ng-show="data.recommendationWaived != 'Not Selected' && !data.isComplete">
+						<div class="col-md-10 col-md-offset-1">
+							You need a total of <b>{{data.numberOfRecommendations}}</b> completed recommendation(s). You may request <b>{{data.numberOfRecommendations + 1}}</b>					recommendations.
+						</div>
+					</div>
+					<br/>
+					<div class="row" ng-show="data.recommendations.length">
+						<div class="col-md-10 col-md-offset-1">
+							<table class="table table-responsive">
+								<thead>
+									<tr>
+										<th>Recommender</th>
+										<th>Email Address</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in data.recommendations" style="text-align:left">
+										<td ng-show="item.recommendationUrl.length < 1">{{item.recommenderName}}</td>
+										<td ng-show="item.recommendationUrl.length > 1"><a ng-href="{{item.recommendationUrl}}" target="_blank">{{item.recommenderName}}</a></td>
+										<td>{{item.recommenderEmail}}</td>
+										<td>{{item.recommendationStatus}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row" ng-show="data.recommendationWaived != 'Not Selected' && !data.isComplete">
+						<div class="col-md-10 col-md-offset-1">
+							<h4 ng-show="recommenderSubmitted">Your recommender was sent an email with instructions on completing a recommendation.</h4>
+							<div class="row" ng-hide="data.recommendations.length > data.numberOfRecommendations">
+								<div class="col-md-6">
+									<h5>Recommender Name</h5>
+									<input type="text" class="form-control" ng-model="form.recommenderName"></input>
+								</div>
+								<div class="col-md-6">
+									<h5>Recommender Email</h5>
+									<input type="text" class="form-control" ng-model="form.recommenderEmail"></input>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--Spanish Language Evaluation-->
+				<div ng-show="data.recordType == 'Spanish_Language_Evaluation'">
+					<hr ng-hide="data.directions == null || data.isComplete"/>
+					<!-- Alerts -->
+					<div class="row" ng-if="(data.evalWaived != 'Not Selected' && !data.isComplete) || data.isComplete">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="alert alert-info" ng-if="data.evalWaived != 'Not Selected'"><span class="fa fa-exclamation-circle"></span> You elected <span ng-show="data.evalWaived == 'Yes'"> not</span> to view your completed evaluation</div>
+							<div class="alert alert-success" ng-if="data.isComplete"><span class="fa fa-check"></span> Your evaluator has finished your evaluation. <span ng-if="data.evalWaived == 'No'">You may view it <a ng-href="/studentportal/SP_SpanishEvaluation?app={{data.applicationId}}&appItem={{data.id}}" target="_blank">here</a>.</span></div>
+							<hr/>
+						</div>
+					</div>
+					<!-- Collect Data -->
+					<div class="row" ng-show="data.evalWaived == 'Not Selected'">
+						<div class="col-md-10 col-md-offset-1">
+							<p>Before you can provide us with your evaluator, you must elect or decline to waive your right to view the evaluation submitted.
+							Your evaluator will see the option you select here.</p>
+						</div>
+						<div class="col-md-7 col-md-offset-1">
+							<b>Do you waive your right to view the completed evaluation?</b>
+						</div>
+						<div class="col-md-2">
+							<select class="form-control" ng-model="form.evalWaived">
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</div>
+					</div>
+					<div class="row" ng-if="(data.evalWaived != 'Not Selected' && !data.isComplete) || data.isComplete">
+						<div class="col-md-10 col-md-offset-1">
+							<!-- <p ng-hide="data.evaluatorEmail != ''">Please submit a professor's name and email address. They will be sent instructions on completing a Spanish Language Evaluation.</p> -->
+							<p ng-show="data.isComplete">Your Spanish Language Evaluation was completed by:</p>
+							<div class="row">
+								<div class="col-md-6">
+									<h5>Professor Name</h5>
+									<input type="text" class="form-control" ng-model="data.evaluatorName" ng-disabled="data.isComplete || !data.showSubmitEvalButton" ng-hide="data.isComplete"></input>
+									<p class="form-control-static" ng-show="data.isComplete">{{data.evaluatorName}}</p>
+								</div>
+								<div class="col-md-6">
+									<h5>Professor Email</h5>
+									<input type="text" class="form-control" ng-model="data.evaluatorEmail" ng-disabled="data.isComplete || !data.showSubmitEvalButton" ng-hide="data.isComplete"></input>
+									<p class="form-control-static" ng-show="data.isComplete">{{data.evaluatorEmail}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" ng-if="data.isComplete">
+						<div class="col-md-10 col-md-offset-1">
+							<hr/>
+							<h4>Signature</h4><br />
+							<img class="img-responsive" ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+						</div>
+					</div>			
+				</div>
+
+				<!--Housing Preferences -->
+				<div class="top-buffer" ng-show="data.recordType == 'Housing_Preferences_Form'">
+					<hr/>
+					<div class="row" ng-hide="!(data.displayoffcampus || data.displayoncampus || data.displaynonsmoking || data.displaysmoking || data.displaysingleroom || data.displaysinglegender || data.displayprivatebathroom || data.catered || data.selfCatered || data.lactoseIntolerant || data.foodAllergies || data.displayvegetarian || data.displayVegan || data.displayglutenfree || data.displaykosher || data.displayHalal || data.displayother)">
+						<div class="col-xs-12">
+							<h3>Please indicate your preference(s).</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-sm-6" ng-show="data.displayoffcampus">
+							<div class="row">
+								<div class="col-xs-10">
+									Off Campus
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.offCampus" class="checkbox"></input>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayoncampus">
+							<div class="row">
+								<div class="col-xs-10">
+									On Campus
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.onCampus" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaynonsmoking">
+							<div class="row">
+								<div class="col-xs-10">
+									Non-Smoking
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.nonSmoking" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaysmoking">
+							<div class="row">
+								<div class="col-xs-10">
+									Smoking
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.smoking" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaysingleroom">
+							<div class="row">
+								<div class="col-xs-10">
+									Single Room
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.singleRoom" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaysinglegender">
+							<div class="row">
+								<div class="col-xs-10">
+									Single Gender
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.singleGender" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayprivatebathroom">
+							<div class="row">
+								<div class="col-xs-10">
+									Private Bathroom
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.privateBathroom" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaycatered">
+							<div class="row">
+								<div class="col-xs-10">
+									Catered
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.catered" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayselfcatered">
+							<div class="row">
+								<div class="col-xs-10">
+									Self-Catered
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.selfCatered" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaylactoseintolerant">
+							<div class="row">
+								<div class="col-xs-10">
+									Lactose Intolerant
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.lactoseIntolerant" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayfoodallergies">
+							<div class="row">
+								<div class="col-xs-10">
+									Food Allergies
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.foodAllergies" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayvegetarian">
+							<div class="row">
+								<div class="col-xs-10">
+									Vegetarian
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.vegetarian" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayVegan">
+							<div class="row">
+								<div class="col-xs-10">
+									Vegan
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.vegan" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayglutenfree">
+							<div class="row">
+								<div class="col-xs-10">
+									Gluten-Free
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.glutenFree" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displaykosher">
+							<div class="row">
+								<div class="col-xs-10">
+									Kosher
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.kosher" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayHalal">
+							<div class="row">
+								<div class="col-xs-10">
+									Halal
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.halal" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayShabbat">
+							<div class="row">
+								<div class="col-xs-10">
+									Shabbat
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.shabbat" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6" ng-show="data.displayother">
+							<div class="row">
+								<div class="col-xs-10">
+									Other
+								</div>
+								<div class="col-xs-2">
+									<input ng-disabled="data.isComplete" type="checkbox" ng-model="data.other" class="checkbox"></input ng-disabled="data.isComplete">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-form="housingPrefsForm">
+						<div class="row" ng-show="data.displaydietaryrestrictions">
+							<div class="col-xs-12 form-group" ng-class="{'has-error': housingPrefsForm.dietaryRestrictions.$invalid}">
+								<label class="control-label" for="dietaryRestrictions">Please provide details on any dietary restrictions.</label>
+								<textarea name="dietaryRestrictions" id="dietaryRestrictions" ng-disabled="data.isComplete" ng-maxlength="255" rows="4" ng-model="data.dietaryRestrictions" class="form-control"></textarea ng-disabled="data.isComplete">
+								<p ng-show="housingPrefsForm.dietaryRestrictions.$error.maxlength" class="help-block">Entry too long.</p>
+							</div>
+						</div>
+						<div class="row" ng-show="data.displayReligiousAccomodations">
+							<div class="col-xs-12 form-group" ng-class="{'has-error': housingPrefsForm.religiousAccomodations.$invalid}">
+								<label class="control-label" for="religiousAccomodations">Please provide details on any religious accomodations needed.</label>
+								<textarea name="religiousAccomodations" id="religiousAccomodations" ng-disabled="data.isComplete" ng-maxlength="255" rows="4" ng-model="data.religiousAccomodations" class="form-control"></textarea ng-disabled="data.isComplete">
+								<p ng-show="housingPrefsForm.religiousAccomodations.$error.maxlength" class="help-block">Entry too long.</p>
+							</div>
+						</div>
+						<div class="row" ng-show="data.displayroommaterequests">
+							<div class="col-xs-12 form-group" ng-class="{'has-error': housingPrefsForm.roommateRequests.$invalid}">
+								<label class="control-label" for="roommateRequests">Please indicate any roommate requests. Please only list one person. An attempt to honor a roommate request will only be made if the request is mutual.</label>
+								<textarea name="roommateRequests" id="roommateRequests"ng-disabled="data.isComplete" ng-maxlength="255" rows="4" ng-model="data.roommateRequests" class="form-control"></textarea ng-disabled="data.isComplete">
+								<p ng-show="housingPrefsForm.roommateRequests.$error.maxlength" class="help-block">Entry too long.</p>
+							</div>
+						</div>
+						<div class="row" ng-show="data.displayneatnesslevel">
+							<div class="col-xs-12 form-group" ng-class="{'has-error': housingPrefsForm.neatnesslevel.$invalid}">
+								<label class="control-label" for="neatnesslevel">Please indicate your neatness level.</label>
+								<select name="neatnesslevel" class="form-control" ng-required="data.displayneatnesslevel" ng-model="data.neatnesslevel">
+									<option value="Very Neat">Very Neat</option>
+									<option value="Neat">Neat</option>
+									<option value="Not Neat">Not Neat</option>
+								</select>
+								<p ng-show="housingPrefsForm.neatnesslevel.$error.required && !housingPrefsForm.neatnesslevel.pristine" class="help-block">Please select a value.</p>							
+							</div>
+						</div>
+						<div class="row" ng-show="data.displaytypicalbedtime">
+							<div class="col-xs-12 form-group" ng-class="{'has-error': housingPrefsForm.typicalbedtime.$invalid}">
+								<label class="control-label" for="typicalbedtime">Please provide your typical bedtime.</label>
+								<input name="typicalbedtime" type="text" ng-maxlength="255" ng-required="data.displaytypicalbedtime" ng-model="data.typicalbedtime" class="form-control" />
+								<p ng-show="housingPrefsForm.typicalbedtime.$error.maxlength" class="help-block">Entry too long.</p>
+								<p ng-show="housingPrefsForm.typicalbedtime.$error.required" class="help-block">Entry required.</p>					
+							</div>
+						</div>
+					</div>
+					<div class="row" ng-show="data.housingOptions.length">
+						<div class="col-xs-12">
+							<h3>Please rank your preferred housing option(s).</h3>
+						</div>
+					</div>
+					<div class="row" ng-show="data.housingOptions.length">
+						<div class="col-xs-12">
+							<table class="table table-responsive">
+								<thead>
+									<tr>
+										<th>Rank</th>								
+										<th>Name &amp; Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="option in data.housingOptions">
+										<td ng-hide="data.isComplete" style="width: 125px">
+											<select class="form-control" ng-change="calculateNumRankedHousing(option)" ng-model="option.Rank" ng-options="item for item in data.housingRankOptions" ng-disabled="data.isComplete"/>
+										</td>
+										<td ng-show="data.isComplete" style="width: 125px">{{option.Rank}}</td>
+										<td style="font-weight: normal;">
+											<b>Name:</b> <span ng-bind-html="option.Name"/>
+											<br/>
+											<div ng-show="option.BasePrice != 0 && option.BasePrice.length>=1">
+												<b>Housing Fee:</b>
+												<i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>In order to provide the most reasonable possible housing fee for the largest number of students, we set a baseline fee for housing based on our best estimates of where students will be placed by the university.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i> $<span ng-bind-html="option.BasePrice"/>
+											</div>
+											<div ng-show="data.housingRankOptions.length>=2 && option.Price.length>=1">
+												<b>Housing Supplemental Fee:</b>
+												<i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>A supplemental fee is billed when the housing you’re assigned is more expensive than the base price. This will be billed to your account when you are assigned housing.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i> $<span ng-bind-html="option.Price"/>
+											</div>
+											<b>Description:</b> <span ng-bind-html="option.Description" /><option
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br /><br />
+					<div class="row" ng-show="data.displaySignature">
+						<div class="col-md-10 col-md-offset-1">
+							<p>
+								IFSA has verified that each of its housing options has planned for the pandemic and will activate pandemic procedures upon the recommendation of local and national public health authorities.  However, it is important to acknowledge that shared spaces increase one’s exposure to illness and thus, risk. We are unable to guarantee that a student will not be exposed to illness on an IFSA program or in IFSA-arranged housing, and we strongly recommend that students comply with recommended hygiene measures and PPE standards as recommended by public health authorities in their program location.
+							</p>
+							<p>
+								Some considerations when choosing housing may include, but are not limited to:
+							</p>
+							<ul>
+								<li>
+									A double room with shared bathroom maximizes your exposure to shared spaces. Should your roommate become ill, it is likely that you will also be required to quarantine. Similarly, should your roommate undertake risky travel or other behavior, you may be impacted by this.
+								</li>
+								<li>
+									A single room with shared bathroom does not eliminate risk, but minimizes it further, particularly if students engage in enhanced hygiene practices. A shared bathroom may still lead to a shared quarantine.
+								</li>
+								<li>
+									A single room with en-suite bathroom minimizes risk, but still does not eliminate it. Shared spaces may still include hallways, kitchens, and other common areas. Students may, depending on local government regulations and/or housing provider policy, be able to self-isolate without moving out of their room.
+								</li>
+								<li>
+									Students in homestays should be prepared to function as part of the family unit, including for the purpose of quarantine and isolation measures.  Students will eat meals with and share space with the family. If one member becomes sick, each may become sick, and the family may need to isolate as a unit. All families are prepared to care for a student who becomes ill.
+								</li>
+							</ul>
+							<p>
+								By signing below, I confirm I've read the above information.
+							</p>
+						</div>
+						<div class="col-md-10 col-md-offset-1 well">
+							I have read and understand the information on IFSA's website regarding housing options and I acknowledge that housing preferences are not guaranteed by IFSA or the host institution. I understand that if I do not disclose any special needs to IFSA, arrangements cannot be made for me.
+						</div>
+						<div ng-show="data.isComplete && data.attachments" class="col-md-8">
+							<br /><h3>Signature</h3><br />
+							<img ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+						</div>
+					</div>
+				</div>
+
+				<!--Family Stay -->
+				<div class="top-buffer" ng-show="data.recordType == 'Family_Stay_Form'">
+					<hr/>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>Would you prefer to be placed in a household with smokers?</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.smoking" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>Would you prefer to be placed in a household with non-smokers?</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.nonSmoking" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>Would you attend religious services with your host?</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.willAttendReligiousService" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<h4>Would you prefer a home with children?</h4>
+						</div>
+						<div class="col-md-1">
+							<input type="checkbox" class="checkbox" ng-model="data.children" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>Please list any personal interests you have.</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.personalInterests" class="form-control" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>Please list any music preferences you have.</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.musicPreferences" class="form-control" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-md-offset-1">
+							<h4>If you would prefer to share a twin room with another student, please list your preferred roommate here.</h4>
+						</div>
+						<div class="col-md-4">
+							<textarea rows="4" cols="40" ng-model="data.roommateRequests" class="form-control" ng-disabled="data.isComplete"/>
+						</div>
+					</div>
+				</div>
+
+				<!--Travel Plans -->
+				<div class="top-buffer" ng-show="data.recordType == 'Travel_Plan' && !data.isComplete">
+					<!--<hr/>-->
+					<div class="row" ng-show="!data.isComplete && !data.arrivalDate">
+						<div class="col-xs-12">
+							<p>Travel information for your program is not available at this time. Please try again later.</p>
+						</div>
+					</div>
+					<div class="row" ng-show="!data.isComplete && data.arrivalDate">
+						<div class="col-xs-12">
+							<div ng-bind-html="commonDirections"></div>
+							<p ng-show="data.arrivalDate"><b>Your required arrival date:</b> {{data.arrivalDate | date: "MM/dd/yyyy"}}</p>
+							<p ng-show="data.arrivalCity"><b>Your arrival city:</b> {{data.arrivalCity }}</p>
+							<p ng-show="data.arrivalInstructions">{{data.arrivalInstructions}}</p>
+							<p></p>
+							<p ng-bind-html="data.directions"></p>
+						</div>
+					</div>
+					<div ng-show="!data.isComplete">
+						<hr/>		
+						<div ng-form="flightsMainForm">
+							<div ng-repeat="item in data.independentFlights" ng-form="flightForm">
+								<div class="row">
+									<div class="col-md-6 form-group" ng-class="{'has-error': flightForm.flightNum.$invalid}">
+										<label class="control-label" for="airlineName">Airline Name</label>
+										<input type="text" class="form-control" name="airlineName" ng-model="item.airlineName" required="required" />
+									</div>
+									<div class="col-md-6 form-group" ng-class="{'has-error': flightForm.flightNum.$invalid}">
+										<label class="control-label" for="flightNum">Flight Number</label>
+										<input type="text" class="form-control" name="flightNum" ng-model="item.flightNumber" required="required" />
+									</div>
+									<!-- <div class="col-md-4 form-group" ng-class="{'has-error': flightForm.flightType.$invalid}">
+										<label class="control-label" for="flightType">Flight Type</label>
+										<select class="form-control" name="flightType" ng-model="item.type" required="required">
+											<option value="Outgoing">Outgoing (Traveling to program)</option>
+											<option value="Return">Return (Leaving program)</option>
+										</select>
+									</div> -->
+								</div>
+								<div class="row">
+									<div class="col-md-3 form-group" ng-class="{'has-error': flightForm.departCode.$invalid}">
+										<label class="control-label" for="departCode">Departure Location (Airport Code)</label>
+										<input type="text" class="form-control" name="departCode" placeholder="JFK for John F. Kennedy International Airport" required="required" ng-maxlength="3" ng-model="item.Departure_Airport_Code__c"/>
+										<span ng-show="flightForm.departCode.$error.maxlength" class="text-danger">Airport codes are only three characters</span>
+									</div>
+									<div class="col-md-9 form-group" ng-class="{'has-error': !item.departureDatePart || !item.departureTimePart}">
+										<label class="control-label" for="departTime">Departure Time</label>
+										<div class="col-xs-12">
+											<div class="form-inline">
+												<div class="form-group">
+													<div class="col-xs-12" ng-if="useNativeDateAndTimePicker">
+														<label for="departDate" class="sr-only">Departure Date</label>
+														<input type="date" class="form-control" name="departDate" ng-model="item.departureDatePart" required placeholder="Date" />
+													</div>
+													<div class="col-xs-12" ng-if="!useNativeDateAndTimePicker">
+														<label for="departDate" class="sr-only">Departure Date</label>
+														<p class="input-group">
+															<input type="text" class="form-control" datepicker-popup="shortDate" ng-model="item.departureDatePart" is-open="item.DepartDateOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" name="departDate" />
+															<span class="input-group-btn">
+															<button type="button" class="btn btn-default" ng-click="item.DepartDateOpened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+															</span>
+														</p>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="col-xs-12">
+														<label for="departTime" class="sr-only">Departure Time</label>
+														<input ng-if="useNativeDateAndTimePicker" type="time" class="form-control" name="departTime" step="60" ng-model="item.departureTimePart" required placeholder="Time" />
+														<timepicker ng-if="!useNativeDateAndTimePicker" ng-model="item.departureTimePart" hour-step="1" minute-step="1" show-meridian="true" show-spinners="false"></timepicker>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3 form-group" ng-class="{'has-error': flightForm.arrivalCode.$invalid}">
+										<label class="control-label" for="departTime">Arrival Location (Airport Code)</label>
+										<input type="text" class="form-control" name="arrivalCode" placeholder="LHR for Heathrow Airport" ng-model="item.Arrival_Airport_Code__c" ng-maxlength="3" required="required" />
+										<span ng-show="flightForm.arrivalCode.$error.maxlength" class="text-danger">Airport codes are only three characters</span>
+									</div>
+									<div class="col-md-9 form-group"  ng-class="{'has-error': !item.arrivalDatePart || !item.arrivalTimePart || item.arrivalDatePart > data.arrivalDatePlus30, 'has-warning' : item.arrivalDatePart > data.arrivalDatePlus1 && item.type == 'Outgoing'}">
+										<label class="control-label" for="departTime">Arrival Time</label>
+										<div class="col-xs-12">
+											<div class="form-inline">
+												<div class="form-group">
+													<div class="col-xs-12" ng-if="useNativeDateAndTimePicker">
+														<label for="arrivalDate" class="sr-only">Arrival Date</label>
+														<input type="date" class="form-control" name="arrivalDate" ng-model="item.arrivalDatePart" required placeholder="Date"/>
+													</div>
+													<div class="col-xs-12" ng-if="!useNativeDateAndTimePicker">
+														<label for="arrivalDate" class="sr-only">Arrival Date</label>
+														<div class="row">
+															<div class="col-xs-12">
+																<p class="input-group">
+																  <input type="text" class="form-control" datepicker-popup="shortDate" ng-model="item.arrivalDatePart" is-open="item.ArriveDateOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" name="arrivalDate" />
+																  <span class="input-group-btn">
+																	<button type="button" class="btn btn-default" ng-click="item.ArriveDateOpened = true"><i class="glyphicon glyphicon-calendar"></i></button>
+																  </span>
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+														<div class="col-xs-12">
+														<label for="arrivalDate" class="sr-only">Arrival Time</label>
+														<input ng-if="useNativeDateAndTimePicker" type="time" class="form-control" name="arrivalTime" step="60" ng-model="item.arrivalTimePart" required placeholder="Time"/>
+														<timepicker ng-if="!useNativeDateAndTimePicker" ng-model="item.arrivalTimePart" hour-step="1" minute-step="1" show-meridian="true" show-spinners="false"></timepicker>
+													</div>
+												</div>
+											</div>
+										</div>
+										<p style="padding-top: 10px" ng-show="item.arrivalDatePart > data.arrivalDatePlus1 && item.arrivalDatePart < data.arrivalDatePlus30 && item.type == 'Outgoing'" class="bg-warning">
+											Your flight is arriving after your program is scheduled to start. Please verify the information is correct before proceeding. If you have permission for late arrival please ignore this message.
+										</p>
+										<p style="padding-top: 10px" ng-show="item.arrivalDatePart > data.arrivalDatePlus30 && item.type == 'Outgoing'" class="bg-danger">
+											Your flight is a arriving a month after your program is scheduled to start, IFSA does not need to track your flight after the program has completed. Please verify the information is correct before proceeding. If you have permission for late arrival please ignore this message.
+										</p>
+									</div>
+								</div>
+								<div class="row top-buffer">
+									<div class="col-xs-3">
+										<button type="button" class="btn btn-danger" ng-click="removeFlight(item)" ng-disabled="data.isComplete">Remove Flight</button>
+									</div>					
+								</div>
+								<hr/>
+							</div>
+						</div>	
+						<div class="row top-buffer" ng-show="!data.isComplete && data.arrivalDate">
+							<div class="col-xs-3">
+								<button type="button" class="btn ifsa-btn" ng-click="addFlight()" ng-disabled="data.isComplete">Add Flight</button>
+							</div>
+							<div class="col-xs-9" ng-show="data.independentFlights.length > 0">
+								<p>If you clicked the Add Flight button in error, use the Remove Flight button to erase the flight. Your travel plans will not submit unless all fields are completed.</p> 
+							</div>
+						</div>
+						<div class="row top-buffer" ng-show="!data.isComplete && data.arrivalDate">
+							<div class="col-xs-12">
+								<b>If you would like to provide any other details about your travel plans, please do so below.</b>
+								<input type="text" class="form-control" name="otherInfo" ng-model="data.travelPlanInfo" maxlength="255" />
+							</div>
+						</div>
+						<div class="row top-buffer" ng-show="data.independentFlights.length">
+							<div class="col-xs-12">
+								<button type="button" ng-disabled="!flightsMainForm.$valid || submittingData" class="btn btn-success" ng-click="submitIndependentFlights()">Submit<span ng-show="submittingData"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+							</div>
+						</div>
+					</div>
+				</div>		
+				<div class="top-buffer" ng-show="data.recordType == 'Travel_Plan' && data.isComplete">
+					<div class="row">
+						<div class="col-xs-12">
+							<p>You have already submitted your travel information. For changes or updates, contact your program advisor.</p>
+						</div>
+					</div>
+				</div>
+				<!--Scholarship-->
+				<div class="top-buffer" ng-show="data.recordType == 'Scholarships'">
+					<div class="row">
+						<div class="col-md-12">
+							<h4>Deadlines</h4>
+							Fall/Semester 2 and Year programs – March 1 (priority deadline) and April 1 (final deadline) <br />
+							Spring/Semester 1 and Calendar year programs – October 1 (priority deadline) and November 1 (final deadline) <br />
+							Summer programs - February 1 (priority deadline) and April 1 (final deadline) <br />
+						</div>
+					</div>
+					<h4>Student Financial Footprint</h4>		
+					<div class="row">
+						<div class="col-md-8">
+							<strong>I have or will file a FASFA this year</strong><br />
+							<i>Free Application for Federal Student Aid (FASFA)</i>
+							Upon submission of your FASFA, you will reveive a Student Aid Report (SAR). SAR gives you some basic information about your eligibility for federal student aid. An Expected Family Contribution (EFC) will display in the upper right-hand corner of your SAR.					
+						</div>
+						<div class="col-md-4" ng-hide="data.isComplete">
+							<input type="radio" name="FASFA" ng-model="data.FASFA" ng-value="data.FASFA" value=true>Yes</input> <input type="radio" checked="checked" name="FASFA" ng-model="data.FASFA" ng-value="data.FASFA" value=false>No</input>
+						</div>
+						<div class="col-md-4" ng-show="data.isComplete">
+							<input type="radio" name="FASFA" ng-model="data.FASFA" ng-checked="data.FASFA" ng-disabled="data.isComplete" value=true>Yes</input> <input type="radio" name="FASFA" ng-disabled="data.isComplete" ng-model="data.FASFA" ng-checked="!data.FASFA" value=false>No</input>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>What is your EFC on SAR (expected family contribution)</strong><br />
+							If your application is incomplete, your SAR will not include an EFC, but it will tell you what you need to do to resolve any issues.					
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.EFC" ng-disabled="data.isComplete" />
+							</div>
+						</div>				
+					</div>
+					<h5>I will receive</h5>			
+					<div class="row">
+						<div class="col-md-8">
+							<strong>Transferable Employee (parent benefit) Tuition Remission</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.TuitionRemission" ng-disabled="data.isComplete" />
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>Transferable University Discount</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.TuitionDiscount" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>Transferable College Savings Plan (529 Plans)</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.CollegeSavingsPlan" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>V. A. Benefits</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.VABenefits" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>I can pay toward my fees.</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.AmountStudentCanPay" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>What my family and others can pay.</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.AmountFamilyCanPay" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>I will pay my home university tuition/housing invoice.</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.HomeTuition" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+							<strong>I will pay my home university study abroad fees.</strong>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+								<span class="input-group-addon">$</span>
+								<input type="number" class="form-control" ng-model="data.HomeStudyAbroadFees" ng-disabled="data.isComplete"/>
+							</div>
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<strong>I am applying for:</strong>
+						</div>
+						<div class="col-md-8">
+							<span><input type="checkbox" ng-model="data.IFSAGeneral" ng-disabled="data.isComplete"/>IFSA General Need Based Scholarship (includes all Memorial, School and Program Specific awards)</span><br />
+							<span><input type="checkbox" ng-model="data.FirstGen" ng-disabled="data.isComplete"/>First Generation College Student Scholarship</span><br />
+							<span><input type="checkbox" ng-model="data.GAPScholarship" ng-disabled="data.isComplete"/>Fill the GAP Matching Funds Scholarship</span><br />
+							<span><input type="checkbox" ng-model="data.IFSAWorkStudy" ng-disabled="data.isComplete"/>IFSA Work-to-Study</span><br />
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1 well">
+							Scholarships awards are be credited to student portion of the IFSA program invoice. If an overpayment of program fees occurs, a refund check will be issued to you after your departure and registration into classes abroad. Please make arrangements in writing for special disbursement or transfer of your scholarship awards. 
+						</div>
+					</div>
+					<h4>Financial Aid and Loan Profile</h4>
+					<br />   
+					<form name="MainForm">
+						<table class="table table-responsive"> 
+							<thead ng-show="data.aidList.length > 0">
+								<th style="width: 25%">Type/Source</th><th>Estimated Amount</th><th>Estimated Disbursement</th><th> </th>          
+							</thead>
+							<tr ng-repeat="item in data.aidList" ng-form="AidForm">
+								<td style="width: 25%">
+									<div class="form-group" ng-class="{'has-error': AidForm.AidType.$invalid}">
+										<select class="form-control" required name="AidType" id="AidType" ng-disabled="data.isComplete" ng-options="type.value as type.label for type in viewModel.aidTypes" ng-model="item.aidType">
+											<option value="" selected="selected">-Pick One-</option>
+										</select>
+									</div>
+								</td>
+								<td>
+									<div class="input-group" ng-class="{'has-error': AidForm.disbAmount.$invalid}">
+										<span class="input-group-addon">$</span>
+										<input type="number" ng-model="item.disbursmentAmount" name="disbAmount" class="form-control" ng-disabled="data.isComplete" required>            
+									</div>
+								</td>
+								<td>
+									<div class="form-group" ng-class="{'has-error': AidForm.disbDate.$invalid}">
+									<input class="form-control" ng-model="item.disbursmentDate" type="date" name="disbDate" placeholder="yyyy-mm-dd" ng-disabled="data.isComplete" required/>
+									</div> 
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger" ng-hide="data.isComplete" ng-click="removeAid(item)">X</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" class="text-right">
+									<button type="button" class="btn ifsa-btn" ng-hide="data.isComplete" ng-click="addAid()">Add Aid</button>
+								</td>
+							</tr>
+						</table>									
+					</form>
+					<div class="row">
+						<div class="col-md-8">
+							Financial Aid Officer's Name
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" ng-disabled="data.isComplete" ng-model="data.FinancialAidOfficersName" />					
+						</div>				
+					</div>
+					<div class="row">
+						<div class="col-md-8">
+								Financial Aid Officer's Telephone Number
+							</div>
+							<div class="col-md-4">
+								<input type="text" class="form-control" ng-disabled="data.isComplete" ng-model="data.FinancialAidOfficersPhone" />					
+							</div>				
+						</div>
+						<div class="row">
+							<div class="col-md-8">
+								Financial Aid Officer's Email Address
+							</div>
+							<div class="col-md-4">
+								<input type="text" class="form-control" ng-disabled="data.isComplete" ng-model="data.FinancialAidOfficersEmail" />					
+							</div>				
+						</div>
+					<!--Signature-->
+					<div class="row" > <!-- ng-hide="data.isComplete" -->
+						<div class="col-md-10 col-md-offset-1 well">
+							I grant permission to share financial aid, loan or grant information with IFSA for the purpose of scholarship application. I certify that the information in this application is true to the best of my knowledge.
+							<br />
+							If awarded an IFSA Scholarship, you will be asked to accept and acknowledge your award formally. Please Note:  You are responsible for reporting all scholarships to your home university’s financial aid office. Be aware that receipt of this scholarship may result in changes or reductions to your scholarships and loan funds from your home university.
+						</div>
+					</div>
+					<div ng-show="data.isComplete" class="col-md-8">
+							<br /><h3>Signature</h3><br />
+							<img ng-src="data:image/png;base64,{{data.attachments[0]}}" alt="Signature" />
+						</div>
+				</div>
+				<!--Transcript -->
+				<div class="top-buffer" ng-show="data.recordType == 'Transcript'">
+					<hr/>
+					<div class="row">
+						<div class="col-xs-12">
+							Check this box if you are not currently enrolled in any courses at your home university.
+							<input type="checkbox" class="checkbox" ng-model="data.notCurrentlyEnrolled" ng-disabled="data.isComplete"></input>
+						</div>
+					</div>
+					<hr/>
+					<div class="row" ng-show="data.courses.length">
+						<div class="col-xs-6">
+							<div class="text-center">
+								Course Name
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="text-center">
+								Course Code
+							</div>
+						</div>
+					</div>
+					<div class="row" ng-repeat="course in data.courses">
+						<br/>
+						<div class="col-md-4 col-md-offset-1 col-xs-6">
+							<input type="text" class="form-control" ng-model="course.courseName" ng-disabled="data.isComplete"></input>
+						</div>
+						<div class="col-md-4 col-md-offset-2 col-xs-6">
+							<input type="text" class="form-control" ng-model="course.courseCode" ng-disabled="data.isComplete"></input>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<button type="button" class="btn ifsa-btn" ng-click="addCourse()" ng-hide="data.isComplete">Add Course</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--Directory Information Opt Out-->
+				<div class="top-buffer" ng-show="data.recordType == 'Agreements_and_Releases' && data.directoryOptOutStatus == 'Not Selected'">
+					<hr/>
+					<h3>Privacy Disclosure</h3>
+					<p>
+						As outlined in the Family Educational Rights and Privacy Act ​(FERPA), IFSA has the right to release, for reasons deemed legitimate, the following directory information about any IFSA student unless that student has requested in writing that his/her directory information be withheld from release. The following information is designated as directory information by IFSA:
+						<ul>
+							<li>Name</li>
+							<li>Home university</li>
+							<li>Overseas address</li>
+							<li>Email Address</li>
+							<li>Grade level</li>
+							<li>Major field of study</li>
+							<li>Dates of attendance</li>
+							<li>Overseas university/ program attended</li>
+							<li>Special awards received</li>
+							<li>Scholarships awarded</li>
+						</ul>
+					</p>
+					<p>
+						If you wish to withhold your directory information please check here. <input type="checkbox" ng-model="directoryOptOut" class="checkbox"/>
+					</p>
+				</div>
+				
+				<!-- Learning Plan -->
+				<div class="top-buffer" ng-show="data.recordType == 'Learning_Plan'">
+					<div ng-hide="isAdvisor || learningPlanDisclosureSet">
+						<div class="row" >
+							<div class="col-md-9 col-md-offset-1">
+								<h4>
+									Please indicate below if you would like your learning plan shared with your home school study abroad advisor.
+								</h4>
+								<select class="form-control" required="required" ng-model="data.learningPlanDisclosure" name="learningPlanDisclosure" id="learningPlanDisclosure" ng-disabled="data.isComplete">
+									<option value="Yes">Yes</option>
+									<option value="No">No</option>
+								</select>
+							</div>
+						</div>
+						<div class="row" ng-show="data.learningPlanDisclosure">
+							<div class="col-md-1 col-md-offset-10">
+								<button type="button" class="btn btn-default" ng-click="learningPlanDisclosureSet=true">Save</button>
+							</div>
+						</div>
+					</div>
+					<style>
+						table{
+						width: 100%;
+						}
+						td {
+							padding: 2px;
+							font-weight: normal;
+						}
+						.first-col {
+						width: 2%;
+						font-weight: bold;
+						vertical-align: top;
+						}
+					</style>
+					<div class="row" ng-show="isAdvisor && data.learningPlanDisclosure != 'Yes'">
+						<div class="col-md-12">
+							The student has opted not to share their learning plan with academic advisors
+						</div>
+					</div>
+					<table ng-show="(!isAdvisor && learningPlanDisclosureSet) || (isAdvisor && data.learningPlanDisclosure == 'Yes')">
+						<tr ng-show="isAdvisor">
+							<td colspan="2">
+								<a ng-href="/advisorportal/SP_LearningPlanPDF?id={{data.id}}" target="_blank" class="btn ifsa-btn">View/Download PDF</a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<h4>1. Academic goals <span ng-if="!data.hideStudyAbroadWording">while abroad</span></h4>
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								a.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.academicGoalsA" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.academicGoalsA" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								b.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.academicGoalsB" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.academicGoalsB" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								c.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.academicGoalsC" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.academicGoalsC" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<h4>2. Personal goals <span ng-if="!data.hideStudyAbroadWording">while abroad</span></h4>
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								a.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.personalGoalsA" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.personalGoalsA" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								b. 
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.personalGoalsB" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.personalGoalsB" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								c.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.personalGoalsC" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.personalGoalsC" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<h4>3. Professional development goals <span ng-if="!data.hideStudyAbroadWording">(while abroad and when returning home)</span></h4>
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								a.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.professionalGoalsA" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.professionalGoalsA" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								b. 
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.professionalGoalsB" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.professionalGoalsB" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								c. 
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.professionalGoalsC" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.professionalGoalsC" />
+							</td>
+						</tr>							
+						<tr>
+							<td colspan="2">
+								<h4>OPTIONAL: If you already know specific actions you plan to take to reach your goals, please list them below.</h4>
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								1. 
+							</td>
+							<td>					
+								<textarea rows="4" class="form-control" ng-model="data.specificActions1" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.specificActions1" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								2.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.specificActions2" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.specificActions2" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								3.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.specificActions3" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.specificActions3" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								4.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.specificActions4" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.specificActions4" />
+							</td>
+						</tr>
+						<tr>
+							<td class="first-col">
+								5.
+							</td>
+							<td>
+								<textarea rows="4" class="form-control" ng-model="data.specificActions5" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.specificActions5" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<h4>OPTIONAL: Please share anything else about your goals <span ng-if="!data.hideStudyAbroadWording">for study abroad</span>. For example: timelines for accomplishing your goals, specific resources or guidance you plan to seek out on site, or obstacles that may stand between you and your achievement of goals.</h4>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea rows="4" class="form-control" ng-model="data.otherInformation" ng-hide="data.isComplete || isAdvisor"></textarea>
+								<span ng-show="data.isComplete || isAdvisor" ng-bind-html="data.otherInformation" />
+							</td>
+						</tr>
+					</table>		
+				</div>
+
+				<!--Contract/Agreement Signature-->
+				<div class="top-buffer" ng-show="data.recordType == 'Agreements_and_Releases' || data.recordType == 'Signature' || data.recordType == 'C_C_Form' || data.recordType == 'Medical_Form' || (data.recordType == 'Housing_Preferences_Form' && data.displaySignature == true) || (data.recordType == 'Recommendation' && data.recommendationWaived == 'Not Selected') || (data.recordType == 'Spanish_Language_Evaluation' && data.evalWaived == 'Not Selected') || data.recordType == 'Scholarships'">
+					<div ng-show="!data.isComplete">
+						<h3>Sign Here</h3>
+						<canvas id="signature" onresize="sigPad.resize()" class="signature top-buffer" ng-signature-pad="signature"></canvas>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">		
+				<div ng-hide="hideSubmitButtons || submittingData || data.isComplete || data.recordType == 'Signature' || data.recordType == 'Agreements_and_Releases' || data.recordType == 'C_C_Form' || data.recordType == 'Medical_Form' || (data.recordType == 'Housing_Preferences_Form' && data.displaySignature == true) || data.recordType == 'Recommendation' || data.recordType == 'Spanish_Language_Evaluation' || data.recordType == 'Travel_Plan' || (data.recordType == 'No_Action') || data.recordType == 'Upload' || data.recordType == 'Download_Upload' || data.recordType == 'Confidentiality_Disclosure_Form' || data.recordType == 'Course_Preference_Form' || data.recordType == 'Tutorial_Request_Form' || data.recordType == 'Financial_Obligation_Form' || data.recordType == 'Visa_Form' || data.recordType == 'Scholarships' || (data.recordType == 'Program_Approval' && !isAdvisor) || (data.recordType == 'Passport_Copy' && data.passportDataSubmitted) || data.fastFormsURL || (data.recordType == 'Learning_Plan' && !learningPlanDisclosureSet)">
+					<button type="submit" class="btn btn-conf-small btn-highlight" ng-show="data.recordType == 'Personal_Essay' && !submittingData" ng-click="saveForLater()">Save for Later</button>
+					<button ng-disabled="(data.recordType=='Addresses' && (numberOfEmergencyContacts() < 2 || modalForm.addressForm.$invalid)) || (data.recordType == 'Housing_Preferences_Form' && !housingPrefsComplete) || (data.recordType == 'Program_Approval' && modalForm.programApprovalForm.$invalid) || (data.recordType == 'Passport_Copy' && (!data.passportDoNotHave && !data.passportInRenewal && (!data.passportNumber || !data.passportCountry || !data.expirationDate )))" class="btn btn-success" ng-click="submit()">Submit</button>
+				</div>
+				<div ng-hide="hideSubmitButtons || submittingData || data.isComplete || data.isStarted || (data.recordType != 'Agreements_and_Releases' && data.recordType != 'Signature' && data.recordType != 'C_C_Form' && data.recordType != 'Medical_Form' && data.recordType != 'Spanish_Language_Evaluation' && data.recordType != 'Scholarships') && ((data.recordType == 'Housing_Preferences_Form' && data.displaySignature == false) || data.recordType == 'Family_Stay_Form' || data.recordType == 'Passport_Copy' || data.recordType == 'Personal_Essay' || (data.recordType == 'Recommendation' && data.recommendationWaived != 'Not Selected') || data.recordType == 'Learning_Plan' || data.recordType == 'Travel_Plan' || data.recordType == 'Addresses' || data.recordType == 'Program_Approval' || data.recordType == 'Transcript' || (data.recordType == 'No_Action') || data.recordType == 'Free_Form_Upload' || data.recordType == 'Arabic_Language_Form' || (data.recordType == 'Spanish_Language_Evaluation' && data.evalWaived == 'Not Selected')) || data.recordType == 'Update_Emergency_Contact' || data.fastFormsURL">			
+					<button ng-disabled="disableSignatureSubmit(signature)" type="submit" class="btn btn-success" ng-click="submitSignature()">Submit</button>
+				</div>
+				<div ng-hide="hideSubmitButtons || submittingData || data.isComplete || (data.recordType != 'Recommendation') || data.fastFormsURL || (data.recordType == 'Recommendation' && (data.recommendationWaived == 'Not Selected' || data.recommendations.length > data.numberOfRecommendations))">
+					<button type="submit" class="btn btn-success" ng-click="submitRecommender()">Submit</button>
+				</div>
+				<div ng-hide="hideSubmitButtons || submittingData || data.isComplete || (data.recordType != 'Spanish_Language_Evaluation') || data.fastFormsURL || (data.recordType == 'Spanish_Language_Evaluation' && data.evalWaived == 'Not Selected') || !data.showSubmitEvalButton">
+					<button type="submit" class="btn btn-success" ng-click="submitEvaluator()">Submit</button>
+				</div>
+				<div ng-show="data.recordType == 'No_Action' && !data.isComplete">
+					<button type="submit" ng-hide="data.status == 'Complete'" class="btn btn-warning" ng-click="saveForLater()">OK</button>
+					<button type="submit" ng-show="data.status == 'Complete'" class="btn btn-success" ng-click="submit()">OK</button>
+				</div>
+				<div ng-show="data.fastFormsURL || hideSubmitButtons">
+					<button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
+				</div>
+				<div ng-show="submittingData">
+					<i class="fa fa-spinner fa-pulse fa-3x" />
+				</div>
+			</div>
+		</div>
+		<div ng-show="!loading && data.form && !data.isComplete">
+			<div class="modal-body">
+				<div style="padding-bottom: 10px;" ng-repeat="formItem in data.form.formData.items | orderBy : 'Position__c'">
+					<dynamic-form-item form-Item="formItem" type="{{formItem.fieldType}}" change="processRules(formItem)"></dynamic-form-item>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success" ng-hide="submittingData" ng-click="saveDynamicForm()">Save</button>
+				<div ng-show="submittingData">
+					<i class="fa fa-spinner fa-pulse fa-3x" />
+				</div>
+			</div>
+			</div>
+		</form>
+	</div>
+</div>

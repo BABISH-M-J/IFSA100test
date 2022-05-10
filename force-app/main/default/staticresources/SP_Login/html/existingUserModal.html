@@ -1,0 +1,16 @@
+<div class="ui dimmer modals page top aligned transition visible active" style="display: flex !important;">
+    <div class="ui modal tiny transition active" ng-class="modal.color">
+        <!-- <i class="close icon" ng-click="cancel()"></i> -->
+        <div class="image content">
+            <img class="image" ng-src="{{modal.imageUrl}}">
+            <div class="description">
+                <div class="ui huge header" style="color: #fff !important;">{{modal.header}}</div>
+                <div class="ui medium header" style="color: #fff !important;" ng-bind-html="modal.body"></div>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="ui button" ng-class="modal.buttonColor" ng-if="modal.linkText" ng-click="close()">{{modal.linkText}}</button>
+            <button class="ui button" ng-class="modal.buttonColor" ng-if="modal.showClose" ng-click="cancel()">Close</button>
+        </div>
+    </div>
+</div>

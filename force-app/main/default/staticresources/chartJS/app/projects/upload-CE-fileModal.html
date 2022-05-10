@@ -1,0 +1,30 @@
+<!--
+    CHART Upload Course Equivalency File Modal
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<div type="text/ng-template">
+	<form class="ui form" name="modalForm" novalidate="novalidate" ng-submit="save()">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Upload Class Equivalencies</h5>
+			<button type="button" class="close" ng-click="closeModal()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="ui message" ng-bind-html="explanation"></div>
+				<div ng-show="fileToUpload.size > 2621440" class="ui negative message">The file you have choosen is too large. Please select a file that is less than 2.5 MB</div>
+				<input name="file" type="file" file-model="fileToUpload" required="required"/>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="ui tiny button" type="button" ng-click="closeModal()">Cancel</button>
+			<button class="ui right floated tiny green right labeled icon button" type="submit" ng-disabled="modalForm.$invalid || !fileToUpload || fileToUpload.size > 2621440">
+                <i class="upload icon"></i> Upload
+			</button>
+		</div>
+	</div>
+	</form>
+</div>

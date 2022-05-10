@@ -1,0 +1,4 @@
+<div type="text/ng-template" ng-hide="formItem.hidden">
+    <label ng-if="formItem.showLabel">{{formItem.label}}:</label>
+    <select class="form-control" ng-model="formItem.response" ng-options="item for item in formItem.values" ng-readonly="formItem.isReadOnly" ng-change="change()"/>
+</div>

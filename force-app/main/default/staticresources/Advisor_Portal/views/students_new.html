@@ -1,0 +1,93 @@
+<loading is-loading="loading">
+    <div class="row">
+        <div class="ui big breadcrumb">
+            <a  href="#/" class="section">Home</a>
+            <div class="divider"> / </div>
+            <div class="active section">Students</div>
+        </div>
+    </div>
+    <div id="myStudentApplications">
+        <!-- Header -->
+        <hr class="hr-gold"/>
+        <div class="ui mobile reversed stackable grid">
+            <div class="one column row" ng-if="errors.length">
+                <div class="column">
+                    <div class="ui error message">
+                        <div class="header">
+                          An error has occured
+                        </div>
+                        <ul class="list">
+                          <li ng-repeat="e in errors">
+                            <i class="red close icon" ng-click="errors.splice($index, 1)"></i>
+                              {{e}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="six wide column scrollable-menu">
+                <div ng-include="templateURL + 'search_filter_results.html'"></div>
+            </div>
+            <div class="ten wide column">
+                <div class="ui fluid card">
+                    <div class="content" ng-hide="activeStudent">
+                        <div class="header">Select a student from the list on the left to get started</div>
+                        <div class="description" ng-bind-html="studentsGettingStarted"></div>
+                    </div>
+                    <div class="content" ng-show="activeStudent">
+                        <div class="large purple-primary header" style="margin: 5px 10px;"><i class="user icon"></i><span ng-bind-html="activeStudent.Name"></span></div>
+                        <div class="ui divider"></div>
+                        <div class="ui stackable grid">
+                            <div class="four wide column">
+                                <div class="ui secondary vertical fluid pointing menu">
+                                    <a class="item purple-primary" ng-class="{ 'active' : activeTab == 'info'}" ng-click="selectTab('info')">
+                                        <i class="info icon"></i>
+                                        Info
+                                    </a>
+                                    <a class="item purple-primary" ng-class="{ 'active' : activeTab == 'note'}" ng-click="selectTab('note')" ng-if="activeStudent.toolBoxNotes && activeStudent.toolBoxNotes.length">
+                                        <i class="sticky note outline icon"></i>
+                                        Notes
+                                    </a>
+                                    <a class="item purple-primary" ng-class="{ 'active' : activeTab == 'favorites'}" ng-click="selectTab('favorites')" ng-if="activeStudent.favoritePrograms && activeStudent.favoritePrograms.length">
+                                        <i class="heart outline icon"></i>
+                                        Favorite Programs
+                                    </a>
+                                    <a class="item purple-primary" ng-class="{ 'active' : activeTab == 'searches'}" ng-click="selectTab('searches')" ng-if="activeStudent.savedSearches && activeStudent.savedSearches.length">
+                                        <i class="right floated icons">
+                                            <i class="search icon"></i>
+                                            <i class="corner mini bottom left save icon"></i>
+                                        </i>
+                                        Saved Searches
+                                    </a>
+                                    <a class="item purple-primary" ng-repeat="app in activeStudent.applications" ng-class="{ 'active' : activeTab == app.appId}" ng-click="selectTab(app.appId)">
+                                        <span ng-bind-html="applicationIcon(app, 'infoMenu')" tooltip="{{displayAppToolTips(app)}}" tooltip-placement="bottom"></span>
+                                        <span ng-bind-html="app.Program_Term_Name"></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="twelve wide stretched column">
+                                <!-- STUDENT INFO TAB -->
+                                <div ng-if="activeTab == 'info'">
+                                    <div ng-include="templateURL + 'tab_info.html'"></div>
+                                </div>
+                                <div ng-if="activeTab == 'note'">
+                                    <div ng-include="templateURL + 'tab_notes.html'"></div>
+                                </div>
+                                <div ng-if="activeTab == 'favorites'">
+                                    <div ng-include="templateURL + 'tab_favorites.html'"></div>
+                                </div>
+                                <div ng-if="activeTab == 'searches'">
+                                    <div ng-include="templateURL + 'tab_searches.html'"></div>
+                                </div>
+                                <!-- APP INFO TAB -->
+                                <div ng-show="activeApp">
+                                    <div ng-include="templateURL + 'tab_application.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</loading>

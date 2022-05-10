@@ -1,0 +1,53 @@
+<div class="row mt">
+    <div class="col-xs-12">
+        <h2 class="content-title">Profile</h2>
+        <hr style="border-top: 1px solid #5a5a5a;"/>
+        <p>Please ensure all information on this page is correct.</p>
+    </div>
+</div>
+<form ng-submit="submit()" name="profileForm" class="ui huge form" ng-class="{'loading' : loading}">
+    <div class="field">
+        <label for="studentFirstName">First Name</label>
+        <input id="studentFirstName" type="text" ng-model="viewModel.studentFirstName" ng-required="true" /> <!-- placeholder="Jacob" -->
+    </div>
+    <div class="field">
+        <label for="studentPreferredName">Preferred First Name</label>
+        <input id="studentPreferredName" type="text" ng-model="viewModel.PreferredName" /> <!-- placeholder="Jake" -->
+        <h6>This is how we will address you from now on.</h6>
+    </div>
+    <div class="field">
+        <label for="studentMiddleName">Middle Name</label>
+        <input id="studentMiddleName" type="text" ng-model="viewModel.MiddleName" ng-required="middleNameRequired"/>
+        <h6>Check this box if you do not have a middle name on your official documents <input id="middleNameCheck" type="checkbox" ng-click="doesntHaveMiddleName()"/></h6>
+    </div>
+    <div class="field">
+        <label for="studentLastName">Last Name</label>
+        <input id="studentLastName" type="text" ng-model="viewModel.studentLastName" ng-required="true" /> <!-- placeholder="McDonald" -->
+    </div>
+    <div class="field">
+        <label for="studentBirthDate">Birth Date</label>
+        <input type="date" id="studentBirthDateMobile" ng-required="true" ng-model="temp.birthdate"/>
+    </div>
+    <div class="field">
+        <label for="studentPhone">Cell Phone Number</label>
+        <input id="studentPhone" ui-mask="(999) 999-9999" ui-mask-placeholder-char="_" type="text" ng-model="viewModel.Phone" ng-required="true"  />
+    </div>
+    <div class="field">
+        <label for="studentEmail">School Email Address</label>
+        <input id="studentEmail" type="email" ng-model="viewModel.Email" ng-required="true" placeholder="email@example.com"/>
+    </div>
+    <div class="field">
+        <label for="studentCitizenship">Are you a U.S. Citizen?</label>
+        <select id="studentCitizenship" ng-model="viewModel.Citizenship" ng-required="true" ng-options="item for item in viewModel.CitizenshipOptions"/>
+    </div>
+    <div class="field" id="nonUsCitizenshipRow" ng-if="viewModel.Citizenship != 'U.S. Citizen'">
+        <label for="studentNonUsCitizenship">What is your (Non-U.S.) Citizenship?</label>
+        <select id="studentNonUsCitizenship" ng-model="viewModel.NonUsCitizenship" ng-options="item for item in viewModel.NonUsCitizenshipOptions" required="{studentCitizenship.value == 3}" ng-required="studentCitizenship.value == 3"/>
+    </div>
+    <div class="field">
+        <label for="studentCitizenship">Sex (As listed on your passport) <div class="ui big label" tooltip-placement="bottom" tooltip="The sex listed on you passport needs to correspond with visa and immigration documents produced by your host university abroad."><b>Why are we asking this?</b></div></label>
+        <select id="studentSex" ng-model="viewModel.Sex" ng-required="true" ng-options="item for item in viewModel.SexOptions"/>
+    </div>
+    <hr />
+    <button type="submit" ng-disabled="profileForm.$invalid" class="positive ui huge button">Save</button>
+</form>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>application/javascript</contentType>
+    <description>angular-ui-mask
+https://github.com/angular-ui/ui-mask
+Version: 1.6.1 - 2015-11-14T14:46:58.619Z</description>
+</StaticResource>

@@ -1,0 +1,79 @@
+<loading is-loading="activeApp.loading">
+    <div class="ui three statistics">
+        <div class="statistic app-status" ng-repeat="statistic in activeApp.statistics" tooltip="{{getStatusDefinition(statistic.value)}}" tooltip-placement="bottom">
+            <div class="label purple-primary">
+                {{statistic.label}}
+            </div>
+            <div class="text value purple-primary">
+                {{statistic.value}}
+            </div>
+        </div>
+    </div>
+    <div class="ui basic center aligned segment">
+        <button type="button" ng-repeat="button in activeApp.buttons" class="ui right icon brand-button button mt-small" ng-click="appButtonClicked(button)" ng-disabled="button.disabled" ng-class="{'loading' : button.loading}">
+            <i ng-class="button.icon"></i>
+            {{button.label}}
+        </button>
+    </div>
+    <div class="ui secondary fluid pointing menu">
+        <a class="item" ng-class="{ 'active' : activeAppTab == 'items'}" ng-click="selectAppTab('items')">
+            Application Items
+        </a>
+        <a class="item" ng-class="{ 'active' : activeAppTab == 'classes'}" ng-click="selectAppTab('classes')" ng-if="activeApp.classes && activeApp.classes.length">
+            Classes
+        </a>
+    </div>
+    <div class="ui fluid card" ng-if="activeAppTab == 'classes'">
+        <div class="content">
+            <div class="large header">
+                <button type="button" style="margin-bottom: 5px;" class="ui right floated icon basic red button" ng-if="activeApp.Grades_Submitted" ng-click="generateGradeReport()" ng-class="{'loading': generatingGradeReport}">
+                    <i class="file pdf outline icon"></i>
+                    Download Grade Report
+                </button>
+                <i class="graduation cap icon"></i> Classes
+            </div>
+            <div class="description" style="margin-top: 10px;">
+                <div class="ui divided items">
+                    <div class="item" ng-repeat="course in activeApp.classes">
+                        <div class="content">
+                            <a class="ui right floated brand-button button" ng-if="course.Course__r.Approved_for_CHART__c" ng-href="/chart/#/details/{{course.Course__c}}" target="_blank">View class in CHART</a>
+                            <div class="header">
+                                {{course.Course_Title__c}}
+                            </div>
+                            <div class="meta">
+                                <span class="host_institution" ng-if="course.Host_Institution__r.Name"><label>Host Institution</label> {{course.Host_Institution__r.Name}}</span>
+                                <span class="us_credits" ng-if="course.US_Semester_Credit_Hours__c"><label>U.S. Semester Credit Hours</label> {{course.US_Semester_Credit_Hours__c}}</span>
+                                <span class="host_credits" ng-if="course.Host_Credits__c"><label>Host Credits</label> {{course.Host_Credits__c}}</span>
+                                <span class="final_grade" ng-if="course.Final_Grade__c"><label>Final Grade</label> {{course.Final_Grade__c}}</span>
+                                <span class="status" ng-if="course.Status__c"><label>Status</label> {{course.Status__c}}</span>
+                            </div>
+                            <div class="description">
+                                <span ng-bind-html="course.Course__r.Course_Description__c | fixHTMLTags | quote"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="activeAppTab == 'items'">
+        <div class="ui three doubling cards">
+            <div class="ui raised link card" ng-class="{'grey app-item-incomplete': !item.isComplete && !item.isStarted, 'green app-item-complete': item.isComplete, 'yellow app-item-started': item.isStarted}" ng-click="viewAppItem(item)" ng-repeat="item in activeApp.appItems | orderBy :['-isStarted','isComplete']">
+                <div class="content app-item-content">
+                    <div class="header" ng-bind-html="item.name"></div>
+                    <!-- <div class="center aligned meta" ng-if="item.deadline && !item.isComplete">Due {{item.deadline | date:'MM/dd/yyyy'}}</div> -->
+                    <div ng-if="item.loading">
+                        Loading...
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="author">
+                        <span class="category" ng-if="!item.isComplete && !item.isStarted"><i class="fa fa-exclamation-circle"/> Not Started</span>
+                        <span class="category" ng-if="item.isStarted"><i class="fa fa-info-circle"/> Started</span>
+                        <span class="category" ng-if="item.isComplete"><i class="fa fa-check-circle"/> Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</loading>

@@ -1,0 +1,97 @@
+<loading is-loading="loading">
+    <div class="row">
+        <div class="ui big breadcrumb">
+            <a  href="#/" class="section">Home</a>
+            <div class="divider"> / </div>
+            <div class="active section">Students</div>
+        </div>
+    </div>
+    <div id="myStudentApplications">
+        <!-- Header -->
+        <h2 class="content-title">Student Applications</h2>
+        <hr class="hr-gold"/>
+        <div class="ui equal width large form">
+            <div class="fields">
+                <div class="field">
+                    <label for="nameSearch">Search for Student</label>
+                    <div class="ui action left icon input">
+                        <i class="search icon"></i>
+                        <input type="text" id="nameSearch" placeholder="Student Name" ng-model="viewModel.searchString" ng-change="searchForStudentNames()" typeahead-wait-ms="375" typeahead-on-select="selectStudent($item)" typeahead="item as item.Name for item in studentResults" autocomplete="off"/>
+                        <button class="ui button" ng-click="viewModel.searchString = ''">Clear</button>
+                        </div>
+                </div>
+                <div class="field">
+                    <label for="statusFilter">Search by Application Status</label>
+                    <select id="statusFilter" ng-model="viewModel.selectedStatus" ng-options="item for item in viewModel.AvailableStatuses"/>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="four wide field">
+                    <label for="countryFilter">Search by Country</label>
+                    <select id="countryFilter" ng-model="viewModel.selectedCountry" ng-options="item for item in viewModel.AvailableCountries"/>
+                </div>
+                <div class="four wide field">
+                    <label for="termFilter">Search by Term</label>
+                    <select id="termFilter" ng-model="viewModel.selectedTerm" ng-options="item for item in viewModel.AvailableTerms"/>
+                </div>
+                <div class="four wide field">
+                    <label for="yearFilter">Search by Year</label>
+                    <select id="yearFilter" ng-model="viewModel.selectedYear" ng-options="item for item in viewModel.AvailableYears"/>
+                </div>
+                <div class="three wide inline field">
+                    <div class="ui checkbox" ng-click="viewModel.onlyProgramApproval = !viewModel.onlyProgramApproval" ng-class="{ 'checked' : viewModel.onlyProgramApproval}">
+                        <input type="checkbox" class="hidden" ng-model="viewModel.onlyProgramApproval" >
+                        <label>Pending Program Approvals Only</label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="ui fluid large ifsa-btn button" value="Search" ng-click="search()">
+                Search <i class="fa fa-spinner fa-pulse" ng-show="isSubmitting"/>
+            </button>
+        </div>
+        <hr/>
+        <div class="text-center" ng-show="!appList.length && !isSearching && !loading">
+            <p>We did not find anything matching that criteria.</p>
+        </div>
+        <loading is-loading="isSearching">
+            <div class="ui items">
+                <div class="item" ng-repeat="item in appList">
+                    <div class="content">
+                        <div class="ui right floated large buttons">
+                            <button ng-show="item.ProgramApprovalStatus != 'None' && (item.ApplicationStatus !='Diverted' || item.ApplicationStatus !='Dropped' || item.ApplicationStatus =='Deferred')" type="button" class="ui icon button" ng-class="{'green' : item.ProgramApprovalStatus == 'Complete', 'loading' : item.isLoadingPA}" ng-click="viewAppItem(item, 'pa')">
+                                <i class="check icon" ng-if="item.ProgramApprovalStatus == 'Complete'"></i>
+                                Program Approval
+                            </button>
+                            <button type="button" class="ui button" ng-class="{'loading' : item.isLoadingApp}" ng-disabled="item.isLoadingApp" ng-click="getAppDetails(item)">View Application</button>
+                            <button type="button" class="ui button" ng-class="{'loading' : item.isLoadingLP}" ng-disabled="item.isLoadingLP" ng-if="item.LearningPlanStatus != 'None'" ng-disabled="item.LearningPlanStatus != 'Complete'" ng-click="viewAppItem(item, 'lp')">Learning Plan</button>
+                        </div>
+                        <span class="header" ng-bind-html = "item.ApplicationStudentFirstName + ' ' + item.ApplicationStudentLastName"></span>
+                        <div class="meta">
+                            <span class="program">
+                                Program: 
+                                <span ng-show="item.ApplicationProgramTermProgram" ng-bind-html="item.ApplicationProgramTermProgram"></span>
+                                <span ng-hide="item.ApplicationProgramTermProgram">Undecided</span>
+                            </span>
+                            <span class="term">
+                                Term:
+                                <span ng-hide="item.ApplicationProgramTermYear == 0">{{item.ApplicationProgramTermSection}} {{item.ApplicationProgramTermYear}}</span>
+                            </span>
+                            <span class="status">
+                                Status:
+                                {{item.ApplicationStatus}}
+                            </span>
+                        </div>
+                        <div class="description">
+                            
+                        </div>
+                        <div class="extra">
+                            <span ng-if="item.ApplicationContracted">
+                                <i class="green check icon" ></i> Contracted
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </loading>
+    </div>
+</loading>

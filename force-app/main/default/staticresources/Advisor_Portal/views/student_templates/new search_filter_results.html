@@ -1,0 +1,115 @@
+<div class="ui fluid vertical menu">
+    <div class="item">
+      <div class="ui input"><input tabindex="0" type="text" ng-model="filters.studentName" placeholder="Search Students..."></div>
+    </div>
+    <a class="item" ng-click="showFilters = !showFilters" tooltip="Click to view filter options">
+        <i class="chevron icon" ng-class="showFilters ? 'down' : 'right'"></i>
+        <strong>Filters</strong>
+    </a>
+    <div class="item" ng-if="showFilters">
+        <div class="menu">
+            <div class="item">
+                Application Status
+            </div>
+            <div class="item">
+                <select class="ui fluid dropdown" ng-model="filters.appStatus">
+                    <option selected value=""></option>
+                    <option ng-repeat="status in studentViewModel.AvailableStatuses" ng-value="status" ng-bind-html="status"></option>
+                </select>
+            </div>
+            <div class="item">
+                Country
+            </div>
+            <div class="item">
+                <select class="ui fluid dropdown" ng-model="filters.appCountry">
+                    <option selected value=""></option>
+                    <option ng-repeat="country in studentViewModel.AvailableCountries" ng-value="country" ng-bind-html="country"></option>
+                </select>
+            </div>
+            <div class="item">
+                Term
+            </div>
+            <div class="item">
+                <select class="ui fluid dropdown" ng-model="filters.appTerm">
+                    <option selected value=""></option>
+                    <option ng-repeat="term in studentViewModel.AvailableTerms" ng-value="term" ng-bind-html="term"></option>
+                </select>
+            </div>
+            <div class="item">
+                Year
+            </div>
+            <div class="item">    
+                <select class="ui fluid dropdown" ng-model="filters.appYear">
+                    <option selected value=""></option>
+                    <option ng-repeat="year in studentViewModel.AvailableYears" ng-value="year" ng-bind-html="year"></option>
+                </select>
+            </div>                        
+            <div class="item">
+                Additional Options
+            </div>
+            <div class="item">
+                <select class="ui fluid dropdown" ng-model="filters.otherOptions">
+                    <option selected value="all">All Students</option>
+                    <option value="pending">Pending Approvals Only</option>
+                    <option value="leads">Global Wayfinder leads</option>
+                    <option value="searches">Students with Saved Searches</option>
+                    <option value="notes">Students with Notes</option>
+                    <option value="favorites">Students with Favorited Programs</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- Pagination code reference -->
+    <!-- https://salesforce.stackexchange.com/questions/212652/help-with-incorporating-code-for-pagination -->
+    <select ng-model="pageSize" id="pageSize" class="form-control">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+     </select>
+    <div ng-if="students.length">
+        <!-- <div class="item" ng-repeat="student in students | newStudents: filters.studentName: filters.appStatus: filters.appCountry: filters.appTerm: filters.appYear: filters.otherOptions | orderBy: ['LastName', 'FirstName'] as filteredStudents" ng-class="{ 'active' : activeStudent == student}"> -->
+        <div class="item" ng-repeat="student in students | newStudents: filters.studentName: filters.appStatus: filters.appCountry: filters.appTerm: filters.appYear: filters.otherOptions | startFrom:currentPage*pageSize | limitTo:pageSize | orderBy: ['LastName', 'FirstName'] as filteredStudents" ng-class="{ 'active' : activeStudent == student}">
+            <div class="content">
+                <div ng-click="selectStudent(student)">
+                    <div class="header purple-primary">
+                        <strong><span ng-bind-html="student.FirstName"></span> <span ng-bind-html="student.LastName"></span></strong>
+                    </div>
+                    <div class="meta" style="margin-top: 5px;">
+                        <span ng-if="student.Grade_Level" class="grade purple-primary"><label>Grade:</label> {{student.Grade_Level}}</span>
+                        <span ng-if="student.Major_New" class="major purple-primary"><label>Major:</label> {{student.Major_New}}</span>
+                    </div>
+                    <div class="extra" style="margin: 5px 0px;">
+                        <div class="ui circular label" ng-if="student.applications.length">
+                            <i class="list alternate outline icon"></i>
+                            Applications
+                            <div class="detail">{{student.filteredApplications.length}} of {{student.applications.length}}</div>
+                        </div>
+                        <div class="ui circular label" ng-if="!student.applications.length">
+                            <i class="user outline icon"></i>
+                            Global Wayfinder lead
+                        </div>
+                    </div>
+                </div>
+                <div class="selection list" ng-show="activeStudent == student">
+                    <div class="item" ng-repeat="app in student.filteredApplications" ng-class="{ 'selection' : activeStudent == student, 'active' : activeApp == app }">
+                        <div class="content" ng-click="selectTab(app.appId)">
+                            <div class="header">
+                                <span ng-bind-html="applicationIcon(app, 'leftMenu')" tooltip="{{displayAppToolTips(app)}}" tooltip-placement="bottom"></span>
+                                <span ng-bind-html="app.Program_Term_Name"></span>
+                            </div>
+                            <div class="description">{{app.Status}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+        Previous
+    </button>
+    {{currentPage+1}}/{{numberOfPages()}}
+    <button ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
+        Next
+    </button>
+</div>

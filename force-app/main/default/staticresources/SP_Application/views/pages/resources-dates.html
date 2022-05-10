@@ -1,0 +1,95 @@
+<div class="tab-content">
+    <!-- Program Term Dates Data -->
+    <div id="programDatesTable" ng-if="true">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Important Program Dates</h3>
+            </div>
+            <div class="panel-body" ng-if="!showDates">
+                <p>Program Dates have not yet been finalized.</p>
+            </div>
+            <table class="table" ng-if="showDates">
+                <tbody>
+                <tr ng-if="viewModel.applicationDeadline">
+                    <td class="col-md-3">Application Deadline</td>
+                    <td class="col-md-9">{{viewModel.applicationDeadline | date : 'longDate'}}</td>
+                </tr>
+                <tr ng-if="viewModel.programDueDate && !hideProgDueDate">
+                    <td class="col-md-3">Program Fee Due Date <i class="fa fa-info-circle text-muted" aria-hidden="true" tooltip-html-unsafe='<p>Date when your program fees are due to IFSA-Butler. Please see <a href="/studentportal/SP_Account">My Account</a> to view invoices.</p>' tooltip-trigger="click" tooltip-placement="right" tooltip-class="customClass"></i></td>
+                    <td class="col-md-9">{{viewModel.programDueDate | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.suggestedDepartureFromUS">
+                    <td class="col-md-3">Suggested Departure from U.S.</td>
+                    <td class="col-md-9">{{viewModel.suggestedDepartureFromUS | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.startDate">
+                    <td class="col-md-3">Program Start Date</td>
+                    <td class="col-md-9">{{viewModel.startDate | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.startDate && viewModel.arrivalWindowStartTime ">
+                    <td class="col-md-3">Arrival Window</td>
+                    <td class="col-md-9">{{viewModel.startDate | date : 'MMMM d, y'}}<span ng-if="viewModel.arrivalWindowStartTime">, {{viewModel.arrivalWindowStartTime}} - {{viewModel.arrivalWindowEndTime}}</span></td>
+                </tr>
+                <tr ng-if="viewModel.ifsaOrientationStartDate">
+                    <td class="col-md-3">IFSA Orientation</td>
+                    <td class="col-md-9">{{viewModel.ifsaOrientationStartDate | date : 'MMMM d, y'}} - {{viewModel.ifsaOrientationEndDate | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.moveIntoTermHousing">
+                    <td class="col-md-3">Move into Term Housing</td>
+                    <td class="col-md-9">{{viewModel.moveIntoTermHousing | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.groupTransferToHostCity">
+                    <td class="col-md-3">Group Transfer to Host City</td>
+                    <td class="col-md-9">{{viewModel.groupTransferToHostCity | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.universityOrientationStarts">
+                    <td class="col-md-3">University Orientation</td>
+                    <td class="col-md-9">{{viewModel.universityOrientationStarts | date : 'MMMM d, y'}} - {{viewModel.universityOrientationEnds | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.classesBegin">
+                    <td class="col-md-3">Classes Begin</td>
+                    <td class="col-md-9">{{viewModel.classesBegin | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.classesEnd">
+                    <td class="col-md-3">Classes End</td>
+                    <td class="col-md-9">{{viewModel.classesEnd | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.assessmentsBegin">
+                    <td class="col-md-3">Assessment Period</td>
+                    <td class="col-md-9">{{viewModel.assessmentsBegin | date : 'MMMM d, y'}} - {{viewModel.assessmentsEnd | date : 'MMMM d, y'}}</td>
+                </tr>
+                <tr ng-if="viewModel.endDate">
+                    <td class="col-md-3">Departure Date</td>
+                    <td class="col-md-9">{{viewModel.endDate | date : 'MMMM d, y'}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Program Term Schedule Data -->
+    <div id="schedule" ng-if="viewModel.scheduleList.length">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Program Event Schedule <small>Click an event name for more details</small></h3>
+            </div>
+            <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Type</th>
+                <th class="text-center">Start Date</th>
+                <th class="text-center">End Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in viewModel.scheduleList">
+                <td><a ng-click="open(item)">{{item.displayName}}</a></td>
+                <td>{{item.type}}</td>
+                <td class="text-center">{{item.startDate | date : 'MMMM d, y'}}</td>
+                <td class="text-center">{{item.endDate | date : 'MMMM d, y'}}</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div><!-- END OF TAB CONTENT -->

@@ -1,0 +1,125 @@
+<div type="text/ng-template">
+	<div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{{ addCustomClass ? 'Add Unlisted Class' : data.title}}</h4>
+	</div>
+	<div class="modal-body">
+        <div class="ui fluid blue card" ng-if="!addCustomClass">
+            <a class="no-underline content" ng-click="msgDismissed = !msgDismissed">
+                <div class="right floated">
+                    <i class="chevron icon" ng-class="msgDismissed ? 'left' : 'down'"></i>
+                </div>
+                <div class="header"><i class="info circle icon"></i> Finding the Right Class</div>
+            </a>
+            <div class="content" ng-if="!msgDismissed">
+                <div class="ui list">
+                    <div class="item">
+                        <p><strong>Favorites -</strong> If you have already selected Favorites in <a href="/chart" target="_blank">CHART</a>, you can add them to your Class Interest Form by clicking the plus button to the right of the description. If you do not have any Favorites, you can add them in <a href="/chart" target="_blank">CHART</a> by clicking the star button next to the class, and then they will appear in the below list.</p>
+                    </div>
+                    <div class="item">
+                        <p><strong>Class Search -</strong> The search box below looks for classes that are in CHART. Please note that not all classes for every program will appear in CHART. For finding additional courses, refer to the Introduction tab.</p>
+                    </div>
+                    <div class="item">
+                        <p><strong>Unlisted Class -</strong> An Unlisted Class is a class not currently listed in the CHART database. If you have found a class not currently listed in the CHART database, enter class details below as an Unlisted Class.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui padded tertiary inverted grey segment" ng-if="!addCustomClass">
+            <form><!-- this is needed to allow search on 'Enter' keypress -->
+                <div class="ui huge fluid inverted icon input">
+                    <input type="text" ng-model="viewModel.searchText" placeholder="Class search..." ng-change="searchClasses()">
+                    <i class="search icon"></i>
+                </div>
+            </form>
+        </div>
+        
+        <!-- if not searching -->
+        <div ng-if="!addCustomClass" style="padding-top:15px; padding-bottom:15px;">
+            <h3 class="ui horizontal divider header" ng-if="!searching">Favorites</h3>
+            <div class="text-center" ng-if="!data.hasFavorites && !searching">
+                <p>You don't have any favorites. You can add favorites using CHART.</p>
+                <a class="ui right labeled large icon button" href="/chart" target="_blank"><i class="blue external alternate icon"></i> CHART</a>
+            </div>
+            <h3 class="ui horizontal divider header" ng-if="searching">{{classResults.length}} Search Results</h3>
+            <div class="ui message text-center" ng-if="searching && !classResults.length">
+                <p>No results? Don’t worry! Refer to the Introduction tab to view your program course catalog or contact your Program Advisor for assistance.</p>
+            </div>
+            <div class="ui large middle aligned divided list">
+                <div class="item">
+                    <div class="right floated middle aligned content">
+                        <button class="ui green huge icon button" ng-click="newClass()"><i class="plus icon"></i></button>
+                    </div>
+                    <i class="question circle icon"></i>
+                    <div class="middle aligned content">
+                        <div class="header">Unlisted Class</div>
+                        <div class="description">
+                            <p>Found a new class not in CHART? Add it here!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item" ng-repeat="class in classResults | orderBy: 'isFavorite'">
+                    <div class="right floated content">
+                        <button class="ui huge basic icon button" ng-click="class.showDetails = !class.showDetails"><i class="info icon"></i></button>
+                        <button class="ui green huge icon button" ng-disabled="class.selected" ng-click="selectClass(class)"><i class="icon" ng-class="class.selected ? 'check' : 'plus'"></i></button>
+                    </div>
+                    <i class="star icon" ng-class="class.isFavorite ? 'yellow' : 'grey'"></i>
+                    <div class="content">
+                        <div class="header"><span ng-bind-html="class.Course_Code__c"></span> {{ class.Course_Code__c ? '|' : ''}} <span ng-bind-html="class.Course_Title_2__c"></span></div>
+                        <div class="description">
+                            <p><span ng-bind-html="class.Host_Institution__r.Name"></span>, <span>Host Credits: {{class.Host_Credits__c}}</span>, <span>US Credits: {{class.US_Semester_Credit_Hours__c}}</span>, <span>US Terms: {{class.US_Terms__c | replace: ';' : ', '}}</span></p>
+                            <div ng-if="class.Course_Locations__r && class.Course_Locations__r.length > 1">
+                                <strong>Class Locations</strong>
+                                <ul style="padding-left: 20px;">
+                                    <li ng-repeat="location in class.Course_Locations__r">
+                                        {{location.Location_of_Instruction__r.Name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <p ng-if="class.showDetails" ng-bind-html="class.Course_Description_Short__c | fixHTMLTags"></p>
+                            <p ng-if="class.showDetails">Additional details in <a ng-href="{{ '/chart/#/details/' + class.Id }}" target="_blank" class="no-underline">CHART</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- if adding a custom class -->        
+        <div id="customClass" ng-if="addCustomClass">
+            <div class="ui container">
+            <form class="ui huge form" name="newClassForm" ng-submit="submitSelection()" novalidate autocomplete="off">
+                <div class="fields">
+                    <div class="four wide field">
+                        <label>Class Code</label>
+                        <input type="text" name="class-code" placeholder="Class Code (Optional)" ng-model="newCourse.courseCode">
+                    </div>
+                    <div class="twelve wide required field">
+                        <label>Class Name</label>
+                        <input type="text" name="class-name" placeholder="Class Name (Required)" ng-model="newCourse.courseTitle" required="required">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="sixteen wide required field">
+                        <label>Host Institution</label>
+                        <select class="ui selection dropdown" name="class-institution" ng-show="institutions.length" ng-model="newCourse.hostInstitutionId" > <!-- ng-change="populateLocationOfInstruction()" -->
+                            <option ng-repeat="hostInstitution in institutions" value="{{hostInstitution.Id}}" ng-bind-html="hostInstitution.Name" />
+                        </select>
+                        <input type="text" ng-show="!institutions.length" readonly value="loading..." />
+                    </div>
+                    <!-- <div class="eight wide field">
+                        <label>Location of Instruction</label>
+                        <select class="ui selection dropdown" name="class-institution" ng-model="newCourse.locationId">
+                            <option ng-repeat="location in locations" value="{{location.Id}}" ng-bind-html="location.Name" />
+                        </select>
+                    </div> -->
+                </div>
+                <button type="submit" class="ui right floated green huge button" id="unlistedClassButton" ng-if="addCustomClass" ng-disabled="newClassForm.$invalid || !newCourse.hostInstitutionId || unListedClassSubmitButtonDisable">Add Class</button>
+                <button class="ui right floated huge button" ng-click="newClass()">Cancel</button>
+            </form>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer" ng-if="!addCustomClass">
+        <!-- <button class="ui left floated huge grey button" ng-click="newClass()" ng-if="addCustomClass"><i class="left arrow icon"></i> Search</button> -->
+        <button class="ui huge button" ng-click="close()">Cancel</button>
+	</div>    
+</div>

@@ -1,0 +1,18 @@
+<!-- Introduction Segment -->
+<!-- <div class="ui active centered inline loader" ng-if="loadingForm"></div> -->
+<div id="introduction" class="cif-form-body">
+    <h1 class="ui header">Introduction</h1>
+    <div class="ui active centered inline loader" ng-if="loadingForm"></div>
+    <div ng-if="!loadingForm">
+        <dynamic-form-item form-Item="formItem" type="{{formItem.fieldType}}" ng-repeat="formItem in appItem.form.formData.items | filter: lessThan('pos', 1)"></dynamic-form-item>
+        <!-- <div class="ui divider"></div>
+        <button class="ui huge right floated right labeled green icon button" ng-click="updateView('required')" ng-if="appItem.form.formData.formRules.length">
+            <i class="arrow right icon"></i>
+            Next
+        </button>
+        <button class="ui huge right floated right labeled green icon button" ng-click="updateView('selections')" ng-if="!appItem.form.formData.formRules.length">
+            <i class="arrow right icon"></i>
+            Next
+        </button> -->
+    </div>
+</div>

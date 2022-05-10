@@ -1,0 +1,36 @@
+<div class="ui basic segment">
+    <h2 class="content-title">Resources</h2>
+    <hr class="hr-gold"/>
+    <!-- Program Information -->
+    <p ng-bind-html="viewModel.customResourcesText"></p>
+    <div ng-if="loading">
+        <div class="ui huge top attached tabular menu">
+            <div class="active item">Date</div>
+            <div class="item">Documents</div>
+        </div>
+        <div class="ui bottom attached active tab segment">
+            <div class="ui placeholder" style="font-size: 1.15em;">
+                <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui dimmer" ng-class="{'active' : loading}">
+      <div class="ui loader"></div>
+    </div>
+</div>
+<tabset>
+    <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+        <ng-include src="tab.templateUrl"></ng-include>
+    </tab>
+</tabset>

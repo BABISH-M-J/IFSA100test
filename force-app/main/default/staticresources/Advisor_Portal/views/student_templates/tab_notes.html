@@ -1,0 +1,18 @@
+<div class="ui two cards">
+    <div class="raised card" ng-repeat="note in activeStudent.toolBoxNotes">
+        <div class="content">
+            <div class="header">
+                {{note.RecordType.Name}}
+            </div>
+            <div class="meta" ng-if="note.My_Advising_Topics__c" ng-repeat="topic in getTopics(note.My_Advising_Topics__c)">
+                {{topic}}
+                <!-- <span ng-if="!$last">|</span> -->
+            </div>
+            <div class="meta" ng-if="note.My_IFSA_Roadmap__c" ng-repeat="topic in getTopics(note.My_IFSA_Roadmap__c)">
+                {{topic}}
+                <!-- <span ng-if="!$last">|</span> -->
+            </div>
+            <div class="description" ng-bind-html="note.My_Note__c | fixHTMLTags"></div>
+        </div>
+    </div>
+</div>

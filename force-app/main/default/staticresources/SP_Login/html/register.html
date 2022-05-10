@@ -1,0 +1,148 @@
+<div class="ui centered raised card" id="register">
+    <div class="content">
+        <div class="ui center aligned large purple-primary header">Great! Let's start your application.</div>
+        <form name="registerForm" novalidate class="ui form" ng-class="{'error' : registerForm.$invalid}" ng-submit="register()">
+            <div class="field">
+                <label for="First_Name" aria-label="First Name"></label>
+                <div class="ui icon input">
+                    <input type="text" name="First_Name" id="First_Name" ng-model="viewModel.firstName" minlength="2" required ng-readonly="viewModel.contactId" placeholder="First Name">
+                    <i class="icon" ng-class="{'red close' : registerForm.First_Name.$invalid, 'green check' : registerForm.First_Name.$valid}"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label for="Last_Name" aria-label="Last Name"></label>
+                <div class="ui icon input">
+                    <input type="text" name="Last_Name" id="Last_Name" ng-model="viewModel.lastName" minlength="2" required ng-readonly="viewModel.contactId" placeholder="Last Name">
+                    <i class="icon" ng-class="{'red close' : registerForm.Last_Name.$invalid, 'green check' : registerForm.Last_Name.$valid}"></i>
+                </div>                
+            </div>
+            <div class="field" ng-class="{'error' : registerForm.School_Email.$invalid && !registerForm.School_Email.$pristine}">
+                <label for="School_Email" aria-label="School Email"></label>
+                <div class="ui icon input" ng-class="{'loading' : checkingEmail}">
+                    <input type="email" name="School_Email" id="School_Email" ng-model="viewModel.email" ng-model-options="{updateOn: 'default blur', debounce: {default: 300, blur: 0}}" required existing-user existing-user-id="{{viewModel.userId}}" ng-pattern="/^[\_\-\.\+a-zA-Z0-9]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/"  ng-readonly="viewModel.contactId" placeholder="School Email">
+                    <i class="icon" ng-class="{'green check' : emailSuccess, 'red close' : registerForm.School_Email.$invalid}"></i>
+                </div>
+                <div class="ui small error message" ng-messages="registerForm.School_Email.$error" ng-if="registerForm.School_Email.$dirty && registerForm.School_Email.$invalid">
+                    <div class="header">Email Error</div>
+                    <p class="some-message" ng-message="pattern">Your school email address is not valid</p>
+                    <p class="some-message" ng-message="existingUser">A user in the system already exists with this email address. <a href="#/login">Click here to login.</a></p>
+                </div>
+                <div class="ui sub header" style="text-transform: none !important;font-weight: 500;margin-top: 5px;">
+                    By providing your information, you are consenting to receive important updates about your IFSA application via email and you can opt out at any time. View the IFSA privacy policies <a class="purple-lt" target="_blank" href="https://ifsa-butler.org/terms-conditions-policies">here</a>.
+                </div>
+            </div>
+            <div class="field">
+                <label for="Home_College_or_University" aria-label="Search for Home College or University"></label>
+                <div class="ui icon action input">
+                    <input type="text" ng-model="viewModel.homeInstitutionName" readonly required placeholder="Search for Home College or University">
+                    <i class="icon" ng-class="{'red close' : registerForm.Home_College_or_University.$invalid, 'green check' : registerForm.Home_College_or_University.$valid}"></i>
+                    <button type="button" class="ui icon button" ng-click="openPickerModal('home_institution')"><i class="search icon"></i></button>
+                </div>
+            </div>
+            <div class="field">
+                <label for="Major" aria-label="Search for Major"></label>
+                <div class="ui icon action input">
+                    <input type="text" ng-model="viewModel.major" readonly required placeholder="Search for Major">
+                    <i class="icon" ng-class="{'red close' : registerForm.Major.$invalid, 'green check' : registerForm.Major.$valid}"></i>
+                    <button type="button" class="ui icon button" ng-click="openPickerModal('major')"><i class="search icon"></i></button>
+                </div>
+            </div>
+            <div class="field" ng-if="viewModel.major == 'Other'">
+                <label for="Major_Other" aria-label="Major Other"></label>
+                <div class="ui icon action input">
+                    <input type="text" name="Major_Other" id="Major_Other" ng-model="viewModel.OtherMajor" ng-required="viewModel.major == 'Other'" placeholder="Major Other">
+                    <i class="icon" ng-class="{'red close' : registerForm.Major_Other.$invalid, 'green check' : registerForm.Major_Other.$valid}"></i>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="six wide field" ng-class="{'error' : registerForm.Phone.$error.phoneValidationNoCountry && (!registerForm.Phone_Country.$pristine || !registerForm.Phone.$pristine)}">
+                    <label for="Phone_Country" aria-label="Phone Country"></label>
+                    <select class="ui compact selection dropdown" name="Phone_Country" id="Phone_Country" ng-model="viewModel.countryCode" title="Phone Country">
+                        <option value="" selected>Select Phone Country</option>
+                        <option value="US">US</option>
+                        <option ng-repeat="country in viewModel.countryOptions" value="{{country.Country_Code__c}}">{{country.Country_Code__c}}</option>
+                    </select>
+                </div>
+                <div class="ten wide field" ng-class="{'error' : registerForm.Phone.$invalid && !registerForm.Phone.$pristine}">
+                    <label for="Phone" aria-label="Phone"></label>
+                    <div class="ui icon input">
+                        <input type="tel" name="Phone" id="Phone" ng-model="viewModel.phone" required phone-validation phone-validation-country-code="{{viewModel.countryCode}}" placeholder="Phone" ng-disabled="!viewModel.countryCode">
+                        <i class="icon" ng-class="{'red close' : registerForm.Phone.$invalid && !registerForm.Phone.$pristine, 'green check' : registerForm.Phone.$valid && !registerForm.Phone.$pristine}"></i>
+                    </div>
+                </div>
+            </div>            
+            <div class="ui small error message" ng-messages="registerForm.Phone.$error" ng-messages-multiple ng-if="registerForm.Phone.$dirty && registerForm.Phone.$invalid">
+                <div class="header">Phone Error</div>
+                <p class="some-message" ng-message="phoneValidationNotValid">Your phone number is not valid</p>
+                <p class="some-message" ng-message="phoneValidationNoCountry">Please select a country</p>
+                <p class="some-message" ng-message="phoneValidationBlank">Please enter a phone number</p>
+            </div>
+            <div class="field"  ng-class="{'error' : registerForm.Password.$invalid && !registerForm.Password.$pristine}" ng-if="!viewModel.contactId">
+                <label for="Password" aria-label="Password"></label>
+                <div class="ui icon input">
+                    <input type="password" name="Password" id="Password" ng-model="viewModel.password" required minlength="8" maxlength="16" ng-pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/" placeholder="Password" password-validation password-first-name="{{viewModel.firstName}}" password-last-name="{{viewModel.lastName}}">
+                    <i class="icon" ng-class="{'red close' : registerForm.Password.$invalid && !registerForm.Password.$pristine, 'green check' : registerForm.Password.$valid && !registerForm.Password.$pristine}"></i>
+                </div>
+            </div>
+            <div class="ui small error message" ng-messages="registerForm.Password.$error" ng-messages-multiple ng-if="registerForm.Password.$dirty && registerForm.Password.$invalid">
+                <div class="header">Password Error</div>
+                <p class="some-message" ng-message="minlength">Your password is too short (Minimum 8 Characters)</p>
+                <p class="some-message" ng-message="maxlength">Your password is too long (Maximum 16 Characters)</p>
+                <p class="some-message" ng-message="passwordValidationFirstName">Your password cannot contain your first name</p>
+                <p class="some-message" ng-message="passwordValidationLastName">Your password cannot contain your last name</p>
+                <div ng-message="pattern">
+                    <p>Your password does not meet complexity requirements.</p>
+                    <ul class="list">
+                        <li>You must include both a upper and lower case letters in your password.</li>
+                        <li>You must include at least one number in your password.</li>
+                        <li>Symbols are allowed but not required</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="field" ng-class="{'error' : registerForm.Confirm_Password.$invalid && !registerForm.Confirm_Password.$pristine}" ng-if="!viewModel.contactId">
+                <label for="Confirm_Password" aria-label="Confirm Password"></label>
+                <div class="ui icon input">
+                    <input type="password" name="Confirm_Password" id="Confirm_Password" ng-model="viewModel.passwordRetyped" same-as="viewModel.password" required placeholder="Confirm Password">
+                    <i class="icon" ng-class="{'red close' : registerForm.Confirm_Password.$invalid && !registerForm.Confirm_Password.$pristine, 'green check' : registerForm.Confirm_Password.$valid && !registerForm.Confirm_Password.$pristine}"></i>
+                </div>
+            </div>
+            <div class="ui small error message" ng-messages="registerForm.Confirm_Password.$error" ng-if="registerForm.Confirm_Password.$dirty && registerForm.Confirm_Password.$invalid">
+                <div class="header">Confirm Password Error</div>
+                <p class="some-message" ng-message="match">Your password does not match</p>
+            </div>
+            <div class="field" ng-show="!viewModel.programId || (viewModel.programId && viewModel.programOfInterest)">
+                <label for="Choose_Program" aria-label="Choose Program"></label>
+                <div class="ui icon action input">
+                    <input type="text" ng-model="viewModel.programOfInterest.Name" readonly required placeholder="Choose Program">
+                    <i class="icon" ng-class="{'red close' : registerForm.Choose_Program.$invalid, 'green check' : registerForm.Choose_Program.$valid}"></i>
+                    <button type="button" class="ui icon button" ng-click="open()"><i class="search icon"></i></button>
+                </div>
+            </div>
+            <div class="field" ng-if="viewModel.programId && !viewModel.programOfInterest">
+                <label for="Choose_Term" aria-label="Tell us when you want to study abroad."></label>
+                <div class="ui icon action input">
+                    <input type="text" ng-model="viewModel.program.Name" readonly required placeholder="Tell us when you want to study abroad">
+                    <i class="icon" ng-class="{'red close' : registerForm.Choose_Term.$invalid, 'green check' : registerForm.Choose_Term.$valid}"></i>
+                    <button type="button" class="ui icon button" ng-click="selectTerm()"><i class="search icon"></i></button>
+                  </div>
+            </div>
+            <div class="ui divider"></div>
+            <button type="submit" class="ui fluid huge ifsa-gold button" ng-class="{'loading' : saving}" ng-disabled="registerForm.$invalid">Let's Go</button>
+            <!-- <div class="ui red center aligned padded segment" ng-hide="hideModalButtons">
+                <p>These buttons to be removed</p>
+                <div class="ui vertical buttons">
+                    <button type="button" class="ui fluid ifsa-lt-aqua button" ng-click="existingUser('ch')">Test CHART modal</button>
+                    <button type="button" class="ui fluid ifsa-lt-blue button" ng-click="existingUser('sp')">Test Student Portal modal</button>
+                    <button type="button" class="ui fluid ifsa-lt-clover button" ng-click="existingUser('gw')">Test Global Wayfinder modal</button>
+                    <button type="button" class="ui fluid button" ng-click="hideModalButtons = true">Hide Modal Buttons</button>
+                </div>
+            </div> -->
+            
+        </form>
+    </div>
+    <div class="extra content">
+        <div class="ui right aligned container">
+            Already have an account? <a href="#/login">Click here to login.</a>
+        </div>
+    </div>
+</div>

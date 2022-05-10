@@ -1,0 +1,74 @@
+<loading is-loading="loading">
+    <div class="ui grid">
+        <div class="one column row">
+            <div class="ui big breadcrumb">
+                <a  href="#/" class="section">Home</a>
+                <div class="divider"> / </div>
+                <div class="active section">Prospective Students</div>
+            </div>    
+        </div>
+        <div class="one column row">
+            <h2 class="content-title">{{viewModel.HomeInstitutionName}}</h2>
+            <hr class="hr-gold"/>
+        </div>
+        <div class="row">
+            <div class="four wide column">
+                <div class="ui vertical fluid menu" style="font-size: 1em;">
+                    <div class="header item">
+                        <i class="users icon"></i> Students
+                    </div>
+                    <div class="item">
+                        <div class="ui icon input">
+                            <input type="text" ng-model="filterStudent" placeholder="Search by name...">
+                            <i class="search icon"></i>
+                        </div>
+                    </div>
+                    <div class="item">
+                        Graduation Year
+                        <div class="menu">
+                            <a class="item" ng-class="{'active' : studentFilterGradYear.value == item.value}" ng-repeat="item in filterYears" ng-click="selectYear(item)">{{item.text}}</a>
+                        </div>
+                    </div>
+                    <a class="item" ng-class="{'active' : selectedStudent.Id == student.Id}" ng-repeat="student in advisingNotes | filter:studentsFilter(filterStudent) | filter:yearFilter(studentFilterGradYear.value)" ng-click="selectStudent(student)">
+                        <div class="content">
+                            <span ng-if="student.Contact.Preferred_Name__c" ng-bind-html="student.Contact.Preferred_Name__c"></span>
+                            <span ng-if="!student.Contact.Preferred_Name__c" ng-bind-html="student.Contact.FirstName"></span>
+                            <span ng-bind-html="student.Contact.LastName"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="twelve wide column">
+                <loading is-loading="noteLoading" ng-if="selectedStudent">
+                    <div class="ui medium header">
+                        <span ng-if="student.Contact.Preferred_Name__c" ng-bind-html="student.Contact.Preferred_Name__c"></span>
+                        <span ng-if="!student.Contact.Preferred_Name__c" ng-bind-html="student.Contact.FirstName"></span>
+                        <span ng-bind-html="student.Contact.LastName"></span>
+                    </div>
+                    <div class="ui top attached tabular menu" style="font-size: 1em;">
+                        <div class="item" ng-class="{'active': activeTab.Id == note.Id}" ng-click="changeTab(note)" ng-repeat="note in selectedStudent.notes">{{getLabel(note)}}</div>
+                    </div>
+                    <div class="ui bottom attached segment" style="font-size: 1em;">
+                        <div class="ui small header">Topics</div>
+                        <div id="advisingTopics" ng-if="activeTab.RecordType.Name == 'My Advising Topics'">
+                            <span ng-repeat="topic in activeTab.My_Advising_Topics__c.split(';')">{{topic}}<span ng-if="!$last">, </span> </span>
+                        </div>
+                        <div id="ifsaRoadmap" ng-if="activeTab.RecordType.Name == 'My IFSA Roadmap'">
+                            <span ng-repeat="topic in activeTab.My_IFSA_Roadmap__c.split(';')">{{topic}}<span ng-if="!$last">, </span> </span>
+                        </div>
+                        <div class="ui divider"></div>
+                        <div id="myNotes" ng-if="activeTab.My_Note__c">
+                            <div class="ui small header">Notes</div>
+                            <div ng-bind-html="activeTab.My_Note__c"></div>
+                        </div>
+                        <div class="ui divider"></div>
+                        <div id="lastModfified">
+                            <div class="ui tiny header">Last Modified</div>
+                            <div>{{activeTab.LastModifiedDate | date : "short"}}</div>
+                        </div>
+                    </div>
+                </loading>
+            </div>
+        </div>
+    </div>
+</loading>

@@ -1,0 +1,119 @@
+<!-- Selections Segment -->
+<div id="selections" class="cif-form-body">
+    <h1 class="ui header">Selections</h1>
+    <div class="ui active centered inline loader" ng-if="loadingCourses"></div>
+    <div ng-if="!loadingCourses">
+        <div class="ui fluid violet message">
+            <p>{{numberOfRemainingCourses()}} Classes Remaining</p> 
+            <p ng-if="alternateRule">{{numberOfRemainingAlternates()}} Alternates Remaining</p>
+            <p ng-if="appItem.form.formData.departments.noResText" ng-bind-html="appItem.form.formData.departments.noResText"></p>
+            <p ng-repeat="dept in appItem.form.formData.departments.selectedDepartments" ng-if="appItem.form.formData.departments.selectedDepartments && appItem.form.formData.departments.linkClassesDept">
+                {{numberOfRemainingCoursesForDept(dept)}} <span ng-bind-html="dept.Name"></span> Classes Remaining ({{appItem.form.formData.departments.maxClassesPerDept}} Classes maximum)
+            </p>
+        </div>
+        <div class="ui active centered inline loader" ng-if="loadingClasses"></div>
+        <div class="ui items">
+            <div class="item" ng-repeat="class in courseSelections | toArray | orderBy: 'rank'">
+                <div class="ui fluid card">
+                <!-- Primary Class Information -->
+                <div class="content" ng-if="class.Id">
+                    <div class="ui right floated large icon buttons" ng-if="!class.isRequired">
+                        <button class="ui button" ng-click="reorder(class, $index, 'up')" ng-disabled="$index == requiredCount"><i class="arrow up icon"></i></button>
+                        <button class="ui button" ng-click="reorder(class, $index, 'down')" ng-disabled="$last"><i class="arrow down icon"></i></button>
+                        <button class="ui red button" ng-click="clearCourse(class)" ng-disabled="isDeleting"><i class="x icon"></i></button>
+                    </div>
+                    <div class="header">{{class.rank}} - <span ng-bind-html="class.Course_Title_2__c"></span></div>
+                    <div class="meta" ng-if="class.US_Semester_Credit_Hours__c || class.Host_Credits__c">
+                        <span ng-if="class.US_Semester_Credit_Hours__c">US Credits: {{class.US_Semester_Credit_Hours__c}}</span>
+                        <span ng-if="class.Host_Credits__c">Host Credits: {{class.Host_Credits__c}}</span>
+                        <span ng-if="class.US_Terms__c">US Terms: {{class.US_Terms__c | replace: ';' : ', '}}</span>
+                    </div>
+                    <div class="description" ng-if="class.Course_Description_Short__c">
+                        <p ng-bind-html="class.Course_Description_Short__c | fixHTMLTags"></p>
+                    </div>
+                    <div class="description" ng-if="!class.isRequired">
+                        <span ng-click="class.fulfillsDegreeRequirement = !class.fulfillsDegreeRequirement"><i class="square outline icon" ng-class="{'check' : class.fulfillsDegreeRequirement}"></i> Degree Requirement</span> <i class="question circle outline icon" tooltip-placement="bottom" tooltip="Select if you need to take this specific class in order to fulfill a degree requirement at your home university. You will have the opportunity to explain any general needs on the next page."></i>
+                    </div>
+                    <div class="description" ng-if="appItem.form.formData.departments.selectedDepartments && appItem.form.formData.departments.linkClassesDept && appItem.form.formData.departments.selectedDepartments[0].Host_Institution__c == class.Host_Institution__c">
+                        <input style="display: none;" type="text" name="classDepartment" ng-model="class.selectedDepartment" ng-required="appItem.form.formData.departments.selectedDepartments && appItem.form.formData.departments.linkClassesDept && appItem.form.formData.departments.selectedDepartments[0].Host_Institution__c == class.Host_Institution__c">
+                        <div class="btn-group" dropdown is-open="class.deptPickerStatus.isopen">
+                            <button id="{{$index}}-department-button" type="button" class="btn btn-default" ng-click="departmentSelected(class)" dropdown-toggle> <!-- ng-disabled="appItem.form.formData.departments.selectedDepartments.length == appItem.form.formData.departments.maxDepts" -->
+                                <span ng-bind-html="getDepartmentName(class.selectedDepartment)"></span>&nbsp;<span ng-if="dept.designation">- {{dept.designation}}</span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="{{$index}}-department-button">
+                                <li ng-repeat="dept in appItem.form.formData.departments.selectedDepartments | orderBy: 'Name'" ng-class="{'disabled': dept.selectCount == appItem.form.formData.departments.maxClassesPerDept}">
+                                    <button class="btn btn-link" style="text-decoration: none; color: black" ng-click="class.selectedDepartment = dept.Id; departmentSelected(class);" ng-disabled="dept.selectCount == appItem.form.formData.departments.maxClassesPerDept">
+                                        <span ng-bind-html="dept.Name"></span>&nbsp;<span ng-if="dept.designation">- {{dept.designation}}&nbsp;</span>
+                                        <span ng-if="dept.Program_Option__c != viewModel.programOptionId" ng-bind-html="dept.Program_Option__r.Name"></span>
+                                    </button>
+                                </li>
+                                <li ng-if="class.selectedDepartment">
+                                    <button class="btn btn-link" style="text-decoration: none; color: black" ng-click="class.selectedDepartment = undefined; departmentSelected(class);">
+                                        Reset
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="extra" ng-if="class.isRequired">
+                        Class Required by Program
+                    </div>
+                </div>
+                <!-- Alternate Class Information -->
+                <div class="content" ng-if="!class.noAlternate && class.Id && !class.isRequired && alternateRule">
+                    <div class="center aligned content" ng-if="alternateRule && !class.isRequired && !(class.alternateCourse && class.alternateCourse.Course_Title_2__c)">
+                        <button class="ui large button" ng-click="classSearch(class, class.Id)">
+                            <i class="plus icon"></i>
+                            Add Alternate
+                        </button>
+                        <span ng-if="appItem.form.formData.departments.selectedDepartments && appItem.form.formData.departments.linkClassesDept && appItem.form.formData.departments.selectedDepartments[0].Host_Institution__c == class.Host_Institution__c">Alternate class needs to be in the same department as your primary choice</span>
+                    </div>
+                    <div class="content" ng-if="class.alternateCourse && class.alternateCourse.Course_Title_2__c">
+                        <button class="ui large right floated red icon button" ng-click="clearAlternateCourse(class)" ng-disabled="isDeleting" ng-if="!class.isRequired"><i class="x icon"></i></button>
+                        <div class="ui small header"><span ng-bind-html="class.alternateCourse.Course_Title_2__c"></span></div>
+                        <div class="meta" ng-if="class.alternateCourse.US_Semester_Credit_Hours__c || class.alternateCourse.Host_Credits__c">
+                            <span ng-if="class.alternateCourse.US_Semester_Credit_Hours__c">US Credits: {{class.alternateCourse.US_Semester_Credit_Hours__c}}</span>
+                            <span ng-if="class.alternateCourse.Host_Credits__c">Host Credits: {{class.alternateCourse.Host_Credits__c}}</span>
+                        </div>
+                        <div class="description" ng-if="class.alternateCourse.Course_Description_Short__c">
+                            <p ng-bind-html="class.alternateCourse.Course_Description_Short__c | fixHTMLTags"></p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="content text-center" ng-if="!class.Id">
+                    <div class="ui large buttons">
+                        <button class="ui green button" ng-click="classSearch(class, null)"><i class="plus icon"></i> Add Class {{class.rank}}</button>
+                        <button class="ui red button" ng-show="class.rank > appItem.form.formData.minNumReqElements" ng-click="removeOptionalClass($index)"><i class="x icon"></i>  Remove Optional Class</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!--<div class="item" ng-if="numberOfCourses() < maxNumOfItems()">
+                <button class="ui huge fluid icon button" type="button" ng-click = "addOptionalClass()"><i class="plus icon"></i> Add another classs</button>
+            </div> -->
+
+            <!-- If there are departments -->
+            <div ng-if="steps.indexOf('departments') !== -1">
+                <div class="item" ng-if="numberOfCourses() < maxNumOfItems()">
+                    <button class="ui huge fluid icon button" type="button" ng-click = "addOptionalClass()"><i class="plus icon"></i> Add another class</button>
+                </div>
+            </div>
+            <!-- If there are not departments -->
+            <div ng-if="steps.indexOf('departments') === -1">
+                <div class="item" ng-if="numberOfCourses() < appItem.form.formData.numReqElements">
+                    <button class="ui huge fluid icon button" type="button" ng-click = "addOptionalClass()"><i class="plus icon"></i> Add another class</button>
+                </div>
+            </div>
+
+            <!--<div>Index of Departments Step: {{steps.indexOf('departments')}} <br>
+                numberOfCourses: {{numberOfCourses()}}<br>
+                maxNumOfItems: {{maxNumOfItems()}}<br>
+                SelectedDepartments.length: {{appItem.form.formData.departments.selectedDepartments.length}}<br>
+                Max Class Per Departments: {{appItem.form.formData.departments.maxClassesPerDept}}
+            </div> -->
+            <div class="ui fluid red message" ng-if="numberOfCourses() > maxNumOfItems()">
+                You currently have more courses selected than are allowed by department. Please remove some classes and the "Next" button will activate. For help, please refer to the purple box at the top for any remaining requirements.
+            </div>
+        </div>
+    </div>
+</div>

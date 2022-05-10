@@ -1,0 +1,12 @@
+﻿<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title"><span ng-show="successful">Program Selected!</span><span ng-show="!successful">Submission Failed</span></h3>
+	</div>
+	<div class="modal-body">
+		<h4 ng-show="successful">Thanks for choosing your program! Now you can begin providing us your application materials.</h4>
+		<h4 ng-show="!successful">There was an error submitting your data. Please try again. If you continue to have problems, contact IFSA.</h4>
+	</div>
+	<div class="modal-footer">
+		<button class="btn ifsa-btn" type="button" ng-click="clickOk()">OK</button>
+	</div>
+</div>

@@ -1,0 +1,44 @@
+<div>
+    <h2 class="ui header">Saved Searches</h2>
+    <div class="ui two fluid cards">
+        <div class="card" ng-repeat="search in activeStudent.savedSearches">
+            <div class="content">
+                <div class="header">Search {{$index + 1}}</div>
+                <div class="description">
+                    <div class="ui relaxed items">
+                        <div class="item" ng-if="search.Element_1__c">
+                            <search-element class="content" element="search.Element_1__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_2__c">
+                            <search-element class="content" element="search.Element_2__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_3__c">
+                            <search-element class="content" element="search.Element_3__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_4__c">
+                            <search-element class="content" element="search.Element_4__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_5__c">
+                            <search-element class="content" element="search.Element_5__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_6__c">
+                            <search-element class="content" element="search.Element_6__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_7__c">
+                            <search-element class="content" element="search.Element_7__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_8__c">
+                            <search-element class="content" element="search.Element_8__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_9__c">
+                            <search-element class="content" element="search.Element_9__c"></search-element>
+                        </div>
+                        <div class="item" ng-if="search.Element_10__c">
+                            <search-element class="content" element="search.Element_10__c"></search-element>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

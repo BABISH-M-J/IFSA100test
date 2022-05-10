@@ -1,0 +1,36 @@
+<div class="row mt">
+    <div class="col-xs-12 text-center">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <h5><b>In order to help IFSA improve advising and support for all students abroad, we invite you to share information about yourself and the unique experiences you bring to our programs. These questions are optional.</b></h5>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 text-left">
+                <multi-select options="viewModel.TravelTopicsOptions" selected="selectedTravelToptics" two-cols="true" is-required="false" label-text="Please select any of the following topics that you would be interested in receiving more information on from IFSA in relation to your time abroad:"/>
+            </div>
+        </div>
+        <p/>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="form-group">
+                    <label class="control-label" for="travelConcerns">Do you have any questions or concerns you would like to share with IFSA staff about your upcoming study abroad experience related to your identity?</label>
+                    <select id="travelConcerns" class="form-control form-input" ng-model="travelConcerns">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <textarea class="form-control form-input" ng-model="viewModel.TravelConcerns" placeholder="Write any concerns here..." ng-show="travelConcerns =='Yes'"></textarea>    
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <hr/>
+                <input type="button" class="btn ifsa-btn" value="Back" ng-show="!submitted" ng-disabled="toggling" ng-click="toggleSurvey(false, 0)"/>
+                <button type="button" class="btn ifsa-btn" ng-show="!submitted" ng-disabled="appForm.$invalid || toggling" ng-click="toggleSurvey(true, 2)">
+                    Next <i class="spinner loading icon" ng-if="toggling"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

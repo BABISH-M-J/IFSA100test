@@ -1,0 +1,156 @@
+<!--
+    Home Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- Page -->
+<div id="body">
+    <div id="search-segment" class="ui basic segment mb-0">
+        <div class="ui stackable doubling grid">
+            <div class="four wide column"></div>
+            <div class="eight wide column">
+                <div class="ui fluid raised card">
+                    <div class="content m-3">
+                        <div class="center aligned mb-3">
+                            <img class="ui medium image" ng-src="{{urlService.getLogoUrl()}}">
+                        </div>
+                        <div class="ui center aligned huge header text-uppercase mb-3">
+                            Class Search
+                        </div>
+                        <div class="ui message" ng-if="noCourses">
+                            <span>You have successfully logged into CHART; however, you are unable to see any class records because we do not know which IFSA programs your home institution pre-approves.  We will send you an email as soon as we are able to review and update your home institution’s approved program list.  If you need assistance in the meantime, email <a href="mailto:chart@ifsa-butler.org">CHART@ifsa-butler.org</a> for help.</span>
+                        </div>
+                        <div class="center aligned meta" ng-if="loading && numberOfBatches > 1">
+                            <small>Loading Classes - {{progressValue | number : 0 }}%</small> 
+                            <uib-progressbar style="height: 4px;" type="info" animate="true" max="100" value="progressValue"></uib-progressbar>
+                        </div>
+                    <!-- Commenting out Buttons and Advanced Search for US-4653
+
+                            <form ng-submit="searchCoursesHome()">
+                            <div class="ui fluid input mb-3" ng-class="{ 'disabled' : loading, 'disabled' : noCourses }">
+                                <input type="text" ng-model="filterCriteria.searchTerm" placeholder="Class title keyword(s)..."/>
+                                <!-- <div class="ui white icon button" ng-class="{ 'disabled' : loading }" ng-click="advanced = !advanced" uib-tooltip='Advanced Search' tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="sliders horizontal icon"></i></div>
+                                <button class="ui ifsa-btn-gold icon button" ng-class="{ 'disabled' : loading }" type="submit"><i class="search icon"></i></button> -->
+                        <!--    </div>
+                            <div class="two ui buttons">
+                                <div class="ui button" ng-class="{ 'disabled' : loading, 'disabled' : noCourses }" ng-click="advanced = !advanced" uib-tooltip='Advanced Search' tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="sliders horizontal icon"></i> Advanced</div>
+                                <button class="ui ifsa-btn-gold button" ng-class="{ 'disabled' : loading, 'disabled' : noCourses }" type="submit"><i class="search icon"></i> Search</button>
+                            </div>
+                        </form>
+                        <div class="ui left aligned segment" ng-if="advanced">
+                            <div class="ui sub header">
+                                Advanced Search
+                            </div>
+                            <div class="ui divider"></div>
+                            <div class="ui form">
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick" is-open="isRegionOpen">
+                                        <button class="ui fluid basic button dropdown-btn" uib-dropdown-toggle="uib-dropdown-toggle" ng-disabled="false">
+                                            Region
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.marketingRegions" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick" is-open="isCountryOpen">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle="uib-dropdown-toggle" ng-disabled="false">
+                                            Country
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.countries" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick" is-open="isProgramOpen">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle="uib-dropdown-toggle" ng-disabled="false">
+                                            Program
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.programs" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle="uib-dropdown-toggle" ng-disabled="false">
+                                            U.S. Term(s)
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.terms" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle="uib-dropdown-toggle" ng-disabled="false">
+                                            Distinctive Learning Component
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.learningComponents" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle ng-disabled="false">
+                                            Department
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.departments" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div uib-dropdown="uib-dropdown" auto-close="outsideClick">
+                                        <button class="ui fluid basic button" uib-dropdown-toggle ng-disabled="false">
+                                            Area of Study
+                                        </button>
+                                        <ul class="homeFilterDropdown dropdown-menu scrollable-menu" uib-dropdown-menu="uib-dropdown-menu" role="menu" aria-labelledby="regionDropDown">
+                                            <div class="dropdown-item" ng-repeat="(key, value) in filterCriteria.areasOfStudy" ng-click="value.selectedInSearch = !value.selectedInSearch">
+                                                <i class="icon" ng-class="{ 'check square outline' : value.selectedInSearch, 'square outline' : !value.selectedInSearch }"></i>
+                                                <span ng-bind-html="value.name"></span>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    -->
+                    </div>
+                </div>
+                <div class="ui padded segment">
+                    <div class="ui header">
+                        Important CHART Info
+                    </div>
+                    <p>
+                        Curriculum Hub: An Academic Reference Tool (CHART) is a searchable class database with thousands of classes students have recently taken, or expressed interest in taking, on IFSA programs abroad. It contains only a fraction of classes available on our programs, and it is continually expanding based on student interests.
+                    </p>
+                    <p>
+                        Please note that CHART only displays classes on IFSA programs your home institution pre-approves for you to attend. As you explore class options, you might download or print the class records you would like to review with advisors or faculty at your home institution. The <a href="#/faq" target="_blank">CHART FAQ</a> may also be helpful, and you are welcome to email <a href="mailto:chart@ifsa-butler.org">CHART@ifsa-butler.org</a> for assistance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

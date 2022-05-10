@@ -1,0 +1,650 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,900);
+
+* {
+    margin: 0;
+    padding: 0;
+    /* font-family: 'Lato', sans-serif; */
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+p {
+    font-size: 1.5rem;
+    line-height: 1.4em;
+}
+
+.reg-font-size {
+    font-size: 1.5rem !important;
+    line-height: 1.4em !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 400;
+}
+
+li.crfAlert {
+    margin-left: 15px;
+}
+
+#wrapper {
+    min-height:100%;
+    position:relative;
+    background-color: lightgray;
+    background:
+        linear-gradient(transparent,#000, #000),
+        url("https://www.ifsa-butler.org/wp-content/uploads/2017/01/China-Barteldt-IMG_3559-HI-RES.jpg") center center fixed;
+    background-repeat: no-repeat, no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#header {
+    padding:10px;
+}
+
+#body {
+    padding-bottom:100px;
+}
+
+#footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:100px;
+    padding: 20px 0px;
+    background-color:#000;
+    color: white;
+}
+
+#footer p {
+    margin: 5px 0px;
+}
+
+#footer a {
+    color: #fff;
+    margin-left: 1.25em;
+}
+
+#footer a:first-child {
+    margin-left: 0em;
+}
+
+.top-buffer {
+    margin-top: 10px;
+}
+
+.hr-black {
+    color: #000;
+}
+
+.hr-gold {
+    color: #AF9761;
+}
+
+.content-panel-primary {
+    background-color:#fff;
+    padding: 40px;
+}
+
+.content-panel-secondary {
+    background-color: transparent;
+    margin: 40px 0px;
+}
+
+.content-title{
+    font-size: 2.5rem;
+    line-height: 1.2em;
+    font-weight: 700;
+    padding-bottom:.30em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: -.03em;
+}
+
+.content-section-title{
+    font-size: 2.5em;
+    color: #AF9761;
+    font-weight: 700;
+    margin-top: 1.25em;
+    margin-bottom: .25em;
+    line-height: 1.5em;
+}
+
+.app-status-title a {
+    font-size: 1em;
+    color: #AF9761;
+    font-weight: 700;
+    margin: 20px 0;
+    line-height: 1.5em;
+}
+
+.ifsa-btn {
+    background-color:#ECCB82 !important;
+    border: 1px solid #ECCB82;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #000 !important;
+}
+
+.brand-button {
+    background-color:#ECCB82 !important;
+}
+
+.control-label
+{
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 400;
+}
+
+.drop-box 
+{
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 200px;
+    height: 65px;
+    text-align: center;
+    padding-top: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.imgContainer
+{
+    min-width:2000px;
+    height:1000px;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+}
+
+.imgContainer img
+{
+    min-width:2000px;
+    height:1000px;
+}
+
+.img-fill
+{
+    width: 90%;
+}
+
+.modal-dialog
+{
+    margin-top: 80px;
+}
+
+#input-container {
+    background-color: #f2f2f2;
+    margin: 0px;
+    padding: 30px 20px;
+}
+
+.overlap
+{
+    position:relative;
+    top:-30px;
+    margin-bottom:-30px;
+}
+
+.required
+{
+    border-color: #FF0000;
+}
+
+.signature
+{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 100%;
+    height: 200px;
+    border: solid 2px #3F3F3F;
+    border-radius: 10px;
+    background-color: #E3E3E3;
+}
+
+.slideshow-lower
+{
+    position:relative;
+    z-index:8000;
+}
+
+.slideshow-superimpose
+{
+    position:relative;
+    z-index:9000;
+    margin-top:-700px;
+    margin-bottom:500px;
+}
+
+.slideshow-banner-superimpose
+{
+    position:relative;
+    z-index:9000;
+    margin-top:-300px;
+    margin-bottom: 200px;
+}
+
+.ta-scroll-window > .ta-bind 
+{
+    height: auto;
+    min-height: 300px;
+    padding: 6px 12px;
+}
+
+.ta-editor
+{
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+}
+
+.ta-toolbar 
+{
+    background-color: #F0F0F0;
+    padding: 10px 10px 5px;
+    margin-left: 0px;
+    border: 1px solid #EEE;
+}
+
+.ta-toolbar .btn-group
+{
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+/* SP PROFILE */
+
+.address-card-title {
+    padding-top: 6.5px;
+}
+
+/* TILES */
+/***************************/
+.ui {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+.ui .header {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+.app-item-incomplete span, 
+.app-item-incomplete span:hover, 
+.app-item-incomplete span:focus, 
+.app-item-incomplete span:active {
+    color: #A0A0A0 !important;
+}
+
+.app-item-started span,
+.app-item-started span:hover,
+.app-item-started span:focus,
+.app-item-started span:active {
+    color: #ECCB82 !important;
+}
+
+.app-item-complete span, 
+.app-item-complete span:hover,
+.app-item-complete span:focus,
+.app-item-complete span:active
+ {
+    color: #016936 !important;
+}
+
+.app-item-content {
+    background-color: #efefef !important;
+    padding: 2em 1em !important;
+}
+
+.app-item-content:hover{
+    background-color: #e0e0e0 !important;
+}
+
+.app-item-content > .header {
+    color: #383A3B !important;
+    font-weight: 400 !important;
+}
+
+.tile-container
+{
+    width:250px;
+    height:150px;
+    max-width:100%;
+    margin:auto;
+    margin-top: 10px;
+    display: inline-block;
+    padding:5px;
+}
+
+.tile
+{
+    transition: all 0.3s ease;
+    cursor: default;
+    margin:auto;
+    padding:5px;
+    width:100%;
+    height:100%;
+}
+
+.tile-incomplete:hover
+{
+    position: relative;
+    background-color: #383A3B;
+    color: #EDCC87;
+    -ms-transform: scale(1.05,1.05);
+    -webkit-transform: scale(1.05,1.05);
+    -moz-transform: scale(1.05,1.05);
+    transform: scale(1.05,1.05);
+    z-index: 10;
+}
+
+.tile:active, .tile:focus
+{
+    position: relative;
+    -ms-transform: scale(1.1,1.1);
+    -webkit-transform: scale(1.1,1.1);
+    -moz-transform: scale(1.1,1.1);
+    transform: scale(1.1,1.1);
+    z-index: 10;
+}
+
+.tile-incomplete
+{
+    background-color: #E5E5E5;
+    color: #000000;
+}
+
+.tile-partialComplete
+{
+    background-color: #FFFFD0;
+    color: #DDA108;
+}
+
+.tile-complete
+{
+    background-color: #D5FDD6;
+    color: #19A347;
+}
+
+.tile-title
+{
+    height:52px;
+}
+
+.form-group.required1 .control-label:after 
+{ 
+    color: #d00;
+    content: "*";
+    font-size: large;
+    margin-left: 8px;
+}
+
+/* Responsive iFrame for Google Map */
+.intrinsic-container {
+position: relative;
+height: 0;
+overflow: hidden;
+}
+
+/* 16x9 Aspect Ratio */
+.intrinsic-container-16x9 {
+padding-bottom: 56.25%;
+}
+
+/* 4x3 Aspect Ratio */
+.intrinsic-container-4x3 {
+padding-bottom: 75%;
+}
+
+.intrinsic-container iframe {
+position: absolute;
+top:0;
+left: 0;
+width: 100%;
+height: 100%;
+}
+
+.asterisk {
+    color: #dd0000;
+}
+
+/* Angular Component Classes */
+
+.tab-content {
+    margin-top: 10px;
+}
+
+/* Use with unordered or ordered lists so the bullets fall inside it's container */
+
+.bindHtml{
+    list-style-position: inside;
+}
+
+/* Tooltip css for SP Resources page */
+.tooltip.customClass{
+    background-color:#FFF;
+    opacity: 1;
+}
+.tooltip.customClass .tooltip-inner {
+    color: #333;
+    background-color: #FFF;
+    box-shadow: 0 0px 12px rgba(0,0,0,.175);
+    text-align: left;
+    margin: 0px;
+    padding: 8px;
+}
+.tooltip.customClass p{
+    padding:0px;
+    margin:0px;
+}
+/* Hide arrow */
+.tooltip.customClass .tooltip-arrow {
+    display: none;
+}
+/* Typed Signature and Inital */
+.handwritten {
+    font-family: 'Homemade Apple';
+    font-size: x-large;
+    padding-top: 15px;
+}
+.linkDisabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: grey;
+}
+
+.cif-form-body {
+    margin-top:14px;
+}
+
+.cif-step:hover {
+    text-decoration: none;
+}
+
+.no-underline {
+    text-decoration: none !important;
+}
+
+/* IFSA PRIMARY COLORS */
+.purple-primary { color: #330072 !important; }
+.purple-lt { color: #501f5f !important; }
+
+/* IFSA SECONDARY COLORS */
+.gold-lt { color: #EED484 !important; }
+.gold-dk { color: #A89968 !important; }
+
+/* IFSA TERTIARY COLORS */
+.blue-primary { color: #003594 !important; }
+.blue-lt { color: #7BA4DB !important; }
+
+.aqua-primary { color: #005f83 !important; }
+.aqua-lt { color: #48a9c5 !important; }
+
+.clover-primary { color: #00816D !important; }
+.clover-lt { color: #00B2A9 !important; }
+
+.spring-primary { color: #009639 !important; }
+.spring-lt { color: #71B790 !important; }
+
+/* IFSA RARE COLORS -- Highlights, Call-Outs */
+.red-primary { color: #d22630 !important; }
+.purple-bold {
+    color: #330072 !important;
+    font-weight: bold;
+}
+.grey-bold {
+    color: #646464 !important;
+    font-weight: bold;
+}
+.grey-lt-bold {
+    color: #939292 !important;
+    font-weight: bold;
+}
+
+.grey-xlt-bold {
+    color: #C2C1C1 !important;
+    font-weight: bold;
+}
+
+.crf-card {
+    margin-top: -5px !important;
+}
+
+/* Small Screens */ 
+@media (max-width:1199px) {
+    body {
+        padding-top:60px;
+    }
+}
+
+/* Large Screens */
+@media (min-width:1200px) {
+    
+    body {
+        padding-top:86px;
+    }
+}
+/* Progress Bar */
+.progress {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 25px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 21px;
+    background-color: #ECCB82;
+    border-radius: 25px;
+}
+
+.center-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  }
+
+/* Mobile */
+
+@media only screen and (max-width: 767px) {
+
+    [class*="mobile hidden"],
+    [class*="tablet only"]:not(.mobile),
+    [class*="computer only"]:not(.mobile),
+    [class*="large monitor only"]:not(.mobile),
+    [class*="widescreen monitor only"]:not(.mobile),
+    [class*="or lower hidden"] {
+      display: none !important;
+    }
+}
+  
+  
+  /* Tablet / iPad Portrait */
+  
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  
+    [class*="mobile only"]:not(.tablet),
+    [class*="tablet hidden"],
+    [class*="computer only"]:not(.tablet),
+    [class*="large monitor only"]:not(.tablet),
+    [class*="widescreen monitor only"]:not(.tablet),
+    [class*="or lower hidden"]:not(.mobile) {
+      display: none !important;
+    }
+}
+  
+  
+  /* Computer / Desktop / iPad Landscape */
+  
+  @media only screen and (min-width: 992px) and (max-width: 1199px) {
+  
+    [class*="mobile only"]:not(.computer),
+    [class*="tablet only"]:not(.computer),
+    [class*="computer hidden"],
+    [class*="large monitor only"]:not(.computer),
+    [class*="widescreen monitor only"]:not(.computer),
+    [class*="or lower hidden"]:not(.tablet):not(.mobile) {
+      display: none !important;
+    }
+}
+  
+  
+  /* Large Monitor */
+  
+  @media only screen and (min-width: 1200px) and (max-width: 1919px) {
+  
+    [class*="mobile only"]:not([class*="large monitor"]),
+    [class*="tablet only"]:not([class*="large monitor"]),
+    [class*="computer only"]:not([class*="large monitor"]),
+    [class*="large monitor hidden"],
+    [class*="widescreen monitor only"]:not([class*="large monitor"]),
+    [class*="or lower hidden"]:not(.computer):not(.tablet):not(.mobile) {
+      display: none !important;
+    }
+}
+  
+  
+  /* Widescreen Monitor */
+  
+  @media only screen and (min-width: 1920px) {
+  
+    [class*="mobile only"]:not([class*="widescreen monitor"]),
+    [class*="tablet only"]:not([class*="widescreen monitor"]),
+    [class*="computer only"]:not([class*="widescreen monitor"]),
+    [class*="large monitor only"]:not([class*="widescreen monitor"]),
+    [class*="widescreen monitor hidden"],
+    [class*="widescreen monitor or lower hidden"] {
+      display: none !important;
+    }
+}
+
+#program-search {
+    position: relative;
+    z-index: 1;
+}
+#program-results {
+    position: relative;
+    z-index: 0;
+}
+
+.ui.selection.dropdown .menu>.item {
+    font-size: 1.1em !important;
+  }
+
+.ui.form .field>label{
+    font-size: 1.25em !important;
+}

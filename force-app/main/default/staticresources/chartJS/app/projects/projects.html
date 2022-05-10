@@ -1,0 +1,361 @@
+<!--
+    Course Matching Projects Summary Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- Page -->
+<div id="body">
+<div class="container-fluid">
+    <div class="ui stackable secondary menu mt-3 desktop-only">
+        <div class="ui medium header item text-uppercase">
+            Class Equivalency Results
+        </div>
+        <div class="right menu">
+            <!-- <div class="ui item">
+                <div class="ui fluid buttons">
+                    <button class="ui button" ng-class="{ 'active' : viewModel.userProfileName == 'IFSA Student User' }" ng-click="viewModel.userProfileName = 'IFSA Student User'; filteredChanged(currentView)">Student</button>
+                    <button class="ui button" ng-class="{ 'active' : viewModel.userProfileName == 'IFSA Advisor User' }" ng-click="viewModel.userProfileName = 'IFSA Advisor User'; filteredChanged(currentView)">Advisor</button>
+                </div>
+            </div> -->
+            <div class="ui item">
+                <a href="#/project-request-form" class="ui green inverted icon button"><i class="plus icon"></i> New Equivalency Project</a>
+                <button class="ui secondary inverted icon button ml-3" ng-click="loadCEUploadModal()" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && viewModel.ceSearch"><i class="upload icon"></i> Upload Equivalencies</button>
+                <!-- <a href="#/projects" class="ui secondary inverted icon button ml-2"><i class="upload icon"></i> Upload Equivalencies</a> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="ui basic segment" ng-if="loading">
+        <div class="ui active inverted dimmer">
+            <div class="ui loader"></div>
+        </div>
+    </div>
+    <!-- Results Segment -->
+    <div class="ui basic segment" ng-if="!loading">
+        <div class="ui stackable grid">
+            <div class="four wide column">
+                <div class="mobile-only">
+                    <div class="ui small header item text-uppercase">
+                        Class Equivalency Results
+                    </div>
+                    <div class="ui two item secondary menu" ng-if="viewModel.userProfileName != 'IFSA Advisor User'">
+                        <a class="item" ng-class="{'active': currentView == 'Completed'}" ng-click="filteredChanged('Completed')" uib-tooltip="Completed Projects" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="check icon"></i></a>
+                        <a class="item" ng-class="{'active': currentView == 'Pending'}" ng-click="filteredChanged('Pending')" uib-tooltip="Pending Projects" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="clock icon"></i></a>
+                    </div>
+                    <div class="ui four item secondary menu" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                        <a class="item" ng-class="{'active': currentView == 'Home School'}" ng-click="filteredChanged('Home School')" uib-tooltip="Home School Projects" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="university icon"></i></a>
+                        <a class="item" ng-class="{'active': currentView == 'Students'}" ng-click="filteredChanged('Students')" uib-tooltip="Student Projects" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="users icon"></i></a>
+                        <a class="item" ng-class="{'active': currentView == 'Pending'}" ng-click="filteredChanged('Pending')" uib-tooltip="Pending Projects" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="clock icon"></i></a>
+                        <a class="item" ng-class="{'active': currentView == 'All Classes'}" ng-click="filteredChanged('All Classes')" uib-tooltip="All Class Equivalencies" tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"><i class="book icon"></i></a>
+                    </div>
+                    <a href="#/project-request-form" class="ui fluid small green inverted icon button" ng-if="currentView == 'Home School'"><i class="plus icon"></i> New Equivalency Project</a>
+                </div>
+                <div class="desktop-only">
+                    <div class="ui small header">Projects</div>
+                    <div class="ui fluid secondary vertical menu">
+                        <a class="item" ng-class="{'active': currentView == 'Completed'}" ng-click="filteredChanged('Completed')" ng-if="viewModel.userProfileName != 'IFSA Advisor User'">
+                            <i class="check icon"></i> Completed
+                        </a>
+                        <a class="item" ng-class="{'active': currentView == 'Home School'}" ng-click="filteredChanged('Home School')" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                            <i class="university icon"></i> Home Institution
+                        </a>
+                        <a class="item" ng-class="{'active': currentView == 'Students'}" ng-click="filteredChanged('Students')" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                            <i class="users icon"></i> Students
+                        </a>
+                        <a class="item" ng-class="{'active': currentView == 'Pending'}" ng-click="filteredChanged('Pending')">
+                            <i class="clock icon"></i> Pending
+                        </a>
+                    </div>
+                    <div class="ui small header" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">Equivalencies</div>
+                    <div class="ui fluid secondary vertical menu" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                        <a class="item" ng-class="{'active': currentView == 'All Classes'}" ng-click="filteredChanged('All Classes')" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                            <i class="book icon"></i> All Equivalencies
+                        </a>
+                    </div>
+
+                    <!-- THIS IS THE DESKTOP TOGGLE VIEW, MOBILE VIEW IS AT THE BOTTOM // SORRY FOR DUPLICATION, UPDATE IN THE FUTURE? -->
+                    <div class="ui horizontal divider" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">Settings</div>
+                    <div class="ui list desktop-only" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">
+                        <div class="item">
+                            <div class="middle aligned right floated content">
+                                <i ng-class="viewModel.ceSearch ? 'large aqua-primary toggle on icon' : 'large toggle off icon'" ng-click="ceSearchToggle(viewModel.ceSearch)"></i>
+                            </div>
+                            <div class="content">
+                                <div class="header">
+                                    Equivalency Search <i class="question circle outline small icon" uib-tooltip="This enables/disables CHART class equivalencies for all users at your institution. When turned off, students, faculty and staff cannot filter CHART records to see classes with matches or potential matches." tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"></i>
+                                </div>
+                                <div class="description">
+                                    <small>Updated <span ng-if="!toggleLoad">{{viewModel.ceSearchLastUpdated | date: 'shortDate' }} by {{viewModel.ceSearchLastUpdatedBy}}</span> <span class="ui mini active inline loader" ng-if="toggleLoad"></span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="ui list" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">
+                        <div class="item">
+                            <div class="right floated content">
+                                <form>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox" ng-click="ceSearchToggle(viewModel.ceSearch)">
+                                            <input type="checkbox" name="ceToggle" tabindex="0" class="hidden" ng-checked="viewModel.ceSearch">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="content">
+                                <div class="header">
+                                    Equivalency Search <i class="question circle outline small icon" uib-tooltip="Enables/Disables class equivalency features for all students at your school." tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"></i>
+                                </div>
+                                <div class="description">
+                                    <small>Updated <span ng-if="!toggleLoad">{{viewModel.ceSearchLastUpdated | date: 'shortDate' }} by {{viewModel.ceSearchLastUpdatedBy}}</span> <span class="ui mini active inline loader" ng-if="toggleLoad"></span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="twelve wide column">
+                <!-- PROJECTS -->
+                <!-- MOBILE VIEW  -->
+                <!-- <div class="mobile-only">
+                    <div class="ui three doubling stackable cards text-center" ng-if="currentView != 'All Classes'">
+                        <div class="ui link card" ng-repeat="project in filteredProjects | orderBy: '-completedDate'">
+                            <div class="content">
+                                <div class="header">{{project.name}}</div>
+                                <div class="meta mt-2">
+                                    <p>Major: {{project.major}}</p>
+                                    <p ng-if="project.completedDate != null">Completed: {{project.completedDate | date : "MM/dd/yyyy" }}</p>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a ng-href="#/projects/{{project.recordId}}" ng-if="project.completedDate" class="ui fluid icon button">View Details</a>
+                                <a ng-if="!project.completedDate" class="ui fluid icon disabled button">Pending</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- DESKTOP VIEW -->
+                <div>
+                    <div class="ui tiny icon message" ng-if="currentView != 'All Classes'">
+                        <i class="circular lightbulb outline icon"></i>
+                        <div class="content">
+                            <p ng-if="viewModel.userProfileName.includes('Student')">IFSA provides a class equivalency service for all students wishing to identify classes on IFSA programs abroad that are potential matches to specific classes at your home institution. Click the “+ New Equivalency Project” button on the top right to get started. Once completed, you can access your customized report here.</p>
+                            <p ng-if="!viewModel.userProfileName.includes('Student') && currentView == 'Home School'">IFSA conducts curriculum integration research for partners looking to identify classes on IFSA programs abroad that are potential matches to specific classes at your home institution. Click the “+ New Equivalency Project” button on the top right to get started. Once completed, you can access your customized report here.</p>
+                            <p ng-if="!viewModel.userProfileName.includes('Student') && currentView == 'Students'">Below is a list of class equivalency projects IFSA has completed at the request of students from your institution. These reports assist students in identifying classes abroad that are potential matches to specific classes at your home institution, and reports only feature IFSA programs you pre-approve for your institution. Students are instructed to review options with their home institution advisors to determine if the classes will count to fulfill specific degree requirements.</p>
+                            <p ng-if="!viewModel.userProfileName.includes('Student') && currentView == 'Pending'">Below is a list of pending curriculum integration projects requested by advisors at your institution and pending class equivalency projects requested by students at your institution. When completed, curriculum integration projects will display in the “Home Institution” tab and class equivalency projects will display in the “Students” tab. </p>
+                        </div>
+                    </div>
+                    <div class="ui message" ng-if="currentView != 'All Classes' && filteredProjects.length == 0">
+                        There are no
+                        <span ng-if="currentView == 'Pending'">pending</span>
+                        <span ng-if="currentView == 'Completed'">completed</span>
+                        <span ng-if="currentView == 'Home School'">home institution</span>
+                        <span ng-if="currentView == 'Students'">student</span>
+                        projects.
+                    </div>
+                    <table class="ui celled unstackable sortable small table" ng-if="currentView != 'All Classes' && filteredProjects.length > 0">
+                        <thead>
+                            <tr>
+                                <th class="eight wide text-uppercase text-muted" ng-click="sortBy('name')">
+                                    Project
+                                    <i class="text-right" ng-class="sortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="sortProperty == 'name'"></i>
+                                </th>
+                                <th class="four wide text-uppercase text-muted text-center" ng-click="sortBy('major')">
+                                    Major
+                                    <i ng-class="sortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="sortProperty == 'major'"></i>
+                                </th>
+                                <th class="four wide text-uppercase text-muted text-center" ng-click="sortBy('completedDate')">
+                                    Completed Date
+                                    <i ng-class="sortReverse ? 'sort numeric up icon' : 'sort numeric down icon'" ng-if="sortProperty == 'completedDate'"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="project in filteredProjects | orderBy: sortProperty:sortReverse | startFrom: currentPage * pageSize | limitTo:pageSize as filteredProjectsTable">
+                                <td>
+                                    <div class="ui small header">
+                                        <a ng-href="#/projects/{{project.recordId}}" ng-if="project.completedDate" ng-bind-html="project.name" />
+                                        <span ng-if="!project.completedDate" ng-bind-html="project.name" />
+                                        <!-- <div class="ui tiny left pointing red label" ng-if="project.completedDate && !project.lastViewedDate">New</div> -->
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-bind-html="project.major" />
+                                </td>
+                                <td class="text-center">
+                                    <span ng-if="project.completedDate">{{project.completedDate | date : "MM/dd/yyyy" }}</span>
+                                    <span ng-class="{ 'disabled' : !project.completedDate }" ng-if="!project.completedDate">Pending</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot ng-if="numberOfPages() > 1">
+                            <tr>
+                                <th colspan="3">
+                                    <div class="ui right floated tiny pagination menu">
+                                        <a class="icon item" ng-class="{'disabled' : currentPage == 0}" ng-click="setCurrentPage(currentPage - 1)">
+                                            <i class="left chevron icon"></i>
+                                        </a>
+                                        <a class="item" ng-class="{'active' : currentPage == i}" ng-repeat="i in getNumberAsArray(numberOfPages())" ng-click="setCurrentPage(i)">
+                                            {{i + 1}}
+                                        </a>
+                                        <a class="icon item" ng-class="{'disabled' : currentPage == numberOfPages() - 1}" ng-click="setCurrentPage(currentPage + 1)">
+                                            <i class="right chevron icon"></i>
+                                        </a>
+                                    </div>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- ALL CLASSES -->
+                <div class="ui tiny icon message" ng-if="currentView == 'All Classes'">
+                    <i class="circular lightbulb outline icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            CHART Records with Potential Equivalencies to your Home Institution
+                        </div>
+                        <p>Below is a list of all classes in the CHART database which have a potential equivalent to your home institution. You can approve or deny all potential matches here at any time. Please note that when you approve or deny an equivalency, it becomes approved or denied across all matching projects and CHART searches and affects all students at your institution.</p>
+                        <p ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">To add new class equivalents, scroll to the bottom of any CHART record. To upload a batch of new equivalents, click the "Upload Equivalencies" button at the top right of this page.</p>
+                    </div>
+                </div>
+                <div id="ce-filters" ng-if="allCourseEquivalents.length > 0 && currentView == 'All Classes'">
+                    <div class="btn-group" uib-dropdown auto-close="outsideClick">
+                        <button id="single-button" type="button" class="ui tiny button" uib-dropdown-toggle ng-disabled="disabled">
+                            Country <span class="caret"></span>
+                        </button>
+                        <div class="menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <div class="dropdown-item" ng-repeat="choice in countriesFilter" ng-click="choice.selected = !choice.selected">
+                                <i ng-class=" choice.selected ? 'check circle outline icon' : 'circle outline icon'"></i>
+                                <span ng-bind-html="choice.name"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group" uib-dropdown auto-close="outsideClick">
+                        <button id="single-button" type="button" class="ui tiny button" uib-dropdown-toggle ng-disabled="disabled">
+                            Program <span class="caret"></span>
+                        </button>
+                        <div class="menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <div class="dropdown-item" ng-repeat="choice in programsFilter" ng-click="choice.selected = !choice.selected">
+                                <i ng-class=" choice.selected ? 'check circle outline icon' : 'circle outline icon'"></i>
+                                <span ng-bind-html="choice.name"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="ui celled sortable unstackable small table" ng-if="currentView == 'All Classes'">
+                    <thead>
+                        <tr>
+                            <th class="three wide text-uppercase text-muted" ng-click="ceSortBy('homeInstitutionCourse.courseCode')">
+                                US Class
+                                <i ng-class="ceSortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="ceSortProperty == 'homeInstitutionCourse.courseCode'"></i>
+                            </th>
+                            <th class="four wide text-uppercase text-muted text-center" ng-click="ceSortBy('hostInstitutionCourse.courseTitle')">
+                                Host Class
+                                <i ng-class="ceSortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="ceSortProperty == 'hostInstitutionCourse.courseTitle'"></i>
+                            </th>
+                            <th class="two wide text-uppercase text-muted text-center" ng-click="ceSortBy('hostInstitutionCourse.country')">
+                                Country
+                                <i ng-class="ceSortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="ceSortProperty == 'hostInstitutionCourse.country'"></i>
+                            </th>
+                            <th class="three wide text-uppercase text-muted text-center">
+                                Program
+                            </th>
+                            <th class="two wide text-uppercase text-muted text-center" ng-click="ceSortBy('status')">
+                                Status
+                                <i ng-class="ceSortReverse ? 'sort alphabet up icon' : 'sort alphabet down icon'" ng-if="ceSortProperty == 'status'"></i>
+                            </th>
+                            <th class="two wide"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ce in allCourseEquivalents | orderBy: ceSortProperty:ceSortReverse | startFrom: ceCurrentPage * cePageSize | projectCourseSearchAndFilter:'country':countriesFilter:programsFilter | projectCourseSearchAndFilter:'program':programsFilter:null | limitTo:cePageSize as allCourseEquivalentsTable">
+                            <td>
+                                <span ng-bind-html="ce.homeInstitutionCourse.courseCode"></span><span ng-if="ce.homeInstitutionCourse.courseCode"> | </span><span ng-bind-html="ce.homeInstitutionCourse.title"></span>
+                            </td>
+                            <td>
+                                <span ng-bind-html="ce.hostInstitutionCourse.courseCode"></span><span ng-if="ce.hostInstitutionCourse.courseCode"> | </span><a href="#/details/{{ce.hostInstitutionCourse.recordId}}" target="_blank"><span ng-bind-html="ce.hostInstitutionCourse.courseTitle"></span></a>
+                                <!-- <div class="sub header">
+                                    <span ng-bind-html="ce.hostInstitutionName"></span>
+                                </div> -->
+                                <div class="sub header" ng-if="ce.hostInstitutionCourse.usTerms">
+                                    <span>US Term(s): {{ce.hostInstitutionCourse.usTerms | replace : ';' : ', ' }}</span>
+                                </div>
+                            </td>
+                            <td>{{ce.hostInstitutionCourse.country}}</td>
+                            <td>
+                                <div class="ui list">
+                                    <div class="item" ng-repeat="program in ce.hostInstitutionCourse.programs">
+                                        <a href="{{program.academicURLSemester}}" target="_blank" ng-if="program.academicURLSemester"><span ng-bind-html="program.recordName"></span></a>
+                                        <a href="{{program.academicURLSummer}}" target="_blank" ng-if="program.academicURLSummer"><span ng-bind-html="program.recordName"></span></a>
+                                        <span ng-bind-html="program.recordName" ng-if="!program.academicURLSemester && !program.academicURLSummer"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td ng-class="{ 'font-italic' : ce.changed }">{{ce.status}} 
+                                <div ng-if="ce.lastApprovedRejectedName">
+                                        per {{ce.lastApprovedRejectedName}} - {{ce.lastApprovedRejectedDate | date : 'short' }}
+                                </div> 
+                            </td>
+                            <td>
+                                <div class="two compact ui icon buttons">
+                                    <button class="ui button" ng-class="{ 'green' : ce.status == 'Match' }" ng-click="ce.status = 'Match'; ce.changed = true"><i class="check icon"></i></button>
+                                    <button class="ui button" ng-class="{ 'red' : ce.status == 'Not a Match' }" ng-click="loadDenyReasonModal(ce, false)"><i class="x icon"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6">
+                                <!-- <button class="ui tiny button" ng-click="approveAll()">
+                                    </i> Approve All
+                                </button> -->
+                                <button class="ui tiny green labeled icon button" ng-click="saveEquivalents(allCourseEquivalents)">
+                                    <i class="save icon"></i> Save Changes
+                                </button>
+                                <div class="ui right floated tiny pagination menu" ng-if="ceNumberOfPages() > 1">
+                                    <a class="icon item" ng-class="{'disabled' : ceCurrentPage == 0}" ng-click="ceSetCurrentPage(ceCurrentPage - 1)">
+                                        <i class="left chevron icon"></i>
+                                    </a>
+                                    <a class="item" ng-class="{'active' : ceCurrentPage == i}" ng-repeat="i in ceGetNumberAsArray(ceNumberOfPages())" ng-click="ceSetCurrentPage(i)">
+                                        {{i + 1}}
+                                    </a>
+                                    <a class="icon item" ng-class="{'disabled' : ceCurrentPage == ceNumberOfPages() - 1}" ng-click="ceSetCurrentPage(ceCurrentPage + 1)">
+                                        <i class="right chevron icon"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <h4 class="ui horizontal divider header mobile-only" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">Settings</h4>
+                <div class="ui list mobile-only" ng-if="viewModel.userProfileName == 'IFSA Advisor User' && enableCEToggle">
+                    <div class="item">
+                        <div class="right floated content">
+                            <i ng-class="viewModel.ceSearch ? 'large aqua-primary toggle on icon' : 'large toggle off icon'" ng-click="ceSearchToggle(viewModel.ceSearch)"></i>
+                        <!-- <form>
+                                <div class="field">
+                                    <div class="ui toggle checkbox" ng-click="ceSearchToggle(viewModel.ceSearch)">
+                                        <input type="checkbox" name="ceToggle" tabindex="0" class="hidden" ng-checked="viewModel.ceSearch">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </form> -->
+                        </div>
+                        <div class="content">
+                            <!-- THIS IS THE MOBILE TOGGLE VIEW, DESKTOP VIEW IS UP TOP // SORRY FOR DUPLICATION, UPDATE IN THE FUTURE? -->
+                            <div class="header">
+                                Equivalency Search <i class="question circle outline small icon" uib-tooltip="This enables/disables CHART class equivalencies for all users at your institution. When turned off, students, faculty and staff cannot filter CHART records to see classes with matches or potential matches." tooltip-placement="top" tooltip-trigger="'mouseenter outsideClick'"></i>
+                            </div>
+                            <div class="description">
+                                <small>Updated <span ng-if="!toggleLoad">{{viewModel.ceSearchLastUpdated | date: 'shortDate' }} by {{viewModel.ceSearchLastUpdatedBy}}</span> <span class="ui mini active inline loader" ng-if="toggleLoad"></span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

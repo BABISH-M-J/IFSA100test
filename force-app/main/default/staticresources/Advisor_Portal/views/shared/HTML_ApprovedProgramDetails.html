@@ -1,0 +1,97 @@
+<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title" ng-bind-html="data.programName + ' Details'"></h3>
+	</div>
+	<div class="modal-body">
+		<!-- Loading Spinner -->
+		<div class="row text-center">
+			<i class="fa fa-spinner fa-pulse fa-2x" ng-show="loading"/>
+		</div>
+		<!-- Program Authorizations -->
+		<h3>Approved Terms</h3>
+		<div class="row" ng-hide="loading">
+			<div class="col-md-6">
+				<label for="springTerm">Spring / Semester 1</label>
+				<h5 id="spring"><span ng-show="data.springTerm">Yes</span><span ng-show="!data.springTerm">No</span></h5>
+			</div>
+			<div class="col-md-6">
+				<label for="summerTerm">Summer</label>
+				<h5 id="spring"><span ng-show="data.summerTerm">Yes</span><span ng-show="!data.summerTerm">No</span></h5>
+			</div>
+			<div class="col-md-6">
+				<label for="fallTerm">Fall / Semester 2</label>
+				<h5 id="spring"><span ng-show="data.fallTerm">Yes</span><span ng-show="!data.fallTerm">No</span></h5>
+			</div>
+			<div class="col-md-6">
+				<label for="academicYear">Academic Year</label>
+				<h5 id="spring"><span ng-show="data.academicYear">Yes</span><span ng-show="!data.academicYear">No</span></h5>
+			</div>
+			<div class="col-md-6">
+				<label for="calendarYear">Calendar Year</label>
+				<h5 id="spring"><span ng-show="data.calendarYear">Yes</span><span ng-show="!data.calendarYear">No</span></h5>
+			</div>
+			<div class="col-md-6">
+				<label for="notApproved">Not Approved</label>
+				<h5 id="spring"><span ng-show="data.notApproved">Yes</span><span ng-show="!data.notApproved">No</span></h5>
+			</div>
+		</div>
+		<hr/>
+		<!-- Billing Arrangements -->
+		<h3>Billing Arrangements</h3>
+		<div ng-show="!billingArrangements.length && !loading">
+			<p>
+				The system could not find any billing arrangements for this term
+			</p>
+		</div>
+		<div ng-repeat="item in billingArrangements">
+			<h4>{{item.selectedTerms | semicolon}}</h4>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="homeInstitutionDirectBill">Direct Bill</label>
+					<h5 id="homeInstitutionDirectBill"><span ng-show="item.directBill">Yes</span><span ng-show="!item.directBill">No</span></h5>
+				</div>
+				<div class="col-md-6" ng-show="item.directBill">
+					<label for="homeInstitutionPaysTuition">Pays Tuition</label>
+					<h5 id="homeInstitutionPaysTuition"><span ng-show="item.paysTuition">Yes</span><span ng-show="!item.paysTuition">No</span></h5>
+				</div>
+				<div class="col-md-6" ng-show="item.directBill">
+					<label for="homeInstitutionPaysAdvancedDeposit">Pays Advanced Deposit</label>
+					<h5 id="homeInstitutionPaysAdvancedDeposit"><span ng-show="item.paysDeposit">Yes</span><span ng-show="!item.paysDeposit">No</span></h5>
+				</div>
+				<div class="col-md-6" ng-show="item.directBill">
+					<label for="homeInstitutionPaysAccomodation">Pays Accomodation</label>
+					<h5 id="homeInstitutionPaysAccomodation"><span ng-show="item.paysAccomodation">Yes</span><span ng-show="!item.paysAccomodation">No</span></h5>
+				</div>
+			</div>
+					<!--
+					<div class="row mt-small">
+						<div class="col-md-10 col-md-offset-1">
+							<label for="homeInstitutionPaysApplicationFee">Pays Application Fee</label>
+							<h5 id="homeInstitutionPaysApplicationFee"><span ng-show="item.Pays_Application_Fee__c">Yes</span><span ng-show="!item.Pays_Application_Fee__c">No</span></h5>
+						</div>
+					</div>
+					-->
+					<!-- <div class="row mt-small">
+						<div class="col-md-10 col-md-offset-1">
+							<label for="homeInstitutionPaysSummerPrograms">Pays Summer Programs</label>
+							<h5 id="homeInstitutionPaysSummerPrograms"><span ng-show="item.Pays_Summer_Programs__c">Yes</span><span ng-show="!item.Pays_Summer_Programs__c">No</span></h5>
+						</div>
+					</div> -->
+					<!-- <div class="row mt-small">
+						<div class="col-md-10 col-md-offset-1">
+							<label for="homeInstitutionPaysHousingDeposit">Pays Housing Deposit</label>
+							<h5 id="homeInstitutionPaysHousingDeposit"><span ng-show="item.Pays_Housing_Deposit__c">Yes</span><span ng-show="!item.Pays_Housing_Deposit__c">No</span></h5>
+						</div>
+					</div>
+					<div class="row mt-small">
+						<div class="col-md-10 col-md-offset-1">
+							<label for="homeInstitutionPaysSupplemental">Pays Supplemental</label>
+							<h5 id="homeInstitutionPaysSupplemental"><span ng-show="item.Pays_Supplemental__c">Yes</span><span ng-show="!item.Pays_Supplemental__c">No</span></h5>
+						</div>
+					</div> -->
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a class="btn ifsa-btn" ng-click="exit()">OK</a>
+	</div>
+</div>

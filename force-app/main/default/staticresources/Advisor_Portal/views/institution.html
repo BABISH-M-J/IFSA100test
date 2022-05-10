@@ -1,0 +1,257 @@
+<loading is-loading="loading">
+    <div class="row">
+        <div class="ui big breadcrumb">
+            <a  href="#/" class="section">Home</a>
+            <div class="divider"> / </div>
+            <div class="active section" ng-bind-html="viewModel.HomeInstitutionName"></div>
+        </div>
+    </div>
+    <!-- Header -->
+    <h2 class="content-title"ng-bind-html="viewModel.HomeInstitutionName"></h2>
+    <hr class="hr-gold"/>
+    <tabset>
+        <tab heading="Home Institution Information">
+            <!-- <div class="panel panel-default" > -->
+                <!-- <div class="panel-heading">
+                <h3 class="panel-title">Home Institution Information</h3>
+                </div> -->
+                <div class="table-responsive">
+                    <table class="table table-condensed text-left">
+                        <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td ng-bind-html="viewModel.HomeInstitutionName"></td>
+                            </tr>
+                            <tr>
+                                <td ng-if="viewModel.HomeInstitutionInstitutionType">Type</td>
+                                <td>{{viewModel.HomeInstitutionInstitutionType}}</td>
+                            </tr>
+                            <tr>
+                                <td>Direct Bill</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionDirectBill ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                            <tr ng-if="viewModel.HomeInstitutionDirectBill">
+                                <td>Pays Tuition</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionPaysTuition ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                            <tr ng-if="viewModel.HomeInstitutionDirectBill">
+                                <td>Pays Accomodation</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionPaysAccomodation ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                            <tr ng-if="viewModel.HomeInstitutionDirectBill">
+                                <td>Pays Advanced Deposit</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionPaysAdvancedDeposit ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                            <tr ng-if="viewModel.HomeInstitutionDirectBill">
+                                <td>Pays Supplemental Fees</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionPaysSupplemental ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                            <tr ng-if="viewModel.HomeInstitutionDirectBill">
+                                <td>Pays Late Withdraw Fees</td>
+                                <td><i class="glyphicon" ng-class="viewModel.HomeInstitutionPaysLateWithdrawFees ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-remove'"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <!-- </div> -->
+        </tab>
+        <tab heading="Approved Programs">
+            <div class="row">
+                <!-- <div class="col-xs-12">
+                    <h3>Approved Programs</h3>
+                    <hr/>
+                </div> -->
+                <!-- Without Modify Access -->
+                <div class="col-xs-12" ng-hide="unlockProgramAuth">
+                    <p> This is a list of all IFSA programs. Those currently approved by your institution are indicated with a check mark on the appropriate term. Use the filters to narrow the list or click on a program name to view billing details. <!--If you need the ability to make changes to your approved program list <a ng-click="requestModifyAccess()">click here</a>. --></p>
+                </div>
+                <!-- With Modify Access -->
+                <div class="col-xs-12" ng-show="unlockProgramAuth">
+                    <p>This is a list of all IFSA programs. Those currently approved by your institution are indicated with a check mark on the appropriate term. Use the filters to narrow the list or click on a program name to view billing details. To add an approved program, select the appropriate approved term for each program.</p>
+                </div>
+                <div class="col-xs-12">
+                    <p ng-show="viewModel.HomeInstitutionApprovesAllSummerPrograms && !viewModel.HomeInstitutionApprovesAllCalendarPrograms">
+                        <strong><span ng-bind-html="viewModel.HomeInstitutionName"></span> approves all summer programs available.</strong>
+                    </p>
+                    <p ng-show="viewModel.HomeInstitutionApprovesAllCalendarPrograms && !viewModel.HomeInstitutionApprovesAllSummerPrograms">
+                        <strong><span ng-bind-html="viewModel.HomeInstitutionName"></span> approves all semester or year programs available.</strong>
+                    </p>
+                    <p ng-show="viewModel.HomeInstitutionApprovesAllSummerPrograms && viewModel.HomeInstitutionApprovesAllCalendarPrograms">
+                        <strong><span ng-bind-html="viewModel.HomeInstitutionName"></span> approves all semester, year, and summer programs available.</strong>
+                    </p>
+                    <p ng-hide="viewModel.HomeInstitutionApprovesAllSummerPrograms && viewModel.HomeInstitutionApprovesAllCalendarPrograms  || !unlockProgramAuth">
+                        <button class="ui big ifsa-btn button" ng-class="{'loading' : processingAuthorizeAll}" ng-disabled="processingAuthorizeAll" ng-click="authorizeAllPrograms()">Approve All Programs</button>
+                    </p>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3"> <!-- ng-hide="viewModel.HomeInstitutionApprovesAllCalendarPrograms"> -->
+                    <div class="form-group">
+                        <label for="countryFilter">Filter by Country</label>
+                        <select id="countryFilter" class="form-control" ng-model="viewModel.SelectedCountry" ng-options="item for item in viewModel.AvailableCountries" ng-change="search('search')"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="authFilter">Filter by Authorization</label>
+                        <select id="authFilter" class="form-control" ng-init="viewModel.authorization='All'" ng-model="viewModel.authorization" ng-change="search('search')">
+                            <option value="All">All</option>
+                            <option value="Authorized">Authorized</option>
+                            <option value="Unauthorized">Unauthorized</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center">
+                    <br/>
+                    <button ng-click="search('search')" class="btn ifsa-btn">Search <i class="fa fa-spinner fa-pulse" ng-show="isSearching"/></button>
+                </div>
+                <div class="col-md-2 text-center">
+                    <br/>
+                    <button ng-click="saveProgAuth()" ng-disabled="!changedItems.length" class="btn ifsa-btn">Save Changes <i class="fa fa-spinner fa-pulse" ng-show="isSaving"/></button>
+                </div>
+                <div class="col-md-2 text-center">
+                    <br/>
+                    <button ng-click="search('cancel')" ng-disabled="!changedItems.length" class="btn ifsa-btn">Cancel Changes <i class="fa fa-spinner fa-pulse" ng-show="isCanceling"/></button>
+                </div>
+                <!-- PAGINATION
+                <div class="text-center top-buffer" ng-hide="isSearching || !filteredApprovedPrograms.length">
+                    <pagination class="pagination-sm" previous-text="<" next-text='>' first-text="<<" last-text=">>" boundary-links="true" max-size="5" items-per-page="itemsPerPage" total-items="approvedProgramList.length" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+                </div> -->
+                <div class="col-md-12">
+                    <p class="text-center" ng-show="!approvedProgramList.length && searchOnLoad">We did not find anything matching that criteria.</p>
+                    <style>
+                        .centered {
+                            text-align: center;
+                        }
+                    </style>
+                    <!-- TABLE FOR SEARCH RESULTS -->
+                    <loading is-loading="isSaving || isCanceling">
+                        <div class="table-responsive top-buffer" ng-hide="isSearching || !filteredApprovedPrograms.length" infinite-scroll="loadMore()" inifinite-scroll-distance="0" infinite-scroll-listen-for-event="list:filtered" infinite-scroll-container="progAuthTable">
+                            <table id="progAuthTable" name="progAuthTable" class="table"> <!-- ng-hide="viewModel.HomeInstitutionApprovesAllCalendarPrograms || isSearching" -->
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <br />
+                                            <a ng-click="sortBy('Name')">Program Name</a>
+                                            <i ng-show="sortProperty=='Name'" class="chevron icon" ng-class="sortOrder ? 'down' : 'up'"></i>
+                                        </th>
+                                        <th><br />
+                                            <a ng-click="sortBy('countryName')">Country Name</a>
+                                            <i ng-show="sortProperty=='countryName'" class="chevron icon" ng-class="sortOrder ? 'down' : 'up'"></i>
+                                        </th>
+                                        <th class="centered" ng-hide="!unlockProgramAuth"><br />Select All<br /> Available Terms</th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.Spring" ng-change="selectAll('Spring')" ng-hide="!unlockProgramAuth" /><br />
+                                            Spring
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.Summer" ng-change="selectAll('Summer')" ng-hide="!unlockProgramAuth" /><br />
+                                            Summer
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.Fall" ng-change="selectAll('Fall')" ng-hide="!unlockProgramAuth" /><br />
+                                            Fall
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.Winter" ng-change="selectAll('Winter')" ng-hide="!unlockProgramAuth" /><br />
+                                            Winter
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.AcademicYear" ng-change="selectAll('AcademicYear')" ng-hide="!unlockProgramAuth" /><br />
+                                            Academic <br /> Year
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.CalendarYear" ng-change="selectAll('CalendarYear')" ng-hide="!unlockProgramAuth" /><br />
+                                            Calendar <br /> Year
+                                        </th>
+                                        <th class="centered">
+                                            <input type="checkbox" ng-model="selectAll.NotApproved" ng-change="selectAll('NotApproved')" ng-hide="!unlockProgramAuth" /><br />
+                                            Not <br /> Approved
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_body" name="table_body">
+                                    <tr ng-repeat="item in infiniteScrollResults">
+                                        <td><a ng-click="openProgramDetails(item)"><span ng-bind-html="item.Name"></span></a></td>
+                                        <td>{{item.countryName}}</td>
+                                        <td class="centered" ng-hide="!unlockProgramAuth"><input type="checkbox" ng-model="item.activeProgramAuthorization.selectAllAvalibleTerms" ng-change="selectAllAvalibleTerms(item)"/></td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showSpringTerm"><input type="checkbox" ng-model="item.activeProgramAuthorization.springTerm" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showSpringTerm"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showSummerTerm"><input type="checkbox" ng-model="item.activeProgramAuthorization.summerTerm" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showSummerTerm"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showFallTerm"><input type="checkbox" ng-model="item.activeProgramAuthorization.fallTerm" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showFallTerm"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showWinterTerm"><input type="checkbox" ng-model="item.activeProgramAuthorization.winterTerm" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showWinterTerm"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showAcademicYear"><input type="checkbox" ng-model="item.activeProgramAuthorization.academicYear" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showAcademicYear"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showCalendarYear"><input type="checkbox" ng-model="item.activeProgramAuthorization.calendarYear" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, true)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showCalendarYear"> - </span>
+                                        </td>
+                                        <td class="centered">
+                                            <span ng-show="item.activeProgramAuthorization.showNotApproved"><input type="checkbox" ng-model="item.activeProgramAuthorization.notApproved" ng-disabled="!unlockProgramAuth" ng-change="valuesChanged(item.activeProgramAuthorization, false)" /></span>
+                                            <span ng-show="!item.activeProgramAuthorization.showNotApproved"> - </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </loading>                
+                    <!-- PAGINATION -->
+                    <!-- <div class="text-center top-buffer" ng-hide="isSearching || !filteredApprovedPrograms.length">
+                        <pagination class="pagination-sm" previous-text="<" next-text='>' first-text="<<" last-text=">>" boundary-links="true" max-size="5" items-per-page="itemsPerPage" total-items="approvedProgramList.length" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+                    </div> -->
+                </div>
+            </div>
+        </tab>
+        <tab heading="Institution Contacts">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- <h3>Institution Contacts</h3>
+                    <hr/> -->
+                    <p>Here you can view a list of contacts for your institution, to update your institutional contacts, please contact your IFSA Institutional Engagement Manager</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Title</th>
+                                <!-- <th ng-show="viewModel.AdvisorType == 'Primary Contact'">Portal Access</th> -->
+                                <th>Portal Access</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in viewModel.advisorList">
+                                <td>{{item.AdvisorLastName}}, {{item.AdvisorFirstName}}</td>
+                                <td>{{item.AdvisorTitle}}</td>
+                                <td ng-show="viewModel.AdvisorType != 'Primary Contact' && item.AdvisorApprovedForAdvising">Yes</td>
+                                <td ng-show="viewModel.AdvisorType != 'Primary Contact' && !item.AdvisorApprovedForAdvising">No</td>
+                                <td ng-show="viewModel.AdvisorType == 'Primary Contact' && item.AdvisorApprovedForAdvising">Yes</td>
+                                <td ng-show="viewModel.AdvisorType == 'Primary Contact' && !item.AdvisorApprovedForAdvising">
+                                    <button type="button" class="btn" ng-click="disable(item)" ng-show="!isSubmitting">
+                                        Disable
+                                    </button>
+                                    <button type="button" class="btn ifsa-btn" ng-click="approve(item)" ng-show="!isSubmitting">
+                                        Approve
+                                    </button>
+                                    <i class="fa fa-spinner fa-pulse" ng-show="item.isSubmitting"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</loading>

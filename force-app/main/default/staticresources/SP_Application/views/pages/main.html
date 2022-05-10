@@ -1,0 +1,147 @@
+<!-- Page Content -->
+<div ng-if="viewModel.profileCompleted || viewModel.isCustom">
+    <h2 class="content-title">{{viewModel.programTermName}}</h2>
+    <hr class="hr-gold"/>
+    <div class="row">
+        <div id="messages" class="col-xs-12" style="margin-bottom: 15px;" ng-if="!loadingAppItems">
+            <div class="ui message" ng-if="viewModel.isCustom && viewModel.customWelcomeText">
+                <p ng-bind-html="viewModel.customWelcomeText"></p>
+            </div>
+            <div class="ui warning icon message" ng-if="viewModel.isUnauthorizedProgram && !viewModel.programApprovalCompleted">
+                <i class="exclamation triangle icon"></i>
+                <div class="content">
+                    <p>The program you selected is not approved by your home institution. Please contact your study abroad advisor on your campus to discuss this program as an option.</p>
+                </div>
+            </div>
+            <div class="ui message" ng-if="viewModel.applicationStatus == 'Ready To Submit'">
+                <p>Thank you for completing your application items! I will be reviewing your application and submitting it shortly. I’ll reach out to you if any questions come up or if items need to be resubmitted. If everything looks good, you’ll receive a submission email notification from me with a timeframe for an admissions decision and next steps in the process. While you’re waiting, please begin working on the following items.  As always, you can reach me by phone at or by email at <b><a style="white-space: nowrap;" ng-href="mailto:{{viewModel.advisorEmail}}">{{viewModel.advisorEmail}}</a></b></p>
+            </div>
+            <div class="ui message" ng-if="viewModel.applicationStatus == 'Submitted'">
+                <p>I have submitted your application! It may be some time before we hear back. In the meantime, there are some additional application materials you can complete. As always, you can reach me by phone at <b style="white-space: nowrap;">{{viewModel.advisorPhone}}</b> or by email at <b><a style="white-space: nowrap;" href="mailto:{{viewModel.advisorEmail}}">{{viewModel.advisorEmail}}</a></b></p>
+            </div>
+            <div class="ui message" ng-if="viewModel.applicationStatus == 'Waitlisted'">
+                <p>{{viewModel.waitlistMessage}}</p>
+            </div>
+            <div class="ui message" ng-if="!viewModel.isCustom && viewModel.applicationStatus == 'Accepted' || viewModel.applicationStatus == 'Accepted (with Conditions)'">
+                <p>Congratulations, {{viewModel.firstName}}! Your application to <b>{{viewModel.programTermName}}</b> has been accepted! By completing the items below, you are committing to study abroad!</p>
+            </div>
+            <div class="ui message" ng-if="(viewModel.applicationStatus == 'Accepted (with Conditions)' && !viewModel.conditionsMet )">
+                <p>In order to meet the conditions of your acceptance, you will need to:</p>
+                <p><b>{{viewModel.acceptanceConditions}}</b></p>
+            </div>
+            <div class="ui message" ng-if="viewModel.applicationStatus == 'Rejected'">
+                <p>Unfortunately your selected host institution is unable to offer you a place. If you would like to explore other program options, please reach out to me by phone at or by email at <b><a style="white-space: nowrap;" ng-href="mailto:{{viewModel.advisorEmail}}">{{viewModel.advisorEmail}}</a></b></p>
+            </div>
+            <div class="ui message" ng-if="viewModel.fillOutMedicalForm">
+                <p>{{viewModel.fillOutMedicalForm}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-4" ng-if="!loadingAppItems">
+            <div class="ui three doubling stackable cards text-center">
+                <div class="ui raised link card" ng-class="{'grey app-item-incomplete': !item.isComplete && !item.isStarted, 'green app-item-complete': item.isComplete, 'yellow app-item-started': item.isStarted}" ng-click="viewAppItem(item)" ng-repeat="item in viewModel.appItems | filter : {'formActive' : true} | orderBy :['-isStarted','isComplete']">
+                    <div class="content app-item-content">
+                        <div class="header" ng-bind-html="item.name"></div>
+                        <div class="center aligned meta" ng-if="item.deadline && !item.isComplete">Due {{item.deadline | date:'MM/dd/yyyy'}}</div>
+                        <div ng-if="item.loading">
+                            Loading...
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="author">
+                            <span class="category" ng-if="!item.isComplete && !item.isStarted"><i class="fa fa-exclamation-circle"/> Not Started</span>
+                            <span class="category" ng-if="item.isStarted"><i class="fa fa-info-circle"/> Started</span>
+                            <span class="category" ng-if="item.isComplete"><i class="fa fa-check-circle"/> Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider hidden-md hidden-lg"></div>
+        </div>
+        <div class="col-sm-8 col-sm-push-4" ng-if="loadingAppItems">
+            <div class="ui three doubling stackable cards text-center">
+                <div class="ui raised link card" ng-repeat="item in [1,2,3]">
+                    <div class="content">
+                        <div class="ui fluid placeholder">
+                            <div class="header">
+                                <div class="line"></div>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui placeholder">
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider hidden-md hidden-lg"></div>
+        </div>
+        <div class="col-sm-4 col-sm-pull-8">
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="ui unstackable items">
+                        <div class="item">
+                            <div class="ui tiny image visible-sm">
+                                <img ng-src="{{viewModel.advisorPhotoUrl}}" ng-if="viewModel.advisorPhotoUrl">
+                            </div>
+                            <div class="ui small image hidden-sm">
+                                <img ng-src="{{viewModel.advisorPhotoUrl}}" ng-if="viewModel.advisorPhotoUrl">
+                            </div>
+                            <div class="middle aligned content">
+                                <a class="header">{{viewModel.advisorFirstName}} {{viewModel.advisorLastName}}</a>
+                                <div class="meta">
+                                    <span ng-if="!viewModel.isCustom">Program Advisor</span>
+                                </div>
+                                <div class="extra" ng-if="viewModel.advisorPhone">
+                                    <span>{{ viewModel.advisorPhone }}</span>
+                                </div>
+                                <div class="extra" ng-if="viewModel.advisorEmail">
+                                    <span>{{ viewModel.advisorEmail }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" ng-if="!viewModel.isCustom">
+                    <p>I'm your program advisor, and I’ll be here to answer any questions and provide support along the way with your application.</p>
+                </div>
+                <div class="content" ng-if="!viewModel.isCustom">
+                    <div class="two ui basic buttons">
+                        <a class="ui huge button" href="{{viewModel.advisorCalendlyLink}}" role="button" target="_blank">
+                            <i class="phone icon"></i>
+                            Schedule Call
+                        </a>
+                        <a class="ui huge button top-buffer" ng-click="loadPAIntroVideoModal()" role="button" ng-if="viewModel.paIntroVideo"><!-- href="{{viewModel.paIntroVideo}}" -->
+                            <i class="red youtube icon"></i>
+                            Intro Video
+                        </a>
+                    </div>
+                </div>
+            </div>            
+            <button class="ui fluid huge green button" type="button" ng-click="addScholarship(viewModel.applicationId)" ng-if="!viewModel.hasScholarship && viewModel.isCatalog && !viewModel.isCustom"><i class="money bill alternate outline icon"></i> Start My IFSA Scholarship Application</button>
+            <div class="ui reg-font-size segment" ng-if="!viewModel.isCustom"><!-- previously only showed on program selected -->
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header">Dates</div>
+                        Once finalized, program dates will be posted in the Resources tab.
+                    </div>
+                    <div class="item">
+                        <div class="header">Cost of Attendance</div>
+                        Tuition and housing fees will be posted in the Resources tab when available.
+                    </div>
+                    <div class="item">
+                        <div class="header">CHART</div>
+                        Click the CHART link above to search our course database. You’ll be able to search courses that students have taken in the past on this program! To see more details about course choices and restrictions, check the program page on our website.
+                    </div>
+                    <div class="item">
+                        <div class="header">Scholarship Application</div>
+                        Click the green button to apply! This is separate from your program application and they do not have to be completed at the same time.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

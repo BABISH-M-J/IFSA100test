@@ -1,0 +1,54 @@
+<div class="ui grid">
+    <div class="sixteen wide column">
+        <div class="ui big breadcrumb">
+            <div class="active section">Home</div>
+        </div>
+    </div>
+    <div class="stackable row">
+        <div class="thirteen wide column">
+            <div class="ui one column grid">
+                <div class="column padding-reset">
+                    <div class="ui huge message page grid">
+                        <h1 class="ui huge header">{{greeting}} {{viewModel.FirstName}}</h1>
+                        <p ng-bind-html="viewModel.introText"></p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui three stackable cards" >
+                        <a class="ui fluid raised link card" ng-attr-target="{{(tile.url.indexOf('#') < 0) ? '_blank' : undefined}}" ng-href="{{tile.url}}" ng-repeat="tile in tiles">
+                            <div class="content app-item-content">
+                                <div class="header" ng-bind-html="tile.heading"></div>
+                            </div>
+                            <div class="extra content" ng-bind-html="tile.details"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <div class="ui fluid card">
+                <div class="content">
+                    <strong>Your Primary IFSA Contact</strong>
+                </div>
+                <div class="image">
+                    <img class="ui medium rounded image" ng-src="{{viewModel.fieldDirectorProfileImageURL}}" alt="{{viewModel.fieldDirectorFirstName}} {{viewModel.fieldDirectorLastName}}" />
+                </div>
+                <div class="content">
+                    <div class="header">{{viewModel.fieldDirectorFirstName}} {{viewModel.fieldDirectorLastName}}</div>
+                    <div class="meta">
+                        {{viewModel.fieldDirectorTitle}}
+                    </div>
+                    <!-- <div class="description">
+                        {{viewModel.fieldDirectorIntro}}
+                    </div> -->
+                </div>
+                <div class="extra content">
+                    <address>
+                        <i class="envelope icon"></i><a ng-href="mailto:{{viewModel.fieldDirectorEmail}}">{{viewModel.fieldDirectorEmail}}</a><br />
+                        <i class="phone icon"></i><abbr title="Phone">P:</abbr> {{viewModel.fieldDirectorPhone}}
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+@media only screen and (min-width: 0px) and (max-width: 480px)
+		{
+			.chatterFeed
+			{
+				display: none;
+			}
+			.relatedLinks
+			{
+				display: none;
+			}
+		}
+		.fieldName {
+			text-align: left;
+			font-weight: bold;
+		}
+		.row {
+			padding-bottom: 10px;
+		}
+
+		.description-counter {
+			font-weight: bold;
+		}
+
+		.panel-case > .panel-heading {
+			background-color: #B7A752;
+			color: #ffffff;
+			border-color: #B7A752;
+		}
+		.panel-case {
+			border-color: #B7A752;
+		}
+		.panel-title .glyphicon
+		{
+			padding-left: 10px;
+		}
+
+		i .glyphicon {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.alertContainer {
+			padding: 5px;
+		}
+		.relatedLinks {
+			text-align: center;
+			font-size: .8em;
+			padding-bottom: 10px;
+
+		}
+		.relatedLinks a {
+			padding-left: 8px;
+			padding-right: 8px;			
+			color: black;
+			text-decoration: underline;
+			white-space: nowrap;
+		}
+		.relatedLinks a:link a:visited {
+			text-decoration: underline;
+			color: black;
+		}
+		.relatedLinks a:hover {
+			text-decoration: underline;		
+		}
+		.relatedLinks a:active {
+			text-decoration: underline;
+			color: black;
+		}

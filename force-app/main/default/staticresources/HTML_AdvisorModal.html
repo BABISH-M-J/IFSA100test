@@ -1,0 +1,20 @@
+<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title">Contact {{viewModel.advisorFirstName + " " + viewModel.advisorLastName}}</h3>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-3 col-md-offset-1">
+				<img ng-src="{{viewModel.advisorPhotoUrl}}" alt="{!viewModel.advisorFirstName}" style="img-fill"/>
+            </div>
+            <div class="col-md-5">
+            	<b>Email:</b> <a href="mailto:{{viewModel.advisorEmail}}">{{viewModel.advisorEmail}}</a><br />
+				<!-- <b>Phone:</b> {{viewModel.advisorPhone}}<br />  -->
+				<a href="{{viewModel.advisorCalendlyLink}}" class="btn btn-conf btn-highlight">Schedule a Call</a>
+            </div>
+		</div>		
+	</div>
+	<div class="modal-footer">
+		<button ng-click="cancel()" class="btn btn-conf-small btn-highlight">Close</button>
+	</div>
+</div>

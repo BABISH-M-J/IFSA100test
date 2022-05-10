@@ -1,0 +1,37 @@
+<form ng-submit="submit()" name="termSelectorForm">
+    <div class="ui dimmer modals page top aligned transition visible active" style="display: flex !important;">
+        <div class="ui longer modal transition active">
+            <i class="close icon" ng-click="cancel()"></i>
+            <div class="header">
+                <span class="ui medium purple-primary header">Select a term</span>
+            </div>
+            <div class="scrolling content">
+                <div class="ui massive fluid vertical menu" ng-if="!selectedParentProgramTerm">
+                    <span class="item" ng-class="{'active': item.active}" ng-repeat="item in programTermOptions | orderBy:['-Term__r.Year__c', 'Term__r.Section__c']" ng-click="select(item)">
+                        <i class="green check icon" ng-if="item == selectedTerm"></i> 
+                        <a ng-bind-html="item.Name"></a>
+                    </span>                
+                </div>
+                <div ng-if="selectedParentProgramTerm">
+                    <button type="button" class="ui right floated labeled icon button" ng-click="goBack()"><i class="chevron left icon"></i> Back</button>
+                    <div class="ui header">Select an option for {{selectedParentProgramTerm.Name}}</div>
+                    <div class="ui massive fluid vertical menu">
+                        <div class="item" ng-class="{'active': item.active}" ng-repeat="item in selectedParentProgramTerm.Program_Terms__r | orderBy:'Name'" ng-click="selectOption(item)">
+                            <span>
+                                <i class="green check icon" ng-if="item == selectedTerm"></i> 
+                                <a ng-bind-html="item.Name"></a>
+                            </span>
+                            <div class="content">
+                                <p style="font-size: 0.9em;" ng-bind-html="item.Description_Long__c"></p>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="button" class="ui right floated button" ng-click="cancel()">Cancel</button>
+                <button type="button" class="ui left labeled positive icon button" ng-click="selected = selectedProgram; ok()" ng-disabled="!selectedTerm"><i class="left map marker alternate icon"></i>Select Program</button>
+            </div>
+        </div>
+    </div>
+</form>

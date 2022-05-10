@@ -1,0 +1,362 @@
+/*!
+ * CSS for CHART
+ * Copyright 2019 Institute for Study Abroad
+ * Author Jay Holt jholt@ifsa-butler.org
+ */
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,700,700i);
+* {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin:0;
+    padding:0;
+}
+
+body {
+    background-color: #F2F2F2;
+}
+
+h1,h2,h3,h4,h5,.header, .button {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+.ifsa-sans {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+#wrapper {
+    min-height:100%;
+    position:relative;
+}
+
+#header {
+    padding: 10px;
+}
+
+#body {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+#footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:60px;
+    padding: 20px;
+    background-color: #F2F2F2;
+}
+
+.ifsa-nav-item {
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#user-menu {
+    position: absolute;
+    top: 46px;
+ }
+
+ #cif-menu {
+    position: absolute;
+    top: 46px;
+ }
+
+.favorite {
+    color: gold;
+}
+
+.bg-favorite {
+    background-color: gold;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.text-white {
+    color: white !important;
+}
+
+#search-title {
+    font-family: 'Source Sans Pro', sans-serif !important;
+    font-size: 3rem !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: auto;
+}
+
+#search-filters {
+    padding: 50px;
+}
+
+.dropdown-menu {
+    /* width: 100%; */
+    padding: 0px;
+    overflow-y: auto;
+}
+
+.homeFilterDropdown {
+    width: 100%;
+    padding: 0px;
+    overflow: scroll;
+}
+
+#host-title {
+    font-weight: bold;
+    color: #646464 !important;
+}
+
+#class-title {
+    font-size: 1.6rem !important;
+    font-weight: bold;
+    color: #330072 !important;
+}
+
+#class-hero {
+    /* background:
+        linear-gradient(to right, rgb(51, 0, 114), rgba(80, 31, 95, .5)),
+        url("../images/bg_connect.png"); */
+    background-color: white;
+    border-bottom: solid 4px #330072;
+    padding: 50px 0px 20px 0px
+}
+
+#favorite-label {
+    background-color: white;
+    color: #333;
+}
+
+#favorite-label:hover {
+    background-color: white;
+    color: gold;
+}
+
+.p-0 {
+    padding: 0px;
+}
+
+/* IFSA PRIMARY COLORS */
+.purple-primary { color: #330072 !important; }
+.purple-lt { color: #501f5f !important; }
+
+/* IFSA SECONDARY COLORS */
+.gold-lt { color: #EED484 !important; }
+.gold-dk { color: #A89968 !important; }
+
+/* IFSA TERTIARY COLORS */
+.blue-primary { color: #003594 !important; }
+.blue-lt { color: #7BA4DB !important; }
+
+.aqua-primary { color: #005f83 !important; }
+.aqua-lt { color: #48a9c5 !important; }
+
+.clover-primary { color: #00816D !important; }
+.clover-lt { color: #00B2A9 !important; }
+
+.spring-primary { color: #009639 !important; }
+.spring-lt { color: #71B790 !important; }
+
+/* IFSA RARE COLORS -- Highlights, Call-Outs */
+.red-primary { color: #d22630 !important; }
+.purple-bold {
+    color: #330072 !important;
+    font-weight: bold;
+}
+.grey-bold {
+    color: #646464 !important;
+    font-weight: bold;
+}
+.grey-lt-bold {
+    color: #939292 !important;
+    font-weight: bold;
+}
+
+.grey-xlt-bold {
+    color: #C2C1C1 !important;
+    font-weight: bold;
+}
+
+.ifsa-btn {
+    background-color: #512060 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.ifsa-btn:hover {
+    background-color: rgba(80, 31, 95, .8) !important;
+}
+
+.aqua-btn {
+    background-color: rgb(0, 95, 131) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.aqua-btn:hover {
+    background-color: rgba(0, 95, 131, .8) !important;
+}
+
+.ifsa-btn-gold {
+    background-color: #EED484 !important;
+    color: black;
+}
+
+.purple-primary-label {
+    background-color: #330072 !important;
+    color: white !important;
+}
+
+.purple-lt-label {
+    background-color: #512060 !important;
+    color: white !important;
+}
+
+.aqua-primary-label {
+    background-color: #005f83 !important;
+    color: white !important;
+}
+
+.aqua-lt-label {
+    background-color: #48A9C5 !important;
+    color: white !important;
+}
+
+.popular {
+    background-color:#A89968 !important;
+    color: white !important;
+}
+
+.expired {
+    background-color:#d22630 !important;
+    color: white !important;
+}
+
+.ifsa-taught {
+    background-color:#005f83 !important;
+    color: white !important;
+}
+
+.course-match {
+    background-color:#00816D !important;
+    color: white !important;
+}
+
+.pre-req-match {
+    background-color:#00816D !important;
+    color: white !important;
+}
+
+.progress-bar {
+    background-color: #005f83 !important;
+}
+
+.internalView {
+    margin-top: -80px;
+}
+
+#ifsa-exclusive {
+    -webkit-clip-path: inset(0px 20px 0px 0px);
+    clip-path: inset(0px 20px 0px 0px);
+    margin-right: -20px;
+    height: 1.5em !important;
+}
+
+#ifsa-taught-label {
+    background-image: url('../images/ifsa_globe_only_gs_fc.png');
+    background-size: auto 20px;
+    height: 20px;
+    width: 20px;
+}
+
+#ifsa-taught-label:hover {
+    background-position: -21px 0px;
+}
+
+#popular-label:hover {
+    color: #A89968 !important;
+}
+
+#expired-label:hover {
+    color: #d22630 !important;
+}
+
+#course-match-label {
+    color: #6c757d !important;
+}
+
+#course-match-label:hover {
+    color: #00816D !important;
+}
+
+#pre-req-match-label:hover {
+    color: #00816D !important;
+}
+
+#search-segment{
+    min-height: 100vh;
+    padding: 100px 0px;
+    background: url("../images/library.jpeg") no-repeat top left fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.ui.toggle.checkbox input:checked~.box:before, .ui.toggle.checkbox input:checked~label:before {
+    background-color: #005f83 !important;
+}
+
+.no-wrap { white-space: nowrap; }
+
+.text-pre-wrap {
+    width: calc(100% - 70px); 
+    display: inline-block ;
+}
+
+.search-card-button {
+    margin-top: 3px !important;
+}
+
+.icon.class-attribute {
+    margin-top: -5px !important;
+}
+
+/* medium+ screen sizes */
+@media (min-width:769px) {
+    .desktop-only {
+        display:default !important;
+    }
+
+    .mobile-only {
+        display:none !important;
+    }
+}
+
+/* small screen sizes */
+@media (max-width: 768px) {
+    .mobile-only {
+        display:default !important;
+    }
+
+    .desktop-only {
+        display:none !important;
+    }
+}
+
+.content.class-details {
+    padding-left: 15px !important;
+}
+div.chart-sticky{
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 100px;
+}

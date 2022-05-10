@@ -1,0 +1,49 @@
+<div type="text/ng-template">
+<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title">{{data.result.displayName}}</h3>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-xs-12 text-center" ng-hide="!data.result.pictureUrl">
+				<img ng-src="{{data.result.pictureUrl}}" class="img-fill" alt="{{data.result.displayName}}"/>
+				<hr/>
+			</div>
+		</div>
+		<div class="row text-center">
+			<div class="col-md-6 col-md-offset-3">
+				<h5>About the Program</h5>
+				<span ng-bind-html="data.result.description" />
+			</div>			
+		</div>
+		<div class="row" ng-show="data.result.programOptions">		
+			<div class="col-md-10 col-md-offset-1">
+				<h5>Please select a program option:</h5>
+				<div class="row" style="padding-bottom: 10px;" ng-repeat="option in data.result.programOptions">
+					<div class="col-md-3">{{option.Program_Option_Name__c}}</div>
+					<div class="col-md-7" ng-bind-html="option.Description_Long__c"></div>
+					<div class="col-md-2">
+						<button type="button" class="btn ifsa-btn" ng-click="confirm(option.Id)" ng-disabled="submittingData">Let's go <span ng-show="submittingData && option.Id == selectedId"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+					</div>
+					<br />
+				</div>
+			</div>			
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col-xs-6 col-sm-4 col-md-3" ng-class="!data.result.hasOptions ? 'col-sm-offset-4 col-md-offset-6' : 'col-xs-offset-6 col-sm-offset-8 col-md-offset-9'">
+				<button type="button" class="btn btn-default" style="width: 100%;" ng-click="cancel()">Select Another</button>
+			</div>
+			<div class="col-xs-6 col-sm-4 col-md-3" ng-hide="data.result.hasOptions">
+				<button type="button" ng-hide="data.result.noApply" style="width: 100%;" class="btn ifsa-btn" ng-click="confirm(data.result.programTermId)" ng-disabled="submittingData">Let's go to {{data.result.country}} <span ng-show="submittingData"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+				<div ng-show="data.result.noApply">
+					<a href="{{data.result.noApply}}" target="_blank" style="width: 100%;" class="btn ifsa-btn">Apply via partners site</a>
+				</div>
+			</div>
+		</div>
+		<!-- <div ng-show="submittingData">
+			<img ng-src="{{data.loadingGif}}" style="width:50px;"/>
+		</div> -->
+	</div>
+</div>

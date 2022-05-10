@@ -1,0 +1,42 @@
+<div type="text/ng-template">
+	<div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<!--<h4 class="modal-title"><span ng-bind-html="data.title"></span></h4>-->
+        <h4 class="modal-title"><span>Please select the course from the options below.</span></h4>
+
+	</div>
+	<div class="modal-body">
+        <!-- Results go here -->
+        <div class="ui large middle aligned divided list">
+            <div class="item" ng-repeat="class in data.courses">
+                <div class="right floated content">
+                    <button class="ui huge basic icon button" ng-click="class.showDetails = !class.showDetails"><i class="info icon"></i></button>
+                    <button class="ui green huge icon button" ng-disabled="class.selected" ng-click="selectClass(class)"><i class="icon" ng-class="class.selected ? 'check' : 'plus'"></i></button>
+                </div>
+                <i class="star icon" ng-class="class.isFavorite ? 'yellow' : 'grey'"></i>
+                <div class="content">
+                    <div class="header"><span ng-bind-html="class.Course_Code__c"></span> {{ class.Course_Code__c ? '|' : ''}} <span ng-bind-html="class.Course_Title_2__c"></span></div>
+                    <div class="description">
+                        <p><span ng-bind-html="class.Host_Institution__r.Name"></span>, <span>Host Credits: {{class.Host_Credits__c}}</span>, <span>US Credits: {{class.US_Semester_Credit_Hours__c}}</span>, <span>US Terms: {{class.US_Terms__c | replace: ';' : ', '}}</span></p>
+                        <p ng-if="class.showDetails">{{class.Course_Description_Short__c}}</p>
+                        <p ng-if="class.showDetails">Additional details in <a ng-href="{{ '/chart/#/details/' + class.Id }}" target="_blank" class="no-underline">CHART</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer">
+        <button class="ui huge button" ng-click="close()">Cancel</button>
+        <!--<button class="ui green huge button" ng-click="submitSelection()" ng-disabled="!selectedItem">-->
+            <!-- Class Selected -->
+            <!--<span ng-if="selectedItem">
+                Add <span ng-if="selectedItem.Course_Code__c">{{selectedItem.Course_Code__c}} - </span>{{selectedItem.Course_Title_2__c}}
+            </span>
+            <span ng-if="!selectedItem">
+                Select class from list
+            </span>
+        </button>
+        <button class="ui green huge button" ng-click="submitNewClass()">Add <span ng-if="data.newCourse.courseCode">{{data.newCourse.courseCode}} - </span>{{data.newCourse.courseTitle}}</button>-->
+        <button class="ui orange huge button" ng-click="submitNewClass()">None of the above match the course I want.</button>
+	</div>
+</div>

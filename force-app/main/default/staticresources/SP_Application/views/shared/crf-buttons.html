@@ -1,0 +1,7 @@
+<button class="ui primary large labeled icon button" type="button" ng-if="uploadNeeded && item.courseStatus!='CIF - Submitted'" ng-click="submitSyllabus(item)" >Upload class syllabus<i class="upload icon"></i></button>
+<button class="ui green large labeled icon button" type="button" ng-click="registerCourse(item)" ng-if="item.courseStatus=='CIF - Submitted'" tooltip-placement="top" tooltip="Add">Add this class to your CRF <i class="plus icon"></i></button>
+<button class="ui red large labeled icon button" ng-class="{'basic': item.courseStatus=='CRF - Draft' || item.courseStatus=='New'}" type="button" ng-click="removeCourse(item)" tooltip-placement="top" tooltip="Remove">
+    <span ng-if="item.courseStatus=='CRF - Draft' || item.courseStatus=='New'">Remove class from CRF</span>
+    <span ng-if="item.courseStatus=='CIF - Submitted'">Not taking this class</span>
+    <i class="trash icon"></i>
+</button>

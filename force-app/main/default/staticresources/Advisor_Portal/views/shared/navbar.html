@@ -1,0 +1,62 @@
+<nav class="navbar navbar-default navbar-fixed-top ifsa-navbar-primary">
+    <!-- SECONDARY NAV -->
+    <div class="row hidden-xs hidden-sm hidden-md">
+      <div id="navbar-top" class="col-xs-12">
+        <!-- <form action="/studentportal/secur/logout.jsp">
+        <button class="btn btn-default btn-xs pull-right">Log Out</button>
+        </form> -->
+      </div>
+    </div>
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+        <!-- TOGGLE BUTTON FOR MOBILE -->
+          <button id="mobile-toggle" type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse" data-target="#collapse" aria-expanded="false" ng-if="viewModel.contactId != null">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- BRAND CONTENT -->
+          <a class="navbar-brand" href="#/">
+            <img alt="Brand" ng-src="{{brandImageURL}}"/>
+          </a>
+        </div>
+        
+        <!-- PRIMARY NAV -->
+        <div class="collapse navbar-collapse" id="collapse">
+          <span id="advisor-nav">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown primary-nav-dropdown" ng-show="{{viewModel.showChart}}">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CHART <span class="caret"></span></a>
+              <ul id="primary-nav" class="dropdown-menu">
+                <li><a href="/chart/" target="_blank">Class Search</a></li>
+                <li><a href="/chart/#/project-request-form" target="_blank">Request Curriculum Integration Project</a></li>
+              </ul>
+            </li>
+          <!-- <span ng-if="{{!viewModel.isLockDownActive}}"> -->
+            <li><a href="#/institution">{{viewModel.InstitutionName}}</a></li>
+            <li class="dropdown primary-nav-dropdown" ng-if="viewModel.showToolbox">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Students <span class="caret"></span></a>
+              <ul id="primary-nav" class="dropdown-menu">
+                <li><a href="#/students_v2/all">Student Information: Approve your Students</a></li>
+                <li><a href="#/students_v2/leads">Global Wayfinder leads</a></li>
+              </ul>
+            </li>
+            <li><a href="#/students_v2/all" ng-if="!viewModel.showToolbox">Students</a></li>
+            <li><a href="#/resources">Resources</a></li>
+            <li class="dropdown primary-nav-dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-fw fa-lg fa-user-circle"></span> <span>{{viewModel.FirstName}}</span> <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/profile">Profile</a></li>
+                <li><a id="logout-li" href="/advisorportal/secur/logout.jsp"><span class="fa fa-sign-out"></span> Logout</a></li>
+              </ul>
+            </li>
+          <!-- </span> -->
+          </ul>
+          </span>
+          
+
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>

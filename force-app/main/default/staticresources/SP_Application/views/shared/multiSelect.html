@@ -1,0 +1,8 @@
+<div class="form-group" ng-class="{'required1' : isRequired}">
+    <label class="control-label">{{labelText}}</label>
+    <div class="row">
+        <div ng-repeat="opt in options" ng-class="twoCols ? 'col-md-12 col-lg-6' : 'col-xs-12'">
+            <input type="checkbox" ng-model="opt.value" ng-change="toggle(opt, false)"><span ng-click="toggle(opt, true)"> {{opt.name}}</span>
+        </div>
+    </div>
+</div>

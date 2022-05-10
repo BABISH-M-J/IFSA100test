@@ -1,0 +1,96 @@
+<div class="col-xs-12 text-center">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h5><b>We’d like to know a little more about you. Some questions allow us to identify scholarship opportunities for which you are uniquely qualified.</b></h5>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row top-buffer" >
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 form-group required1">
+                    <label class="control-label" for="studentFAFSA" ng-class="{'warning': appForm.studentFAFSA.$invalid}">If you submitted the Free Application for Federal Student Aid (FAFSA) this year, are you eligible for the Federal Pell Grant Program?</label>
+                    <select id="studentFAFSA" ng-model="viewModel.FAFSA" class="form-control form-input" ng-options="item for item in viewModel.FAFSAOptions" required/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 form-group required1" ng-show="viewModel.FAFSA=='Yes'">
+                    <label class="control-label" ng-class="{'warning': appForm.studentPell.$invalid}">Are you eligible for the Federal Pell Grant Program?</label>
+                    <select id="studentPell" name="studentPell" ng-model="viewModel.PellGrant" class="form-control form-input" ng-required="viewModel.FAFSA == 'Yes'">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Prefer not to respond">Prefer not to respond</option>
+                    </select>
+                    <br/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 form-group required1">
+                    <label class="control-label" for="firstGen" ng-class="{'warning': appForm.firstGen.$invalid}">Has one or more of your custodial parents/legal guardians completed a bachelor’s degree at a four-year insitution?</label>
+                    <select id="firstGen" name="firstGen" ng-model="viewModel.FirstGeneration" class="form-control form-input" ng-required="true">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="Prefer not to respond">Prefer not to respond</option>
+                    </select>
+                    <br/>
+                    <h5>If you have answered no to the above question, please know that you are welcome to apply for IFSA's First-Generation Student Scholarship, even before you submit your application. More details can be found <a href="https://www.ifsa-butler.org/scholarships/">here</a>.</h5>
+                </div>
+            </div>
+            <div class="row top-buffer">
+                <div class="col-md-10 col-md-offset-1 form-group">
+                    <label class="control-label" for="studentWorkingHours" ng-class="{'warning': appForm.studentWorkingHours.$invalid}" >During a typical semester, how many hours a week do you work for income?</label>
+                    <select id="studentWorkingHours" class="form-control form-input" ng-model="viewModel.WorkingHours" ng-options="item for item in viewModel.WorkingHoursOptions"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="activeDutyVeteran" ng-class="{'warning': appForm.activeDutyVeteran.$invalid}">Are you a U.S. Military veteran and/or on active duty?</label>
+                <select ng-model="viewModel.ActiveDutyVeteran" class="form-control form-input" ng-required="true" id="activeDutyVeteran">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Prefer not to respond">Prefer not to respond</option>
+                </select>
+            </div> 
+            <div class="row"> 
+                <div class="col-md-10 col-md-offset-1">
+                    <multi-select options="viewModel.NatlStudentSuccessOptions" selected="selectedNatlSuccess" is-required="true" label-text="If you are a participant in a national student success program, select all that apply."/>
+                </div>
+                <!--
+                <div class="col-md-10 col-md-offset-1 form-group required1">
+                    <label class="control-label" ng-class="{'warning': selectedNatlSuccess.length == 0}">If you are a participant in a national student success program, select all that apply.</label>
+                    <div class="checkbox" ng-repeat="opt in viewModel.NatlStudentSuccessOptions">
+                        <label>
+                            <input type="checkbox" ng-model="opt.value" ng-change="toggleNatlSuccess(opt)" ng-checked="selectedNatlSuccess.indexOf(opt) >-1" ng-required="selectedNatlSuccess.length == 0"> {{opt.name}} - {{opt.value}} </input>
+                        </label>
+                    </div>
+                    
+                </div>
+                -->
+            </div>
+            <div class="row top-buffer">
+                <div class="col-md-10 col-md-offset-1 form-group">
+                    <label class="control-label" ng-class="{'warning': appForm.sport.$invalid}">If you participate in a specific sport, please enter it below.</label>
+                    <input id="sport" type="text" class="form-control form-input" ng-model="viewModel.Sport"/>
+                </div>
+                <div class="col-md-10 col-md-offset-1 form-group" ng-hide="viewModel.Sport==null || viewModel.Sport==''">    
+                    <label class="control-label" ng-class="{'warning': appForm.sportDivision.$invalid}">Specific Sport Division</label>
+                    <input id="sportDivision" type="text" class="form-control form-input" ng-model="viewModel.SportDivision"/>
+                </div>
+            </div>    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <hr/>
+            <input type="button" class="btn ifsa-btn" value="Back" ng-show="!submitted" ng-disabled="toggling" ng-click="toggleSurvey(true, 1)"/>
+            <button type="button" class="btn ifsa-btn" ng-show="!submitted" ng-disabled="appForm.$invalid || selectedNatlSuccess.length < 1 || toggling" ng-click="toggleSurvey(true, 3)">
+                Next <i class="spinner loading icon" ng-if="toggling"></i>
+            </button>
+        </div>
+    </div>
+</div>

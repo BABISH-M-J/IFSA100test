@@ -1,0 +1,38 @@
+<div type="text/ng-template">
+    <form ng-submit="submit()">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{data.title}}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="ui info message">
+                <div class="header">
+                    Heads up...
+                </div>
+                {{data.prompt}}
+            </div>
+            <div class="ui basic segment reg-font-size">
+                <p>Did you have any classes you wanted to take, but didn't work out? Let us know what those were by adding the class details below. (Optional)</p>
+                <div class="ui divider" ng-show="notRegisteredCourses.length"></div>
+                <div class="ui middle aligned divided list" ng-show="notRegisteredCourses.length">
+                    <div class="item" ng-repeat="item in data.viewModel.courses | filter:{'courseStatus':'Not Registered'} as notRegisteredCourses">
+                        <div class="right floated content">
+                            <div class="ui red large icon button" ng-click="removeClass(item)"><i class="x icon"></i></div>
+                        </div>
+                        <div class="content">
+                            <div class="header"><span ng-bind-html="item.courseTitle" ng-if="!spanishTitles || (!item.untranslatedTitle && item.courseTitle)"></span> <span ng-bind-html="item.untranslatedTitle" ng-if="spanishTitles && item.untranslatedTitle"></span></div>
+                            Reason for not taking class: <span ng-bind-html="item.notRegisteredReason"></span> {{ item.notRegisteredReason == 'Other' ? '-' : '' }} <span ng-bind-html="item.notRegisteredReasonOther"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="ui huge icon button" ng-click="addClass()"><i class="plus icon"></i> Add Class</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="ui huge button" ng-click="close()">Cancel</button>
+            <button type="submit" class="ui green huge button">Submit</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,43 @@
+<div id="onsite-housing">
+    <div ng-include="urlService.getBaseResourceURL() + '/views/shared/onsite-header.html'"></div>
+    <div ng-hide="viewModel.street1 == null">
+        <h2>Housing Assignment - {{viewModel.displayName}}</h2>
+        <div class="row">
+            <div class="col-md-4" id="google_map">
+                <iframe height="305px" width="100%" frameborder="0" style="border:0" ng-src="{{viewModel.mapUrl}}"></iframe>
+            </div>
+            <div class="col-md-8">
+                <h3>Address</h3>
+                <strong>Street 1: </strong>{{viewModel.street1}}<br />
+                <div ng-show="viewModel.street2">
+                    <strong>Street 2: </strong>{{viewModel.street2}}<br />
+                </div>
+                <strong>City: </strong>{{viewModel.locality}}<br />
+                <strong>State/Province: </strong>{{viewModel.dependentLocality}}<br />
+                <strong>Postal/Zip Code: </strong>{{viewModel.zipCode}}<br />
+                <strong>Country: </strong>{{viewModel.country}}<br />
+                <h3>Contact Info</h3>
+                <strong>Landline: </strong>{{viewModel.landLine}}<br />
+                <strong>Cell Phone: </strong>{{viewModel.cellPhone}}<br />
+                <strong>Email Address: </strong><a href="mailto:{{viewModel.email}}">{{viewModel.email}}</a><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                
+                <carousel interval="myInterval" no-wrap="noWrapSlides">
+                    <slide ng-repeat="slide in slides" active="slide.active">
+                        <img ng-src="/studentportal/servlet/servlet.FileDownload?file={{slide.url}}" width="100%" />
+                        <div class="carousel-caption">
+                            <p>{{slide.text}}</p>
+                        </div>
+                    </slide>
+                </carousel>
+            </div>
+            <div class="col-md-8">
+                <h3>About</h3>
+                <p ng-bind-html="viewModel.description | fixHTMLTags"></p>
+            </div>
+        </div>
+    </div>
+</div>

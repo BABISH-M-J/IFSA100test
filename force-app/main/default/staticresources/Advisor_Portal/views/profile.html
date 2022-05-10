@@ -1,0 +1,160 @@
+<loading is-loading="loading">
+    <div class="row">
+        <div class="ui big breadcrumb">
+            <a  href="#/" class="section">Home</a>
+            <div class="divider"> / </div>
+            <div class="active section">Profile</div>
+        </div>
+    </div>
+    <div id="myProfile">
+        <!-- Header -->
+        <h2 class="content-title">{{viewModel.FirstName}} {{viewModel.LastName}}</h2>
+        <hr class="hr-gold"/>
+        <form ng-submit="submit()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Personal Information</h3>
+                            <hr/>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="advisorFirstName">First Name</label>
+                                <input type="text" class="form-control" id="advisorFirstName" ng-model="viewModel.FirstName"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="advisorLastName">Last Name</label>
+                                <input type="text" class="form-control" id="advisorLastName" ng-model="viewModel.LastName"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="advisorTitle">Title</label>
+                                <input type="text" class="form-control" id="advisorTitle" ng-model="viewModel.AdvisorTitle"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <h3>Contact Information</h3>
+                            <hr/>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="advisorEmail">Email</label>
+                                <input type="email" class="form-control" id="advisorEmail" ng-model="viewModel.AdvisorEmail"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="advisorPhone">Phone</label>
+                                <input type="text" class="form-control" id="advisorPhone" ng-model="viewModel.AdvisorPhone"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="advisorMobilePhone">Mobile</label>
+                                <input type="text" class="form-control" id="advisorMobilePhone" ng-model="viewModel.AdvisorMobilePhone"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="advisorFax">Fax</label>
+                                <input type="text" class="form-control" id="advisorFax" ng-model="viewModel.AdvisorFax"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="advisorOfficeName">Office Name</label>
+                                <input type="text" class="form-control" id="advisorOfficeName" ng-model="viewModel.AdvisorOfficeName"/>
+                            </div>
+                        </div>
+                        <!-- <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="advisorMailingStreet">Street Address</label>
+                                <input type="text" class="form-control" id="advisorMailingStreet" ng-model="viewModel.AdvisorMailingStreet"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label for="advisorMailingCity">City</label>
+                                <input type="text" class="form-control" id="advisorMailingCity" ng-model="viewModel.AdvisorMailingCity"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label for="advisorMailingState">State</label>
+                                <input type="text" class="form-control" id="advisorMailingState" ng-model="viewModel.AdvisorMailingState"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="advisorMailingPostalCode">Zip Code</label>
+                                <input type="text" class="form-control" id="advisorMailingPostalCode" ng-model="viewModel.AdvisorMailingPostalCode"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="advisorMailingCountry">Country</label>
+                                <input type="text" class="form-control" id="advisorMailingCountry" ng-model="viewModel.AdvisorMailingCountry"/>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Notification Settings</h3>
+                            <hr/>
+                            <div class="checkbox">
+                                <label>
+                                <input type="checkbox" ng-model="viewModel.AdvisorReceiveAlerts"/> Receive Weekly List of Applicants 
+                                </label>
+                            </div>
+                            <!-- <div class="checkbox">
+                                <label>
+                                <input type="checkbox" ng-model="viewModel.AdvisorReceiveApprovals"/> Receive Student Approval Notifications
+                                </label>
+                            </div> -->
+                            <div class="checkbox">
+                                <label>
+                                <input type="checkbox" ng-model="viewModel.AdvisorReceiveNewsletter"/> Receive IFSA Newsletter
+                                </label>
+                            </div>
+                            <button type="button" class="btn ifsa-btn" value="Save Information" ng-click="submit()">
+                                Save Information <i class="fa fa-spinner fa-pulse" ng-show="isSubmitting"/>
+                            </button>
+                        </div>
+                        <div class="col-xs-12">
+                            <h3>Assignments</h3>
+                            <hr/>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Institution</strong></h5>
+                            <p ng-bind-html="viewModel.HomeInstitutionName"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Roles</strong></h5>
+                            <p>{{viewModel.AdvisorType}}</p>
+                        </div>
+                        <div class="col-xs-12">
+                            <h5><strong>Student Approval Countries</strong></h5>
+                            <p>{{viewModel.AdvisorApprovalCountries}}</p>
+                            <p><em>If you and your colleagues advise and approve students based on country, this indicates your specific country responsibilities. <strong>To get this changed, please contact your IFSA Institutional Engagement Manager.</strong></em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button type="submit" class="btn ifsa-btn" value="Save Information">
+                        Save Information <i class="fa fa-spinner fa-pulse" ng-show="isSubmitting"/>
+                    </button>
+                    <p class="top-buffer"><small>Need to reset your password? <a href="/advisorportal/advisorForgotPassword">Click here.</a> You can also reset it by clicking "Forgot Password?" on the login page.</small></p>
+                </div>
+            </div>
+        </form>
+    </div>
+</loading>

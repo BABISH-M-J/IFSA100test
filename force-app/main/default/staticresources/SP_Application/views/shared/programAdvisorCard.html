@@ -1,0 +1,19 @@
+<div class="ui centered card">
+    <div class="image">
+        <img ng-src="{{viewModel.advisorPhotoUrl}}" alt="{{viewModel.advisorFirstName}}"/>
+    </div>
+    <div class="content">
+        <p class="header">{{viewModel.advisorFirstName}} {{viewModel.advisorLastName}}</p>
+        <div class="meta">
+        <span class="date">Program Advisor</span>
+        </div>
+        <div class="description">
+        I’m excited to be working with you as you apply to {{viewModel.programName}}. If you have any questions or want to chat about your study abroad goals and plans, you can reach me at <b style="white-space: nowrap;">{{viewModel.advisorPhone}}</b>, <b><a style="white-space: nowrap;" href="mailto:{{viewModel.advisorEmail}}">{{viewModel.advisorEmail}}</a></b> or by clicking below to schedule a call.
+        </div>
+    </div>
+    <div class="extra content text-center">
+        <a>
+        <a class="btn btn-lg ifsa-btn" href="{{viewModel.advisorCalendlyLink}}" role="button" target="_blank">Schedule a Call</a>
+        </a>
+    </div>
+</div>

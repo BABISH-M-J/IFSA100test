@@ -1,0 +1,40 @@
+<!-- Required Segment -->
+<div id="required" class="cif-form-body">
+    <h1 class="ui header">Required and Recommended Classes</h1>
+    <div class="ui fluid violet message">{{numberOfRemainingCourses()}} Classes Remaining<span ng-if="alternateRule">, {{numberOfRemainingAlternates()}} Alternates Remaining</span></div>
+    <div class="ui active centered inline loader" ng-if="loadingClasses"></div>
+    <div class="ui styled fluid accordion">
+        <span ng-repeat="rule in appItem.form.formData.formRules | filter: hasRuleItems() | orderBy: 'title'">
+            <div class="title" ng-class="{ 'active' : rule.selected}" ng-click="rule.selected = !rule.selected">
+                <i class="dropdown icon"></i>
+                {{rule.title | replace : '_' : ' '}}
+            </div>
+            <div class="content" ng-class="{ 'active' : rule.selected}">
+                <div class="ui relaxed divided list">
+                    <div class="item" ng-repeat="item in rule.ruleItems">
+                        <div class="content">
+                            <div class="ui grid">
+                                <div class="twelve wide column">
+                                    <div class="header"><i class="yellow star icon" ng-if="item.isFavorite"></i> <span ng-bind-html="item.course.Course_Title_2__c"></span></div>
+                                    <div class="description" ng-bind-html="item.course.Course_Description_Short__c | fixHTMLTags"></div>
+                                </div>
+                                <div class="four wide right aligned middle aligned column">
+                                    <button class="ui icon button" ng-class="{ 'green' : (rule.ruleItems.length <= 1 && rule.ruleName == 'Must_Select_Course_X') || item.isSelected}" ng-click="selectFromRules(item, rule)" ng-disabled="(rule.ruleItems.length <= 1 && rule.ruleName == 'Must_Select_Course_X') || rule.completed || item.isSelected"><i class="icon" ng-class="(rule.ruleItems.length <= 1 && rule.ruleName == 'Must_Select_Course_X') || item.isSelected ? 'check' : 'plus'"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </div>
+    <!-- <div class="ui divider"></div>
+    <button type="button" class="ui huge right floated right labeled green icon button" ng-click="updateView('selections')" ng-disabled="!checkRules()">
+        <i class="arrow right icon"></i>
+        Next
+    </button>
+    <button type="button" class="ui huge right floated inverted green button" ng-class="{ 'loading' : cifLoading}" ng-click="saveForm(true)">
+        <i class="save icon"></i>
+        Save for later
+    </button> -->
+</div>

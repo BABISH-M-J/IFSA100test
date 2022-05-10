@@ -1,0 +1,14 @@
+<div class="ui dimmer modals page top aligned transition visible active" style="display: flex !important;">
+    <div class="ui small modal transition active">
+        <i class="close icon" ng-click="cancel()"></i>
+        <div class="header">
+            {{errorType}} Error
+        </div>
+        <div class="content">
+            <span ng-bind-html="errorMessage"></span>
+        </div>
+        <div class="actions">
+            <button type="button" class="ui button" ng-click="cancel()">OK</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,229 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentFirstName">First Name</label>
+                <input id="studentFirstName" type="text" ng-model="viewModel.studentFirstName" ng-required="true" class="form-control form-input"/> <!-- placeholder="Jacob" -->
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <label class="control-label" for="studentPreferredName">Preferred First Name</label>
+                <input id="studentPreferredName" type="text" ng-model="viewModel.PreferredName" class="form-control form-input" /> <!-- placeholder="Jake" -->
+                <h6>This is how we will address you from now on.</h6>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group" ng-class="middleNameRequired ? 'required1' : ''">
+                <label class="control-label" for="studentMiddleName">Middle Name</label>
+                <input id="studentMiddleName" type="text" ng-model="viewModel.MiddleName" class="form-control form-input" ng-required="middleNameRequired"/>
+                <h6>Check this box if you do not have a middle name on your official documents <input id="middleNameCheck" type="checkbox" ng-click="doesntHaveMiddleName()"/></h6>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentLastName">Last Name</label>
+                <input id="studentLastName" type="text" ng-model="viewModel.studentLastName" ng-required="true" class="form-control form-input" /> <!-- placeholder="McDonald" -->
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <label class="control-label" for="studentSuffix">Suffix</label>
+                <input id="studentSuffix" type="text" ng-model="viewModel.Suffix" class="form-control form-input" placeholder="Jr., Sr., II, etc."/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentCitizenship">Sex (As listed on your passport)</label>
+                <select id="studentSex" ng-model="viewModel.Sex" ng-required="true" class="form-control form-input" ng-options="item for item in viewModel.SexOptions"/>
+                <!--<h6><b>Why are we asking this?</b> The sex listed on your passport should correspond with visa and immigration documents produced by the university abroad. If the sex listed in your passport does not reflect your identity, we are happy to advise on applying for an updated passport.</h6>-->
+                <h6 tooltip-placement="bottom" tooltip="The sex listed on you passport needs to correspond with visa and immigration documents produced by your host university abroad. If the sex listed in your passport does not reflect your identity, please fill in the information about how you identify yourself and the pronouns you prefer if you feel comfortable doing so below. IFSA is also happy to provide information about how to go about getting a new passport if you would like."><b>Why are we asking this?</b></h6>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="preferredPronouns">Personal pronouns</label>
+                <!-- <input id="preferredPronouns" type="text" ng-model="viewModel.PreferredPronouns" class="form-control form-input"/> -->
+                <select id="preferredPronouns" ng-model="viewModel.PreferredPronouns" class="form-control form-input" ng-options="item for item in viewModel.PersonalPronounOptions" required />
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group" >
+                <label class="control-label" for="PreferredPronounsOther">If you would like the opportunity, we invite you to share more about your gender identity here.</label>
+                <input id="PreferredPronounsOther" type="text" ng-model="viewModel.PreferredPronounsOther" class="form-control form-input" ng-maxlength="255"/>
+                <div ng-message="maxlength">The character limit is 255 characters.</div>
+            </div>
+        </div>
+
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentCitizenship">Are you a U.S. Citizen?</label>
+                <select id="studentCitizenship" ng-model="viewModel.Citizenship" ng-required="true" class="form-control form-input" ng-options="item for item in viewModel.CitizenshipOptions"/>
+            </div>
+        </div>
+        <div class="row top-buffer form-group" ng-hide="!viewModel.Citizenship || viewModel.Citizenship == 'U.S. Citizen'" ng-class="viewModel.Citizenship == 'Non-U.S. Citizen' ? 'required1' : ''">
+            <div class="col-md-10 col-md-offset-1">
+                <label class="control-label" for="studentNonUsCitizenship">What is your (Non-U.S.) Citizenship?</label>
+                <select id="studentNonUsCitizenship" ng-model="viewModel.NonUsCitizenship" class="form-control form-input" ng-options="item for item in viewModel.NonUsCitizenshipOptions" required="{studentCitizenship.value == 3}" ng-required="studentCitizenship.value == 3"/>
+            </div>
+        </div>
+        <div class="row top-buffer" ng-hide="viewModel.Citizenship == 'U.S. Citizen'">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <label class="control-label" for="studentCitizenshipDetails">Please provide any other citizenship details you think may be important.</label>
+                <textarea rows="4" cols="40" id="studentCitizenshipDetails" ng-model="viewModel.CitizenshipDetails" class="form-control form-input"/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1" ng-class="{ 'has-error' : appForm.studentEmail.$invalid && !appForm.studentEmail.$pristine }">
+                <label class="control-label" for="studentEmail">School Email Address</label>
+                <input id="studentEmail" type="email" ng-model="viewModel.Email" ng-required="true" class="form-control form-input" placeholder="email@example.com"/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1" ng-class="{ 'has-error' : appForm.studentPersonalEmail.$invalid && !appForm.studentPersonalEmail.$pristine }">
+                <label class="control-label" for="studentPersonalEmail">Personal Email Address</label>
+                <input id="studentPersonalEmail" name="studentPersonalEmail" type="email" ng-model="viewModel.personalEmail" ng-required="true" class="form-control form-input" placeholder="email@example.com" blacklist="{{viewModel.Email}}"/>
+                <span class="text-danger" ng-show="appForm.studentPersonalEmail.$error.blacklist">
+                    Please provide an email address that does not match your school email address.
+                </span>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentPhone">Phone Number</label>
+                <input id="studentPhone" ui-mask="(999) 999-9999" ui-mask-placeholder-char="_" type="text" ng-model="viewModel.Phone" ng-required="true" class="form-control form-input"  />
+            </div>
+        </div>
+        <!--Unneeded
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1">
+                <label class="control-label" for="studentTwitterHandle">Twitter Handle</label>
+                <input id="studentTwitterHandle" type="text" ng-model="viewModel.TwitterHandle" class="form-control form-input" placeholder="@twitterHandle"/>
+            </div>
+        </div>
+        -->
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentBirthDate">Birth Date</label>
+                <p class="input-group">
+                    <input type="text" id="studentBirthDate" class="form-control form-input visible-md-block visible-lg-block" ng-click="openDatepicker($event)" datepicker-popup="MM-dd-yyyy" datepicker-mode="'year'" ng-disabled="true" show-weeks="false" ng-model="temp.birthdate" is-open="datePickerOpen" ng-required="true" placeholder="MM-DD-YYYY" close-text="Close" />
+                    <input type="date" id="studentBirthDateMobile" class="form-control form-input visible-sm-block visible-xs-block" ng-required="true" ng-model="temp.birthdate"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default form-control form-input visible-md-block visible-lg-block" ng-click="openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="homeInstitutionName">Home College or University</label>
+                <input type="text" id="homeInstitutionName" ng-model="viewModel.HomeInstitutionName" required ng-change="searchSchools()" typeahead-wait-ms="375" placeholder="Type to search..." typeahead="item.Name for item in UniversityOptions" class="form-control form-input"/>
+                <h6>If you don't see your University in the list, just type it in manually.</h6>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <label class="control-label" for="studentMultipleUniversities">Check this if you have attended multiple universities</label>
+                <input id="studentMultipleUniversities" type="checkbox" ng-model="viewModel.MultipleUniversities" class="checkbox"/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentGradeLevel">Class standing when abroad</label>
+                <select id="studentGradeLevel" required ng-model="viewModel.GradeLevel" class="form-control form-input" ng-options="item for item in viewModel.GradeLevelOptions"/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentDegree">Degree</label>
+                <select id="studentDegree" required ng-model="viewModel.Degree" class="form-control form-input" ng-options="item for item in viewModel.DegreeOptions"/>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentMajor">Major</label>
+                <!--<input id="studentMajor" ng-required="true" type="text" ng-model="viewModel.Major" class="form-control form-input"/>-->
+                <select id="studentMajor" ng-required="true" ng-model="viewModel.Major" class="form-control form-input" ng-options="item for item in viewModel.MajorOptions"/>
+                <input id="hasSecondMajor" type="Checkbox" ng-click="hasSecondMajor()"/> List a second major
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group" ng-show="secondMajorChecked">
+                <label class="control-label" for="studentSecondMajor">Second Major</label>
+                <select id="studentSecondMajor" ng-model="viewModel.SecondMajor" class="form-control form-input" ng-options="item for item in viewModel.MajorOptions"/>
+            </div>
+        </div>
+        <div class="row top-buffer" ng-show="(viewModel.Major == 'Other' || viewModel.SecondMajor == 'Other')">
+            <div class="col-md-10 col-md-offset-1 form-group" ng-class="(viewModel.Major == 'Other' || viewModel.SecondMajor == 'Other') ? 'required1' : ''">
+                <label class="control-label" for="studentMajorOther">Other Major</label>
+                <input id="studentMajorOther" ng-required="(viewModel.studentMajor == 'Other' || viewModel.SecondMajor == 'Other')" type="text" ng-model="viewModel.OtherMajor" class="form-control form-input"/>
+            </div>
+        </div>
+
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group" >
+                <label class="control-label" for="studentMinor">Minor</label>
+                <select id="studentMinor" ng-model="viewModel.Minor" class="form-control form-input" ng-options="item for item in viewModel.MajorOptions"/>
+                <input id="hasSecondMinor" type="Checkbox" ng-click="hasSecondMinor()"/> List a second minor
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group" ng-show="secondMinorChecked">
+                <label class="control-label" for="studentSecondMinor">Second Minor</label>
+                <select id="studentSecondMinor" ng-model="viewModel.SecondMinor" class="form-control form-input" ng-options="item for item in viewModel.MajorOptions"/>
+            </div>
+        </div>
+        <div class="row top-buffer" ng-show="(viewModel.Minor == 'Other' || viewModel.SecondMinor == 'Other')">
+            <div class="col-md-10 col-md-offset-1 form-group" ng-class="(viewModel.Minor == 'Other' || viewModel.SecondMinor == 'Other') ? 'required1' : ''">
+                <label class="control-label" for="studentMinorOther">Other Minor</label>
+                <input id="studentMinorOther" ng-required="(viewModel.studentMinor == 'Other' || viewModel.SecondMinor == 'Other')" type="text" ng-model="viewModel.OtherMinor" class="form-control form-input"/>
+            </div>
+        </div>
+
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1" ng-class="{ 'has-error' : appForm.studentGPA.$invalid && !appForm.studentGPA.$pristine }">
+                <label class="control-label" for="studentGPA">GPA</label>
+                <input id="studentGPA" name="studentGPA" type="text" required ng-model="viewModel.GPA" class="form-control form-input" ng-pattern="/^(([0-9]|[12][0-9]|3[0])[.])\d\d?\d?$/"/>
+                <p ng-show="appForm.studentGPA.$error.pattern" class="text-error">Invalid value for GPA</p>
+                <p ng-show="appForm.studentGPA.$error.required" class="text-error">GPA is required</p>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="studentSpokenWithAlumni">Have you spoken with one or more IFSA alumni about our programs?</label>
+                <select id="studentSpokenWithAlumni" required ng-model="viewModel.SpokenWithAlumni" class="form-control form-input">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>                                        
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="classesReqd" >Is there a specific class or classes you need to take while abroad that are critical to your participation? By selecting Yes we will contact you to find out more information and begin searching for classes which meet your needs.</label>
+                <select id="classesReqd" required ng-model="viewModel.ClassesReqd" class="form-control form-input">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row text-center">
+    <div class="col-xs-12" ng-hide="surveyQuestions">
+        <hr/>
+        <p>Please ensure all information is filled out as completely and accurately as possible.</p>
+        <button type="button" class="btn ifsa-btn" ng-show="!submitted" ng-click=" toggleSurvey(true, 1)" ng-hide="surveyQuestions" ng-disabled="appForm.$invalid || toggling">
+            Next <i class="spinner loading icon" ng-if="toggling"></i>
+        </button>
+        <!--
+        <div class="row top-buffer">
+            <div class="col-xs-12">
+                <input type="submit" class="btn btn-conf btn-highlight" value="Save Information" ng-show="!submitted"/>
+                
+            </div>
+        </div>
+        -->
+    </div>
+</div>

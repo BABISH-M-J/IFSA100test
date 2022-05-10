@@ -1,0 +1,52 @@
+<!--
+    New Home Institution Class Modal
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<div type="text/ng-template">
+	<form class="ui form" name="homeCourseForm" novalidate="novalidate" ng-submit="save()">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">New <span ng-bind-html="data.courseCode"></span> <span ng-if-"data.courseCode">-</span> <span ng-bind-html="data.courseTitle"></span> Equivalency</h5>
+			<button type="button" class="close" ng-click="closeModal()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="ui tiny icon message">
+					<i class="circular lightbulb outline icon"></i>
+					<div class="content">
+						<div class="header">
+						New Class Equivalency
+						</div>
+                        <p>
+                            This will create a class equivalency between the foreign class and the new class, from your institution, you are creating.
+                        </p>    
+					</div>
+				</div>
+				<p>Please complete the following details about your institution's class.</p>
+				<!-- Add fields to create a new home institution course -->
+				<div class="required field">
+					<label>Class Code</label>
+					<input type="text" name="courseCode" ng-model="newCourse.CourseCode" ng-required="true">
+				</div>
+				<div class="required field">
+					<label>Class Title</label>
+					<input type="text" name="courseTitle" ng-model="newCourse.CourseTitle" ng-required="true">
+				</div>
+				<div class="field">
+					<label>Class Description</label>
+					<textarea rows="3" type="text" name="courseDescription" ng-model="newCourse.CourseDescription"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="ui tiny button" type="button" ng-click="closeModal()">Cancel</button>
+			<button class="ui right floated tiny green right labeled icon button" type="submit" ng-disabled="homeCourseForm.$invalid">
+				<i class="check icon"></i> Save
+			</button>
+		</div>
+	</div>
+	</form>
+</div>

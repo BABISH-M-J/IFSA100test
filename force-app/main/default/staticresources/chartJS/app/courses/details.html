@@ -1,0 +1,209 @@
+<!--
+    Class Details Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- CSS for printing -->
+<style>
+    @media print { 
+        #navbar, #downloadPDF{display: none;}
+        #logo{display: block !important;}
+        #class-hero{color: black !important;}
+        #disclaimer{display: block !important;}
+        
+    }
+    .internalView {
+            margin-top: -70px;
+        }
+</style>
+<!-- Page -->
+<div id="body">
+<!-- Class Header -->
+<div id="logo" style="display: none;">
+    <img ng-src="{{urlService.getLetterheadUrl()}}"/>
+</div>
+<div id="class-hero" class="jumbotron jumbotron-fluid bg-white text-light" ng-if="selectedCourse" ng-class="{ 'internalView' : !(viewModel.userProfileName == 'IFSA CHART Student User' || viewModel.userProfileName == 'IFSA Student User' || viewModel.userProfileName == 'IFSA Advisor User')}">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="grey-lt-bold ng-cloak">
+                    <span class="text-uppercase" ng-if="selectedCourse.programs.length > 0">
+                        <!-- <span ng-if="selectedCourse.programs.length > 1">Multiple Programs |</span>
+                        <span ng-if="selectedCourse.programs.length == 1" ng-bind-html="selectedCourse.programs[0].Name + ' |'"></span> -->
+                        <span ng-bind-html="selectedCourse.hostInstitutionName  + ' |'"></span>
+                    </span>
+                    <span ng-if="selectedCourse.city || selectedCourse.courseLocations.length">{{getCity(selectedCourse) | uppercase}} | </span><span ng-if="selectedCourse.country">{{selectedCourse.country | uppercase}}</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="purple-bold">
+                    <span class="text-uppercase" ng-if="selectedCourse.courseCode" ng-bind-html="selectedCourse.courseCode"></span> {{ selectedCourse.courseCode ? '|' : ''}} <span ng-if="selectedCourse.courseTitle" ng-bind-html="selectedCourse.courseTitle" />
+                </h1>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <span class="grey-bold text-uppercase align-bottom mr-3" ng-if="selectedCourse.untranslatedCourseTitle">
+                    <span ng-if="selectedCourse.courseCode" ng-bind-html="selectedCourse.courseCode"></span> {{selectedCourse.courseCode ? '|' : ''}} <span ng-if="selectedCourse.untranslatedCourseTitle" ng-bind-html="selectedCourse.untranslatedCourseTitle"></span>
+                </span>
+                <span class="grey-bold text-uppercase align-bottom mr-3" ng-if="selectedCourse.usTerms">
+                    US Term(s): {{ selectedCourse.usTerms | replace: ';' : ', ' }}
+                </span>
+                <span class="grey-bold text-uppercase align-bottom" ng-if="selectedCourse.usSemesterCreditHours">
+                    US Semester Credits: {{selectedCourse.usSemesterCreditHours}}
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right">
+                <span class="ui labels">
+                    <span ng-if="selectedCourse.isIFSAClass" class="ui label" uib-tooltip='IFSA Exclusive: Only available through IFSA' tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'"><img id="ifsa-exclusive" ng-src="{{urlService.getBaseUrl() + '/images/ifsa_globe_only_gs_fc.png'}}"/> IFSA Exclusive</span>
+                    <span ng-if="selectedCourse.isTop20 || selectedCourse.popularClass" class="ui label"><i class="trophy icon"></i> Popular</span>
+                    <span ng-if="selectedCourse.isExpired && selectedCourse.expirationReason =='5 years since last renewal'" class="ui label" uib-tooltip="The Expired notification indicates that this class record is more than five years old. Please check the Academics link below for the most current information." tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'"><i class="clock icon"></i> Expired</span>
+                    <span ng-if="selectedCourse.courseMatches.length && viewModel.ceSearch" class="ui label" uib-tooltip='For planning purposes, this class has been linked to a specific class at your home institution. The Class Equivalencies section below contains details to review with your home institution advisor.' tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'"><i class="check icon"></i> Potential Class Equivalency</span>
+                    <span ng-if="selectedCourse.knownPreReqsAndRestrictions" class="ui label" uib-tooltip='This class may have pre-reqs. Scroll to the Known Prerequisites and Restrictions section below for details.' tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'"><i class="clipboard list icon"></i> Known Pre-reqs</span>
+                </span>
+                <span class="ui basic icon button" ng-click="updateFavorite(selectedCourse)" uib-tooltip="Favorite" tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'">
+                    <i ng-class="selectedCourse.isFavorite ? 'favorite star icon' : 'star icon'" ng-if="!savingFavorite"></i>
+                    <i ng-class="selectedCourse.isFavorite ? 'favorite star loading icon' : 'star loading icon'" ng-if="savingFavorite"></i>
+                </span>
+                <span class="ui basic icon button" ng-click="printPage()" uib-tooltip='Download/Print' tooltip-placement="bottom" tooltip-trigger="'mouseenter outsideClick'" ng-disabled="printDisabled"><i class="red file pdf outline icon"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Class Information -->
+<div class="container">
+    <div class="row">
+        <div class="col" ng-if="courseLoading" style="padding-top:60px;">
+            <div class="ui active centered inline loader"></div>
+        </div>
+        <!-- LEFT COLUMN -->
+        <div class="col-md-12 col-lg-4 mb-3" ng-if="selectedCourse && !courseLoading">
+            <!-- Class Details-->
+            <div class="ui fluid card" ng-if="classDetails.length">
+                <div class="content">
+                    <h4 class="ui header">Class Details</h4>
+                </div>
+                <div class="content">
+                    <div class="description">
+                        <div class="ui relaxed list">
+                            <div class="item" ng-repeat="item in classDetails">
+                                <i class="large grey {{item.icon}} alternate left floated middle aligned icon"></i>
+                                <div class="content class-details">
+                                    <div class="header">{{item.header}}</div>
+                                    <ul class="description" style="padding-left: 17px;margin-bottom: 0px;" ng-if="item.subDetails">
+                                        <li ng-repeat="s in item.subDetails">
+                                            <span ng-bind-html="s.Location_of_Instruction__r.Name"></span><br />
+                                        </li>
+                                    </ul>
+                                    <div class="description" ng-if="item.description">{{item.description}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Learning Component -->
+            <div class="ui fluid card" ng-if="learningComponents.length">
+                <div class="content">
+                    <h4 class="ui header">Distinctive Learning Components</h4>
+                </div>
+                <div class="content">
+                    <div class="description">
+                        <div class="ui list">
+                            <div class="item" ng-repeat="learningComponent in learningComponents">
+                                <i class="angle right icon"></i>
+                                {{learningComponent}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui fluid card" ng-if="selectedCourse.programs.length > 0">
+                <div class="content">
+                    <h4 class="ui header">Available Programs</h4>
+                </div>
+                <div class="content">
+                    <div class="ui divided items">
+                        <div class="item" ng-repeat="p in selectedCourse.programs">
+                            <div class="content">
+                                <div class="ui small header" ng-bind-html="p.Name"></div>
+                                <div class="meta" ng-if="p.programOptionName">
+                                    <span ng-bind-html="p.programOptionName"></span>
+                                </div>
+                                <a href="{{p.academicURLSemester}}" target="_blank" class="ui mini fluid button mt-3" ng-if="p.academicURLSemester"><i class="blue external alternate icon"></i> Academic Details</a>
+                                <a href="{{p.academicURLSummer}}" target="_blank" class="ui mini fluid button mt-3" ng-if="p.academicURLSummer"><i class="blue external alternate icon"></i> Academic Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- END OF LEFT COLUMN -->
+        <!-- RIGHT COLUMN -->
+        <div class="col-md-12 col-lg-8" ng-if="selectedCourse && !courseLoading">
+            <uib-accordion close-others="false" ng-if="classInfo.length">
+                <div uib-accordion-group class="mt-1" ng-repeat="item in classInfo" is-open="item.isOpen">
+                    <uib-accordion-heading>
+                        <h5 class="ui header">{{item.name}} <span class="float-right"><i class="caret icon" ng-class="item.isOpen ? 'down': 'left'"></i></span></h5>
+                    </uib-accordion-heading>
+                    <span ng-bind-html="item.description | fixHTMLTags"></span>
+                    <ul ng-if="item.type == 'Files'">
+                        <li ng-repeat="f in item.subDetails">
+                            <a ng-href="/chart/sfc/servlet.shepherd/version/download/{{f.ContentDocument.LatestPublishedVersionId}}" target="_blank">View Syllabus</a>
+                        </li>
+                    </ul>
+                </div>
+                   <!--<uib-accordion-heading>
+                        <h5 class="ui header">Syllabus <span class="float-right"><i class="caret icon" ng-class="isIFSAClassOpen ? 'down': 'left'"></i></span></h5>
+                    </uib-accordion-heading>
+                    <ul>
+                        <li ng-repeat="f in selectedCourse.files">
+                            <a ng-href="/chart/sfc/servlet.shepherd/version/download/{{f.ContentDocument.LatestPublishedVersionId}}" target="_blank">View Syllabus</a>
+                        </li>
+                    </ul>
+                </div>-->
+            </uib-accordion>
+            <div class="mt-3" ng-if="viewModel.ceSearch && (selectedCourse.courseMatches.length || (viewModel.cmpId || viewModel.userProfileName == 'IFSA Advisor User'))">
+                <h4 class="ui horizontal divider header">Class Equivalencies</h4>
+                <button class="ui right floated mini labeled icon button mb-3 desktop-only" ng-click="loadNewCourseModal()" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                    <i class="plus icon"></i> New Class Equivalency
+                </button>
+                <table class="ui celled small padded unstackable table">
+                    <thead>
+                        <tr>
+                            <th>US Class</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="match in selectedCourse.courseMatches">
+                            <td data-label="Home Course"><span ng-bind-html="match.Home_Institution_Course__r.Course_Code__c"></span> | <span ng-bind-html="match.Home_Institution_Course__r.Name"></span></td>
+                            <td ng-show="!match.edit" data-label="Status">{{ match.Status__c }} <button ng-if="viewModel.userProfileName == 'IFSA Advisor User'" class="ui right floated basic icon button" ng-click="match.edit = true"><i class="edit icon"></i></button></td>
+                            <td ng-show="match.edit" data-label="Status">
+                                <div class="three ui icon buttons">
+                                    <button class="ui button" ng-class="{ 'green' : match.Status__c == 'Match' }" ng-click="match.Status__c = 'Match'; updateStatus(match)"><i class="check icon"></i></button>
+                                    <button class="ui button" ng-class="{ 'red' : match.Status__c == 'Not a Match' }" ng-click="match.Status__c = 'Not a Match'; updateStatus(match)"><i class="x icon"></i></button>
+                                    <button class="ui button" ng-click="match.edit = false">Cancel</button>
+                                </div>
+                                <div ng-if="match.Last_Approved_Rejected_By__r.Name">{{ match.Status__c }}  per {{match.Last_Approved_Rejected_By__r.Name}} - {{match.Last_Approved_Rejected__c | date : 'short' }}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="fluid ui tiny icon button mobile-only" ng-click="loadNewCourseModal()" ng-if="viewModel.userProfileName == 'IFSA Advisor User'">
+                    <i class="plus icon"></i> New Class Equivalency
+                </button>
+                <p class="mt-2"><small><em>*Class equivalency information is to be used for planning purposes only. IFSA cannot guarantee that individual classes will fulfill specific degree requirements or credit transfer equivalencies. In the status column of the table above, any "Potential Match" listed has been identified by IFSA staff, and any "Match" listed has been confirmed by an advisor at your home institution. <strong>Since equivalencies can change, it is critical that you always review them with your home institution advisor directly.</strong></em></small></p>
+            </div>
+        </div><!-- END OF RIGHT COLUMN -->
+    </div>
+    <div class="row">
+        <div id="disclaimer" class="col" ng-if="selectedCourse && !courseLoading" style="display:none;">
+            <p class="text-center"><strong>Disclaimer: </strong><span ng-bind="recordDisclaimerText" /></p>
+        </div>
+    </div>
+</div><!-- END OF CLASS INFORMATION -->
+</div><!-- END OF BODY -->

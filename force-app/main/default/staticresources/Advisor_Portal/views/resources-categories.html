@@ -1,0 +1,8 @@
+<div class="ui selection list">
+    <div class="item" ng-repeat="category in resourceFiles | orderBy : 'name'">
+        <div class="header" ng-click="selectCategory(category)">
+            <i class="big folder outline icon" ng-class="{'open' : category.visible}"></i>
+            <span ng-bind-html="category.name"></span> ({{category.files.length}})
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+public without sharing class nullParamException extends Exception {}

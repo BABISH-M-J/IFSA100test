@@ -1,0 +1,7 @@
+body 
+{
+	background-image: url("../images/defaultbg.jpg");
+	height: auto;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+}

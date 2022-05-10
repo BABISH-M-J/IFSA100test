@@ -1,0 +1,18 @@
+<!-- Closing Segment -->
+<div id="sign" class="cif-form-body">
+    <h1 class="ui header">Concluding Statement</h1>
+    <div class="ui active centered inline loader" ng-if="loadingForm"></div>
+    <div class="!loadingForm">
+        <dynamic-form-item ng-hide="loadingForm" ng-repeat="formItem in appItem.form.formData.items | filter: greaterThan('pos', 0)" form-Item="formItem" type="{{formItem.fieldType}}"></dynamic-form-item>
+        <!-- <div class="ui divider"></div>
+        <p class="text-right"></p>
+        <button class="ui huge right floated right labeled green icon button" ng-class="{ 'loading' : saving}" ng-click="submitForm()" ng-disabled="numberOfRemainingCourses() > 0 || numberOfRemainingAlternates() > 0 || !checkRules()">
+            <i class="check icon"></i>
+            Submit
+        </button>
+        <button class="ui huge right floated inverted green button" ng-class="{ 'loading' : savingForLater}" ng-click="saveForm(true)">
+            <i class="save icon"></i>
+            Save for later
+        </button> -->
+    </div>
+</div>

@@ -1,0 +1,13 @@
+﻿<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title"><span ng-show="successful">Registration Complete!</span><span ng-show="!successful">Submission Failed</span></h3>
+	</div>
+	<div class="modal-body">
+		<h4 ng-show="successful && !programSelected"> You have started your application with IFSA! Time to select a study abroad program!</h4>
+		<h4 ng-show="successful && programSelected"> You have now officially started your application with IFSA! Click OK to start working on your application items now!</h4>
+		<h4 ng-show="!successful">There was an error submitting your data. Please try again. If you continue to have problems, contact IFSA.</h4>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn ifsa-btn" ng-click="close()">Ok</button>
+	</div>
+</div>

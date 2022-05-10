@@ -1,0 +1,66 @@
+<!--
+    Class Equivalency Deny Modal
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<div type="text/ng-template">
+	<form class="ui form" name="modalForm" novalidate="novalidate" ng-submit="save()">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Deny Class Equivalency</h5>
+			<button type="button" class="close" ng-click="closeModal()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="ui tiny icon message">
+					<i class="circular lightbulb outline icon"></i>
+					<div class="content">
+						<div class="header">
+						Denying Courses
+						</div>
+						<p>Please note that when you deny an equivalency, it becomes denied across all matching projects and affects all students at your institution.</p>
+					</div>
+				</div>
+				<div class="ui segment text-center">
+					<div class="ui two column grid">
+						<div class="column">
+							<h5 class="ui header">
+								<div class="sub header">US Class</div>
+								<span ng-bind-html="data.homeInstitutionCourse.courseCode" ng-if="data.homeInstitutionCourse.courseCode"></span><span ng-if="data.homeInstitutionCourse.courseCode"> | </span><span ng-bind-html="data.homeInstitutionCourse.title" ng-if="data.homeInstitutionCourse.title"></span>
+							</h5>
+						</div>
+						<div class="column">
+							<h5 class="ui header">
+								<div class="sub header">Host Class</div>
+								<span ng-bind-html="data.hostInstitutionCourse.courseCode" ng-if="data.hostInstitutionCourse.courseCode"></span><span ng-if="data.hostInstitutionCourse.courseCode"> | </span><span ng-bind-html="data.hostInstitutionCourse.courseTitle" ng-if="data.hostInstitutionCourse.courseTitle"></span>
+							</h5>
+						</div>
+					</div>
+					<div class="ui vertical divider">
+						<i class="red dont icon"></i>
+					</div>
+				</div>
+				<!-- <p><strong><span ng-bind-html="data.homeInstitutionCourse.courseCode"></span> <span ng-if="data.homeInstitutionCourse.courseCode">-</span> <span ng-bind-html="data.homeInstitutionCourse.title"></span></strong></p> -->
+				<!-- <p><strong><span ng-bind-html="data.hostInstitutionCourse.courseCode"></span> <span ng-if="data.hostInstitutionCourse.courseCode">-</span> <span ng-bind-html="data.hostInstitutionCourse.courseTitle"></span></strong></p> -->
+				<p>Please provide the reason you are denying this equivalency.</p>
+				<div class="required field">
+					<label>Deny Reason</label>
+					<select class="ui dropdown" name="deniedReason" ng-model="data.deniedReason" ng-options="reason for reason in deniedReasons" ng-required="true"/>
+				</div>
+				<div class="required field" ng-if="data.deniedReason == 'Other (including more than 1 answer above)'">
+					<label>If other, please explain...</label>
+					<textarea rows="2" name="deniedReasonOther" ng-model="data.deniedReasonOther" ng-required="true"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="ui tiny button" type="button" ng-click="closeModal()">Cancel</button>
+			<button class="ui right floated tiny red right labeled icon button" type="submit" ng-disabled="modalForm.$invalid">
+				<i class="x icon"></i> Deny
+			</button>
+		</div>
+	</div>
+	</form>
+</div>

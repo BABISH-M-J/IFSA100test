@@ -1,0 +1,13 @@
+<!-- NAVBAR -->
+<div class="ui ifas-purple inverted menu ng-scope">
+  <div class "menu">
+    <div class="item"><a href="https://www.ifsa-butler.org">Go to IFSA-Butler.org</a></div>
+  </div>
+  <div class="right menu">
+    <div class="item mobile or lower hidden"><a href="https://www.ifsa-butler.org/unpacked/">Unpacked: Student Stories</a></div>
+    <div class="item mobile or lower hidden"><a href="https://www.ifsa-butler.org/scholarships/">Scholarships</a></div>
+    <div class="item"><a href="/chart/">CHART</a></div>
+    <div class="item" ng-if="!isAuthenticated"><a href="#/login">Login</a></div>
+    <div class="item" ng-if="isAuthenticated"><a href="secur/logout.jsp">Logout</a></div>
+  </div>
+</div>

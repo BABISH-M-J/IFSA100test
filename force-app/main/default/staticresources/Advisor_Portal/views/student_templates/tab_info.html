@@ -1,0 +1,27 @@
+<div class="ui stackable two column grid">
+    <div class="column">
+        <label>Prefered Name</label> <span ng-bind-html="activeStudent.Preferred_Name"></span> <br />
+        <label>Birthdate</label> {{activeStudent.Birthdate | date: 'M/d/y'}} <br />
+        <label>Sex</label> {{activeStudent.Sex}} <br />
+        <label>Degree</label> <span ng-bind-html="activeStudent.Degree"></span> <br />
+        <label>Major</label> <span ng-bind-html="activeStudent.Major_New"></span> <br />
+        <label>Grade</label> {{activeStudent.Grade_Level}} <br />
+        <label>GPA</label> {{activeStudent.GPA | number:3}} <br />
+    </div>
+    <div class="column">
+        <address>
+            <label>Phone</label> <span ng-bind-html="activeStudent.Phone"></span> <br />
+            <label>Email</label> <span ng-bind-html="activeStudent.Email"></span> <br />
+            <div ng-if="activeStudent.MailingStreet">
+                <label>Address</label><br />
+                <div style="margin-left: 10px;">
+                    <label>Street</label> <span ng-bind-html="activeStudent.MailingStreet"></span> <br />
+                    <label>City</label> <span ng-bind-html="activeStudent.MailingCity"></span> <br />
+                    <label>State/Province</label> <span ng-bind-html="activeStudent.MailingState"></span> <br />
+                    <label>Zip/Postal Code</label> <span ng-bind-html="activeStudent.MailingPostalCode"></span> <br />
+                    <label>Country</label> <span ng-bind-html="activeStudent.MailingCountry"></span> <br />
+                </div>
+            </div>
+        </address>
+    </div>
+</div>

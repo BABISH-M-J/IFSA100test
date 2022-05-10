@@ -1,0 +1,42 @@
+<br>
+<br>
+<br>
+<div class="ui centered raised card ng-scope" id="login">
+    <div class="content">
+        <div class="ui large header purple-primary">
+            <span ng-if="!viewModel.gwUser && !viewModel.chUser">Welcome Back</span>
+            <span ng-if="viewModel.gwUser || viewModel.chUser">Sign in with 
+                <span ng-if="viewModel.gwUser">Global Wayfinder</span>
+                <span ng-if="viewModel.chUser">CHART</span>
+            </span>
+        </div>
+        <div class="description">
+            <span ng-if="!viewModel.gwUser && !viewModel.chUser">Please sign in to work on your application</span>
+            <span ng-if="viewModel.gwUser || viewModel.chUser">Because we are accessing your personal information, enter your IFSA password below to continue.</span>
+            <form name="loginForm" novalidate="true" class="ui form">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="email" ng-model="viewModel.email" placeholder="School Email" tabindex="1" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" ng-model="viewModel.password" minlength="8" placeholder="Password" tabindex="2" required autocomplete="off">
+                    </div>
+                </div>
+                <button class="ui fluid submit ifsa-gold button" ng-class="{ 'loading' : saving }" ng-click="login()" ng-disabled="loginForm.$invalid"  tabindex="3">Login</button>
+            </form>
+            <br>
+            <div class="ui two column very relaxed centered grid">
+                <div class="center aligned column">
+                    <a href="#/forgot-password" style="color:rgba(0,0,0,.9);">Forgot Password?</a>
+                </div>
+                <div class="center aligned column">
+                    <a href="#/register/" class="right aligned" style="color:rgba(0,0,0,.9);">Need an account?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

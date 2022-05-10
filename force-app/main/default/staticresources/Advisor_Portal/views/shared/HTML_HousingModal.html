@@ -1,0 +1,54 @@
+<div type="text/ng-template">
+	<div class="modal-header">
+		<h3 class="modal-title" ng-if="data.housingOptions">Housing Options</h3>
+		<h3 class="modal-title" ng-if="data.housingAssignment">Housing Assignment</h3>
+	</div>
+	<div class="modal-body">
+		<div ng-if="data.housingOptions">
+			<div class="ui link relaxed horizontal list" ng-if="data.housingOptions.length > 1">
+				<a class="item" ng-click="selectOption($index)" ng-class="{'active': activeItem == $index}" ng-bind-html="option.Housing_Option__r.Name" ng-repeat="option in data.housingOptions"></a>
+			</div>
+			<div class="ui fluid card">
+				<div class="content">
+					<div class="header list-header" ng-bind-html="data.housingOptions[activeItem].Housing_Option__r.Name"></div>
+					<div class="meta" ng-if="data.housingOptions[activeItem].Supplemental_Housing_Price__c">
+						<span class="supplemental_price">
+							<label>Supplmental Price</label> {{data.housingOptions[activeItem].Supplemental_Housing_Price__c | currency : "USD$" : 0}}
+						</span>
+					</div>
+					<div class="description">
+						<span ng-if="data.housingOptions[activeItem].Housing_Option__r.Description__c" ng-bind-html="data.housingOptions[activeItem].Housing_Option__r.Description__c | fixHTMLTags | apostraphe | ampersand"></span>
+						<span ng-if="!data.housingOptions[activeItem].Housing_Option__r.Description__c">
+							A description is not avaiable at this time for <span ng-bind-html="data.housingOptions[activeItem].Housing_Option__r.Name"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-if="data.housingAssignment" class="ui fluid card">
+			<div class="content">
+				<div class="header list-header" ng-bind-html="data.housingAssignment.Name"></div>
+				<div class="meta" ng-if="data.housingOption.Supplemental_Housing_Price__c">
+					<span class="supplemental_price">
+						<label>Supplmental Price</label> {{data.housingOption.Supplemental_Housing_Price__c | currency : "USD$" : 0}}
+					</span>
+				</div>
+				<div class="description" >
+					<span ng-bind-html="data.housingAssignment.Description__c | fixHTMLTags | apostraphe | ampersand"></span>
+					<div class="ui center aligned basic segment" ng-if="data.housingAssignment.Attachments.length">
+						<img class="ui rounded medium image" ng-src="/advisorportal/servlet/servlet.FileDownload?file={{selectedId}}" />
+						
+						<div class="ui tiny images" style="margin-top: 5px;">
+							<a ng-repeat="image in data.housingAssignment.Attachments" ng-click="selectImage(image.Id)">
+								<img class="ui rounded image" ng-src="/advisorportal/servlet/servlet.FileDownload?file={{image.Id}}"  />
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn ifsa-btn" ng-click="exit()">Ok</button>
+	</div>
+</div>

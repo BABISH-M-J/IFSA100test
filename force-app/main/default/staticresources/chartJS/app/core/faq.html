@@ -1,0 +1,290 @@
+<!--
+    FAQ Page
+    Author: Jay Holt jholt@ifsa-butler.org
+    Copyright: 2019 Institute for Study Abroad
+-->
+<!-- Page -->
+<div id="body">
+    <div class="ui justified text container mt-3" style="padding-top:26px;">
+        <!-- Diclaimer Message goes here -->
+        <h1 class="text-center mb-3">FAQ</h1>
+        <div class="ui secondary pointing stackable menu" ng-hide="true">
+            <a class="item" ng-class="{ 'active' : faqView == 'classes' }" ng-click="updateView('classes')">
+                Classes
+            </a>
+            <a class="item" ng-class="{ 'active' : faqView == 'equivalencies' }" ng-click="updateView('equivalencies')">
+                Class Equivalencies
+            </a>
+            <a class="item" ng-class="{ 'active' : faqView == 'terms' }" ng-click="updateView('terms')">
+                Common Terms
+            </a>
+        </div>
+        <!-- Classes View -->
+        <div class="ui very relaxed list" ng-if="faqView == 'classes'">
+            <div class="item">
+                <div class="header">
+                    Does CHART contain a record of every class available to me on IFSA programs?
+                </div>
+                <p>No, CHART only contains records of classes IFSA students have requested or have taken recently. This represents just a fraction of the classes available to students. For direct enroll programs, you can also view the full class listing by visiting the university course catalog. These links are typically found on the program page on the <a href="https://www.ifsa-butler.org/" target="_blank">IFSA website</a>.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    I’m not finding a class I need to take while studying abroad through my search efforts. How can I find out if IFSA has a particular class option available to me?
+                </div>
+                <p>If you would like us to find potential matches abroad to specific classes in your home institution’s curriculum, please submit your request by <a href="#/project-request-form" target="_blank">completing this form.</a></p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    How often are CHART records updated? 
+                </div>
+                <p>Records are updated periodically as needed. Any class that has not been updated in five years or more will display a red “Expired” badge. Always refer to the IFSA syllabus or to the foreign course syllabus to ensure the information displayed in CHART is current.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Why can’t I see classes for all IFSA programs? Should CHART display classes from all programs to me?  
+                </div>
+                <p>CHART is aligned with the list of IFSA programs your institution has pre-approved. If your institution has a limited list of approved IFSA programs, you will only see classes for those programs.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    CHART isn’t displaying any classes when I hit the search button. Why can’t I see any class records?
+                </div>
+                <p>When logging into CHART for the first time, you may receive a message that IFSA does not yet have a record of your institution's approved IFSA list. In this case, you will not initially have access to any CHART class records; however, the IFSA Team will work with your institution to get their approved list updated in CHART for your referencing. The IFSA Team will notify you directly once your institution’s updates have been applied to CHART.</p>
+                <p>If this is not the case, please try using a different browser. Internet Explorer has been associated with technical issues. If you believe you are facing a technical issue, email <a href="mailto:chart@ifsa-butler.org">CHART@ifsa-butler.org</a>.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Why can’t I see class records for an IFSA program my home institution approves? 
+                </div>
+                <p>It is possible that your home institution has recently updated the list of approved IFSA programs. Please email us at <a href="mailto:chart@ifsa-butler.org">CHART@ifsa-butler.org</a> so we can further assist you.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Who can I talk to about studying abroad on an IFSA program?  
+                </div>
+                <p>The answer to this question varies depending on where you are at in the application process.  For current applicants, you should speak with your dedicated program advisor.  If you have forgotten who your dedicated program advisor is, use your existing login credentials to log into the <a href="https://students.ifsa-butler.org/studentportal/SP_Login">IFSA Student Portal</a> to find their contact information.</p>
+                <p>If you have not yet started an application, you can begin the process by <a href="https://students.ifsa-butler.org/studentportal/SP_Login">clicking here</a>.</p>
+                <p>If you need some questions answered before starting an application, please email all questions to <a href="mailto:chart@ifsa-butler.org">CHART@ifsa-butler.org</a> and you will be connected with a lead engagement specialist.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Am I guaranteed the option to take a class I see in CHART? 
+                </div>
+                <p>There is no guarantee that classes found in CHART are still being offered, that class content is up-to-date or that there is any openings for an IFSA student in the desired class. CHART is intended to be used as a reference and planning tool. Please discuss your specific academic needs with your dedicated IFSA program advisor.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    How do I sign up for the classes I want to take? 
+                </div>
+                <p>Signing up for classes is part of the IFSA application process. Once you complete the initial IFSA application, you will then complete a Class Interest Form, indicating the classes you are interested in taking. Your dedicated program advisor, which you are assigned at the start of the application process, will assist you with this form and process.</p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    How can I make sure the classes I am interested in are approved by my home institution for me to take?  
+                </div>
+                <p>Even if a program is pre-approved, you will still need to work with your study abroad advisors and academic advisors at your home institution to ensure the specific classes you hope to take abroad are approved to transfer back to your home institution to fulfill specific degree requirements.</p>
+                <p>To help you in this process, you are able to share class information from CHART with your advisor, by selecting the option to Print/Download PDF button found at the top of the left-hand side column of any class record details page.</p>
+            </div>
+        </div>
+        <!-- Class Equivalency View -->
+        <div class="ui very relaxed list" ng-if="faqView == 'equivalencies'">
+            <div class="item">
+                <div class="header">
+                    Lorem Ipsum?
+                </div>
+                <p>No...lorem <em>ipsum</em>.</p>
+            </div>
+        </div>
+        <!-- Common Terms View -->
+        <div class="ui very relaxed list" ng-if="faqView == 'terms'">
+            <div class="item">
+                <div class="header">
+                    Community-based learning
+                </div>
+                <p>
+                    In these courses, field-based “experiential learning” with
+                    community partners is an instructional strategy. The idea is to
+                    give students direct experience with issues they are studying in
+                    the curriculum and with ongoing efforts to analyze and solve
+                    problems in the community. A key element is the opportunity
+                    students must both apply what they are learning in real-world
+                    settings and reflect in a classroom setting on their service
+                    experiences. These experiences model the idea that giving
+                    something back to the community is an important college
+                    outcome, and that working with community partners is good
+                    preparation for citizenship, work, and life. 
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Directed Research
+                </div>
+                <p>
+                    The goal is to involve students with actively contested questions,
+                    empirical observation, cutting-edge technologies, and the sense
+                    of excitement that comes from working to answer important
+                    questions. Students learn about research methodologies and
+                    complete a research project under the guidance of an expert
+                    faculty member.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Capstone Course or Project
+                </div>
+                <p>
+                    These culminating experiences require students nearing the end
+                    of their learning experience to create a project of some sort that
+                    integrates and applies what they’ve learned. The project might be
+                    a research paper, a performance, a portfolio of “best work,” or an
+                    exhibit of artwork.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    E-portfolios
+                </div>
+                <p>
+                    ePortfolios enable students to electronically collect their work
+                    over time, reflect upon their personal and academic growth, and
+                    then share selected items with others, such as professors,
+                    advisors, and potential employers. The creation of an ePortfolio is
+                    a learning experience in itself. Because collection over time is a
+                    key element of the ePortfolio process, employing ePortfolios in
+                    collaboration with other high-impact practices provides
+                    opportunities for students to make connections between various
+                    educational experiences.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Field study/visits
+                </div>
+                <p>
+                    Field study/visits are embedded in the course or often in addition
+                    to courses. Students venture into a community or a selected
+                    location to observe, investigate issues and look for evidence of
+                    theories. Through field study/visits, course content comes to life.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Internship 
+                </div>
+                <p>
+                    Is this class an internship? Internships are another increasingly
+                    common form of experiential learning. The idea is to provide
+                    students with direct experience in a work setting—usually related
+                    to their career interests—and to give them the benefit of
+                    supervision and coaching from professionals in the field. If the
+                    internship is taken for course credit, students complete a project
+                    or paper that is approved by a faculty member.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Laboratory component  
+                </div>
+                <p>
+                    Does this class have a lab component?
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Learning Communities  
+                </div>
+                <p>
+                    The key goals for learning communities are to encourage
+                    integration of learning across courses and to involve students
+                    with “big questions” that matter beyond the classroom. Students
+                    take two or more linked courses as a group and work closely with
+                    one another and with their professors. Many learning
+                    communities explore a common topic and/or common readings
+                    through the lenses of different disciplines. As examples, some
+                    deliberately link “liberal arts” and “professional courses”; others
+                    feature service learning. The following IFSA programs have
+                    classes with learning communities: Prague, Argentina Universities
+                    Programs and the forthcoming Spain and Italy curriculum.
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Professional development project  
+                </div>
+                <p>
+                    (IFSA Programs only) In this course, there will be a dynamic fieldbased learning experience that provides students participating in
+                    a program with the opportunity to learn more about their
+                    professional areas of interest through structured and creative
+                    application of theory to practice. Through a combination of visits
+                    and experiences that will occur as a group, students should
+                    actively survey an industry of their host community. An
+                    accompanying research project encourages students to pursue
+                    individualized lines of inquiry while gaining practical knowledge
+                    of their professional areas to provide context to their learning.
+                    This combination of research and professional development gives
+                    the Professional Development Project its unique flavor. 
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Service learning 
+                </div>
+                <p>
+                    In these courses, field-based “experiential learning” with
+                    community partners is an instructional strategy—and often a
+                    required part of the course. The idea is to give students direct
+                    experience with issues they are studying in the curriculum and
+                    with ongoing efforts to analyze and solve problems in the
+                    community. A key element in these programs is the opportunity
+                    students must both apply what they are learning in real-world
+                    settings and reflect in a classroom setting on their service
+                    experiences. These programs model the idea that giving
+                    something back to the community is an important college
+                    outcome, and that working with community partners is good
+                    preparation for citizenship, work, and life. Service learning and
+                    volunteering are not the same endeavor. 
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Teaching practicum  
+                </div>
+                <p>
+                    Does this course offer a practicum in teaching? In teaching
+                    practicums, students engage in practice teaching in local school
+                    classrooms. Teaching practicums are more than teaching
+                    observations (which do not involve practical application of skills)
+                    but may include student teaching. 
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Volunteering   
+                </div>
+                <p>
+                    Does this course allow for students to volunteer in the local
+                    community? Is volunteering a course objective or something
+                    highly recommended within the course? In this learning
+                    experience, students volunteer in the local community. It may be
+                    an optional program activity or a required component of a
+                    course. It is usually not credit-bearing. Volunteering and service
+                    learning are not the same endeavor. 
+                </p>
+            </div>
+            <div class="item">
+                <div class="header">
+                    Writing Intensive  
+                </div>
+                <p>
+                    In these courses, the amount of writing required is significant
+                    (usually 15-20 pages in total); writing assignments comprise the
+                    bulk of the evaluated work (around 70%); writing assignments
+                    are spread throughout the course; written work goes through
+                    revision processes including peer review; and writing techniques
+                    are discussed. The course should be taught by an instructor, not a
+                    teaching assistant and the student-instructor ratio is not large.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

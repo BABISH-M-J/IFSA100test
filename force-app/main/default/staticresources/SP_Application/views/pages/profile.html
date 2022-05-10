@@ -1,0 +1,133 @@
+<!-- Header -->
+<h2 class="content-title">{{viewModel.studentFirstName}} {{viewModel.studentLastName}}</h2>
+<hr class="hr-gold"/>
+<!-- Page Message -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="alert" ng-class="{true:'alert-success', false:'alert-danger'}[isSuccess]" ng-show="message.length" role="alert">
+            <button type="button" class="close" ng-click="dismissSaveMessage()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{message}}
+        </div>
+    </div>
+</div>
+<!-- Content -->
+<form>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default address-card">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left address-card-title">Permanent/Home Address</h3>
+                <button class="btn btn-default btn-sm pull-right" ng-click="editMailingAddress()" ng-disabled="submitted" ng-show="!isEditingMailing">Edit</button>
+                <div class="btn-group pull-right" ng-show="isEditingMailing">
+                    <button class="btn btn-default btn-sm" ng-disabled="submitted" ng-click="cancelEdit()">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-sm" ng-disabled="submitted" ng-click="saveData()">Save <span ng-show="submitted"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- {{viewModel.studentFirstName}} {{viewModel.studentLastName}}<br/> -->
+                <address ng-if="!isEditingMailing">
+                    <span ng-if="viewModel.mailingStreet">{{viewModel.mailingStreet}}<br/></span>
+                    <span ng-if="viewModel.mailingCity">{{viewModel.mailingCity}}</span><span ng-if="viewModel.mailingState">, {{viewModel.mailingState}}</span> <span ng-if="viewModel.mailingZip">{{viewModel.mailingZip}}<br/></span>
+                    <span ng-if="viewModel.mailingCountry">{{viewModel.mailingCountry}}</span>
+                </address>
+                <div ng-show="isEditingMailing">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="mailingStreet" type="text" class="form-control form-input" required="true" ng-model="viewModel.mailingStreet" placeholder="Address"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="mailingCity" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.mailingCity" placeholder="City"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="mailingState" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.mailingState" placeholder="State"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="mailingZip" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.mailingZip" placeholder="Zip"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="mailingCountry" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.mailingCountry" placeholder="Country"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default address-card">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left address-card-title">School Housing Address</h3>
+                <button class="btn btn-default btn-sm pull-right" ng-click="editOtherAddress( ng-disabled="submitted")" ng-show="!isEditingOther">Edit</button>
+                <div class="btn-group pull-right" ng-show="isEditingOther">
+                    <button class="btn btn-default btn-sm" ng-disabled="submitted" ng-click="cancelEdit()">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-sm" ng-disabled="submitted" ng-click="saveData()">Save <span ng-show="submitted"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <address ng-if="!isEditingOther">
+                    <span ng-if="viewModel.otherStreet">{{viewModel.otherStreet}}<br/></span>
+                    <span ng-if="viewModel.otherCity">{{viewModel.otherCity}}</span><span ng-if="viewModel.otherState">, {{viewModel.otherState}}</span> <span ng-if="viewModel.otherZip">{{viewModel.otherZip}}<br/></span>
+                    <span ng-if="viewModel.otherCountry">{{viewModel.otherCountry}}</span>
+                </address>
+                <div ng-show="isEditingOther">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="otherStreet" type="text" class="form-control form-input" required="true" ng-model="viewModel.otherStreet" placeholder="Address"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="otherCity" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.otherCity" placeholder="City"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="otherState" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.otherState" placeholder="State"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="otherZip" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.otherZip" placeholder="Zip"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="otherCountry" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.otherCountry" placeholder="Country"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix visible-md-block visible-lg-block"></div>
+    <div class="col-md-6">
+        <div class="panel panel-default address-card">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left address-card-title">Billing Address</h3>
+                <button class="btn btn-default btn-sm pull-right" ng-click="editBillingAddress()" ng-disabled="submitted" ng-show="!isEditingBilling">Edit</button>
+                <div class="btn-group pull-right" ng-show="isEditingBilling">
+                    <button class="btn btn-default btn-sm" ng-disabled="submitted" ng-click="cancelEdit()">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-sm" ng-disabled="submitted" ng-click="saveData()">Save <span ng-show="submitted"><i class="fa fa-spinner fa-pulse fa-fw"/></span></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <address ng-if="!isEditingBilling">
+                    <span ng-if="viewModel.billingStreet">{{viewModel.billingStreet}}<br/></span>
+                    <span ng-if="viewModel.billingCity">{{viewModel.billingCity}}</span><span ng-if="viewModel.billingState">, {{viewModel.billingState}}</span> <span ng-if="viewModel.billingZip">{{viewModel.billingZip}}<br/></span>
+                    <span ng-if="viewModel.billingCountry">{{viewModel.billingCountry}}</span>
+                </address>
+                <div ng-show="isEditingBilling">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="billingStreet" type="text" class="form-control form-input" required="true" ng-model="viewModel.billingStreet" placeholder="Address"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="billingCity" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.billingCity" placeholder="City"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="billingState" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.billingState" placeholder="State"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="billingZip" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.billingZip" placeholder="Zip"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="billingCountry" type="text" class="form-control form-input top-buffer" required="true" ng-model="viewModel.billingCountry" placeholder="Country"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
