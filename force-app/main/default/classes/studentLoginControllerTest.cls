@@ -11,19 +11,7 @@ public without sharing class studentLoginControllerTest
 		apexMockDataUtility.createProgramTerms(new List<Program__c>{(Program__c) testData.get('program')}, setupTerms[0], (User) testData.get('academicAffiarsUser'));
 		Test.startTest();
 		Database.insert(new Program__c(Name='Undecided', Host_Institution__c=null, Country__c = testData.get('country').Id));
-		User studUser = (User) testData.get('studentUser');
-		Program__c program = (Program__c) testData.get('program');
-		UserRole userrole = [Select Id, DeveloperName From UserRole Where DeveloperName = 'President' Limit 1];
-		User adminUser = [Select Id, UserRoleId From User Where Profile.Name = 'System Administrator' AND IsActive = true Limit 1];
-		adminUser.UserRoleId = userRole.Id;
-		update adminUser;
-		System.runAs(adminUser){
-		Database.upsert(studUser);
-		Database.upsert(program);
-		}
-		Test.setCurrentPageReference(new PageReference('SP_Login'));
-		System.currentPageReference().getParameters().put('UserId', studUser.Id);
-		System.currentPageReference().getParameters().put('ProgramId', program.Id);
+
 		studentLoginController controller = new studentLoginController();
 		PageReference reference = controller.authorize();
 
@@ -31,7 +19,8 @@ public without sharing class studentLoginControllerTest
 		controller.viewModel.password = 'theWrongPassword';
 
 		User testUser = (User) testData.get('studentUser');
-		User guestUser = [SELECT Id FROM User WHERE Name = 'Student Portal Site Guest User'].get(0);		
+		User guestUser = [SELECT Id FROM User WHERE Name = 'Student Portal Site Guest User'].get(0);
+       
 		System.runAs(guestUser){
 			controller = new studentLoginController();
 			controller.viewModel.email = 'utest@utest.test';
@@ -57,13 +46,34 @@ public without sharing class studentLoginControllerTest
 			String url = studentLoginController.createApplicationAndUpdateContact(testUser.Id, controller.viewModel.getSerializedViewModel());
 			System.debug(url);
 			System.assertEquals('', url);
-		}
+// added by powerfluence based on Clayton req 03/29/2022 starts
+		createCommunityUserService testobj = new createCommunityUserService();
+            createCommunityUserService testobj1 = new createCommunityUserService(vm, createCommunityUserService.Community.CUSTOM_PORTAL);
+            createCommunityUserService testobj2 = new createCommunityUserService(vm,createCommunityUserService.Community.CHART); 
+            createCommunityUserService testobj3 = new createCommunityUserService(vm,createCommunityUserService.Community.ADVISOR_PORTAL); 
+            createCommunityUserService testobj4 = new createCommunityUserService(vm,createCommunityUserService.Community.STUDENT_PORTAL); 
+            String abc = testobj1.getErrorEmailAddress();
+            testobj1.deleteAccountAndContact();
+		  testobj1.prepareUserRecord();
+            abc = testobj2.getErrorEmailAddress();
+            testobj2.deleteAccountAndContact();
+            abc = testobj3.getErrorEmailAddress();
+            testobj3.deleteAccountAndContact();
+            abc = testobj4.getErrorEmailAddress();
+            testobj4.deleteAccountAndContact();
+		  abc = testobj.getErrorEmailAddress();
 
+		}
+// added by powerfluence based on Clayton req 03/29/2022 ends
 		Test.stopTest();
 		Contact testContact = [SELECT Id, Active_Application__c FROM Contact WHERE Id =: testUser.ContactId];
 		Application__c testApp = [SELECT Id FROM Application__c WHERE Id =: testContact.Active_Application__c];
 		Apex_String_Constant__mdt taskName = [SELECT Value__c FROM Apex_String_Constant__mdt WHERE DeveloperName = 'Welcome_Task'].get(0);
-		System.assertEquals(true, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton starts
+		// System.assertEquals(true, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+		System.assertEquals(false, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton ends
+
 	}
 	
 	@isTest
@@ -231,18 +241,6 @@ public without sharing class studentLoginControllerTest
 		Contact c = new Contact(Id = testUser.ContactId, First_Access_Student_Portal__c = DateTime.now());
 		database.update(c);
 
-		Program__c program = (Program__c) testData.get('program');
-		UserRole userrole = [Select Id, DeveloperName From UserRole Where DeveloperName = 'President' Limit 1];
-		User adminUser = [Select Id, UserRoleId From User Where Profile.Name = 'System Administrator' AND IsActive = true Limit 1];
-		adminUser.UserRoleId = userRole.Id;
-		Database.upsert(adminUser);
-		System.runAs(adminUser){
-			Database.upsert(program);
-		}
-		Test.setCurrentPageReference(new PageReference('SP_Login'));
-		System.currentPageReference().getParameters().put('UserId', testUser.Id);
-		System.currentPageReference().getParameters().put('ProgramId', program.Id);
-		
 		Test.startTest();
 
 		studentLoginViewModel vm = new studentLoginViewModel();
@@ -284,5 +282,243 @@ public without sharing class studentLoginControllerTest
 		Test.stopTest();
 	}
 	*/
+	//added by PowerFluence req_dt:03/29/2022 ref email from Clayton starts
+	@isTest
+	static void testobj(){
+		Account acc = apexMockDataUtility.createAccount('test name');
+		Contact ctct = apexMockDataUtility.createContact('test name', acc.Id);
+		User user = apexMockDataUtility.createUser(ctct.Id);
+		user.ProfileId = [SELECT Id FROM Profile WHERE Name = 'IFSA CHART Student User'].get(0).Id;
+		Database.upsert(user);
+		World__c world = new World__c(Name = 'Global');
+        database.insert(world);
+		Region__c local = new Region__c(Name = 'Local Support', World__c = world.Id);
+		Database.insert(local);
+		Country__c country = apexMockDataUtility.createLocalCountry(local.Id);
+		Host_Institution__c hostInstitution = apexMockDataUtility.createHostInstitution(country.Id);
+		Program__c prgm = apexMockDataUtility.createProgram(hostInstitution);
+		Test.setCurrentPageReference(new PageReference('SP_Login'));
+		System.currentPageReference().getParameters().put('UserId', user.Id);
+		System.currentPageReference().getParameters().put('ProgramId', prgm.Id);
+		System.runAs(user){
+		studentLoginController controller = new studentLoginController();
+		// controller.updateChartUser();
+		List<Program_Term__c> pt = studentLoginController.getTermsByProgramId(prgm.Id);
+		Pagereference pref = controller.isExistingSPUser();
+		try{
+		String resetPwd = studentLoginController.resetPassword(ctct.Email);
+		}
+		catch(System.NullPointerException e){
+			System.debug('Exception '+e);
+		}
+	}
+	}
+    // added by powerfluence based on Clayton req 03/29/2022 starts
+    
+@isTest
+    static void tesforwithoutContact(){
+       Map<String, SObject> testData = apexMockDataUtility.createIfsaDataCollection(new Set<String>());
+		List<String> sections = new List<String>{'Spring', 'Fall', 'Summer', 'Calendar Year', 'Academic Year'};
+		List<Term__c> setupTerms = apexMockDataUtility.createTerms(sections, Date.today().year() + 1);
+		apexMockDataUtility.createProgramTerms(new List<Program__c>{(Program__c) testData.get('program')}, setupTerms[0], (User) testData.get('academicAffiarsUser'));
+		Test.startTest();
+		Database.insert(new Program__c(Name='Undecided', Host_Institution__c=null, Country__c = testData.get('country').Id));
+		 Account acc = apexMockDataUtility.createAccount('test name');
+       
+        List<Lead> leadNew =[SELECT Id,FirstName,LastName,Email FROM Lead LIMIT 1];
+        system.debug('leadNew'+leadNew);
+        Lead le = new Lead();
+        le.FirstName='Unit';
+        le.LastName= 'Test';
+       	le.Email = 'utest@utest.test';
+        //le.Name='Unit';
+       	le.Status='Open';
+        le.CurrencyIsoCode='USD';
+        le.Company='TestCompany';
+        leadNew.add(le);
+        Database.upsert(leadNew);
+        system.debug('leadNew'+leadNew);
+		Contact ctct = apexMockDataUtility.createContact('test name', acc.Id);
+        ctct.FirstName='Unit';
+        ctct.LastName= 'Test';
+        ctct.Email = 'utest@utest.test';
+        Database.update(ctct);
+		studentLoginController controller = new studentLoginController();
+		PageReference reference = controller.authorize();
 
+		controller.viewModel.email = 'utest@utest.test';
+		controller.viewModel.password = 'theWrongPassword';
+		User u11=apexMockDataUtility.createUser(ctct.Id);
+		User testUser = (User) testData.get('studentUser');
+		User guestUser = [SELECT Id FROM User WHERE Name = 'Student Portal Site Guest User'].get(0);		
+		System.runAs(guestUser){
+			controller = new studentLoginController();
+			controller.viewModel.email = 'utest@utest.test';
+			controller.viewModel.password = 'thePassword1';
+			controller.viewModel.firstName = 'Unit';
+			controller.viewModel.lastName = 'Test';
+			Home_Institution__c homeInstitution = (Home_Institution__c) testData.get('homeInstitution1');
+			controller.viewModel.homeInstitutionName = studentLoginController.searchHomeInstitution(homeInstitution.Name.subString(0, 5)).get(0).Name;
+			controller.viewModel.major = controller.viewModel.majorOptions[0].label    ;
+			List<Term__c> terms = studentLoginController.getTerms(controller.viewModel.countryOptions[0].Id);
+			controller.viewModel.programTerms = studentLoginController.searchPrograms(controller.viewModel.countryOptions[0].Id, terms[0].Id, controller.viewModel.homeInstitutionName);
+			controller.viewModel.programOfInterest = controller.viewModel.programTerms[0];
+			List<Program_Term__c> programOptions = studentLoginController.getProgramOptions(controller.viewModel.programOfInterest.Id);
+			// Create portal user method will always return an error in testing - SFDC testing limitation
+			createCommunityUserService result = studentLoginController.register(controller.viewModel.getSerializedViewModel());
+			studentLoginViewModel vm = (studentLoginViewModel) result.viewModel;
+			result.viewModel = null;
+			result = studentLoginController.prepareUserRecord(JSON.serialize(result), JSON.serialize(vm));
+			vm = (studentLoginViewModel) result.viewModel;
+			result.viewModel = null;
+			String userId = studentLoginController.createUserRecord(JSON.serialize(result), JSON.serialize(vm));
+			
+			String url = studentLoginController.createApplicationAndUpdateContact(testUser.Id, controller.viewModel.getSerializedViewModel());
+			System.debug(url);
+			System.assertEquals('', url);
+		}
+
+		Test.stopTest();
+		Contact testContact = [SELECT Id, Active_Application__c FROM Contact WHERE Id =: testUser.ContactId];
+		Application__c testApp = [SELECT Id FROM Application__c WHERE Id =: testContact.Active_Application__c];
+		Apex_String_Constant__mdt taskName = [SELECT Value__c FROM Apex_String_Constant__mdt WHERE DeveloperName = 'Welcome_Task'].get(0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton starts
+		// System.assertEquals(true, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+		System.assertEquals(false, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton ends
+
+		}
+
+		@isTest
+    static void tesforwithoutContactxerox(){
+       Map<String, SObject> testData = apexMockDataUtility.createIfsaDataCollection(new Set<String>());
+		List<String> sections = new List<String>{'Spring', 'Fall', 'Summer', 'Calendar Year', 'Academic Year'};
+		List<Term__c> setupTerms = apexMockDataUtility.createTerms(sections, Date.today().year() + 1);
+		apexMockDataUtility.createProgramTerms(new List<Program__c>{(Program__c) testData.get('program')}, setupTerms[0], (User) testData.get('academicAffiarsUser'));
+		Test.startTest();
+		Database.insert(new Program__c(Name='Undecided', Host_Institution__c=null, Country__c = testData.get('country').Id));
+		 Account acc = apexMockDataUtility.createAccount('test name');
+       
+        
+		Contact ctct = apexMockDataUtility.createContact('test name', acc.Id);
+        ctct.FirstName='Unit';
+        ctct.LastName= 'Test';
+        ctct.Email = 'utest@utest.test';
+        Database.update(ctct);
+		studentLoginController controller = new studentLoginController();
+		PageReference reference = controller.authorize();
+
+		controller.viewModel.email = 'utest@utest.test';
+		controller.viewModel.password = 'theWrongPassword';
+		User testUser = (User) testData.get('studentUser');
+		User guestUser = [SELECT Id FROM User WHERE Name = 'Student Portal Site Guest User'].get(0);		
+		System.runAs(guestUser){
+			controller = new studentLoginController();
+			controller.viewModel.email = 'utest@utest.test';
+			controller.viewModel.password = 'thePassword1';
+			controller.viewModel.firstName = 'Unit';
+			controller.viewModel.lastName = 'Test';
+			Home_Institution__c homeInstitution = (Home_Institution__c) testData.get('homeInstitution1');
+			controller.viewModel.homeInstitutionName = studentLoginController.searchHomeInstitution(homeInstitution.Name.subString(0, 5)).get(0).Name;
+			controller.viewModel.major = controller.viewModel.majorOptions[0].label    ;
+			List<Term__c> terms = studentLoginController.getTerms(controller.viewModel.countryOptions[0].Id);
+			controller.viewModel.programTerms = studentLoginController.searchPrograms(controller.viewModel.countryOptions[0].Id, terms[0].Id, controller.viewModel.homeInstitutionName);
+			controller.viewModel.programOfInterest = controller.viewModel.programTerms[0];
+			List<Program_Term__c> programOptions = studentLoginController.getProgramOptions(controller.viewModel.programOfInterest.Id);
+			// Create portal user method will always return an error in testing - SFDC testing limitation
+			createCommunityUserService result = studentLoginController.register(controller.viewModel.getSerializedViewModel());
+			studentLoginViewModel vm = (studentLoginViewModel) result.viewModel;
+			result.viewModel = null;
+			result = studentLoginController.prepareUserRecord(JSON.serialize(result), JSON.serialize(vm));
+			vm = (studentLoginViewModel) result.viewModel;
+			result.viewModel = null;
+			String userId = studentLoginController.createUserRecord(JSON.serialize(result), JSON.serialize(vm));
+			
+			String url = studentLoginController.createApplicationAndUpdateContact(testUser.Id, controller.viewModel.getSerializedViewModel());
+			System.debug(url);
+			System.assertEquals('', url);
+		}
+
+		Test.stopTest();
+		Contact testContact = [SELECT Id, Active_Application__c FROM Contact WHERE Id =: testUser.ContactId];
+		Application__c testApp = [SELECT Id FROM Application__c WHERE Id =: testContact.Active_Application__c];
+		Apex_String_Constant__mdt taskName = [SELECT Value__c FROM Apex_String_Constant__mdt WHERE DeveloperName = 'Welcome_Task'].get(0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton starts
+		// System.assertEquals(true, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+		System.assertEquals(false, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+        //modified by PowerFluence req_dt:03/29/2022 ref email from Clayton ends
+
+		}
+
+		    
+@isTest
+static void tesforwithoutContactLead(){
+   Map<String, SObject> testData = apexMockDataUtility.createIfsaDataCollection(new Set<String>());
+	 List<String> sections = new List<String>{'Spring', 'Fall', 'Summer', 'Calendar Year', 'Academic Year'};
+	 List<Term__c> setupTerms = apexMockDataUtility.createTerms(sections, Date.today().year() + 1);
+	 apexMockDataUtility.createProgramTerms(new List<Program__c>{(Program__c) testData.get('program')}, setupTerms[0], (User) testData.get('academicAffiarsUser'));
+	 Test.startTest();
+	 Database.insert(new Program__c(Name='Undecided', Host_Institution__c=null, Country__c = testData.get('country').Id));
+	  Account acc = apexMockDataUtility.createAccount('test name');
+   
+    List<Lead> leadNew =[SELECT Id,FirstName,LastName,Email FROM Lead LIMIT 1];
+    system.debug('leadNew'+leadNew);
+    Lead le = new Lead();
+    le.FirstName='Unit';
+    le.LastName= 'Test';
+	le.Email = 'utest@utest.test';
+	le.Status='Open';
+    le.CurrencyIsoCode='USD';
+    le.Company='TestCompany';
+    leadNew.add(le);
+    Database.upsert(leadNew);
+    system.debug('leadNew'+leadNew);
+	
+	 studentLoginController controller = new studentLoginController();
+	 PageReference reference = controller.authorize();
+
+	 controller.viewModel.email = 'utest@utest.test';
+	 controller.viewModel.password = 'theWrongPassword';
+	 User testUser = (User) testData.get('studentUser');
+	 User guestUser = [SELECT Id FROM User WHERE Name = 'Student Portal Site Guest User'].get(0);		
+	 System.runAs(guestUser){
+		 controller = new studentLoginController();
+		 controller.viewModel.email = 'utest@utest.test';
+		 controller.viewModel.password = 'thePassword1';
+		 controller.viewModel.firstName = 'Unit';
+		 controller.viewModel.lastName = 'Test';
+		 Home_Institution__c homeInstitution = (Home_Institution__c) testData.get('homeInstitution1');
+		 controller.viewModel.homeInstitutionName = studentLoginController.searchHomeInstitution(homeInstitution.Name.subString(0, 5)).get(0).Name;
+		 controller.viewModel.major = controller.viewModel.majorOptions[0].label    ;
+		 List<Term__c> terms = studentLoginController.getTerms(controller.viewModel.countryOptions[0].Id);
+		 controller.viewModel.programTerms = studentLoginController.searchPrograms(controller.viewModel.countryOptions[0].Id, terms[0].Id, controller.viewModel.homeInstitutionName);
+		 controller.viewModel.programOfInterest = controller.viewModel.programTerms[0];
+		 List<Program_Term__c> programOptions = studentLoginController.getProgramOptions(controller.viewModel.programOfInterest.Id);
+		 // Create portal user method will always return an error in testing - SFDC testing limitation
+		 createCommunityUserService result = studentLoginController.register(controller.viewModel.getSerializedViewModel());
+		 studentLoginViewModel vm = (studentLoginViewModel) result.viewModel;
+		 result.viewModel = null;
+		 result = studentLoginController.prepareUserRecord(JSON.serialize(result), JSON.serialize(vm));
+		 vm = (studentLoginViewModel) result.viewModel;
+		 result.viewModel = null;
+		 String userId = studentLoginController.createUserRecord(JSON.serialize(result), JSON.serialize(vm));
+		 
+		 String url = studentLoginController.createApplicationAndUpdateContact(testUser.Id, controller.viewModel.getSerializedViewModel());
+		 System.debug(url);
+		 System.assertEquals('', url);
+	
+	 }
+
+	 Test.stopTest();
+	 Contact testContact = [SELECT Id, Active_Application__c FROM Contact WHERE Id =: testUser.ContactId];
+	 Application__c testApp = [SELECT Id FROM Application__c WHERE Id =: testContact.Active_Application__c];
+	 Apex_String_Constant__mdt taskName = [SELECT Value__c FROM Apex_String_Constant__mdt WHERE DeveloperName = 'Welcome_Task'].get(0);
+
+	 // System.assertEquals(true, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+	 System.assertEquals(false, [SELECT Count() FROM Task WHERE Subject =: taskName.Value__c AND WhoId =: testContact.Id AND WhatId =: testApp.Id] > 0);
+    
+
+	 }
+    //babish
+	//added by PowerFluence req_dt:03/29/2022 ref email from Clayton ends
 }

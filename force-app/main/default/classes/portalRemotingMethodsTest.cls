@@ -19,7 +19,7 @@ public with sharing class portalRemotingMethodsTest {
 	
 	/**
 	 * @description test the method that saves a course registration.
-	 */
+	 */Dynamicformview
 	public static testMethod void testSubmitCourseRegistration()
 	{
 		Program_Term__c programTerm = [SELECT Id FROM Program_Term__c LIMIT 1];
@@ -442,7 +442,7 @@ public with sharing class portalRemotingMethodsTest {
 		Test.stopTest();
 
 	}
-
+	//added by PowerFluence req_dt:03/29/2022 ref email from Clayton starts
 	public static testMethod void testGetSubmitApplicationItemDetails1()
 	{
 		Test.startTest();
@@ -459,21 +459,11 @@ public with sharing class portalRemotingMethodsTest {
 		appItem.Status__c = 'Complete';
 		Database.update(appItem);
 		viewModel = portalRemotingMethods.getApplicationItemDetails(appItem.Id);
-		// appItem.Name = 'Scholarship';
-		// appItem.RecordType.DeveloperName = 'Scholarship';
-		// Database.update(appItem);
-		// appItem = [SELECT Id, Name FROM Application_Item__c WHERE Application__c =: app.Id AND Name = 'Scholarship'].get(0);
-		// viewModel = portalRemotingMethods.getApplicationItemDetails(appItem.Id);
-		// viewModel.status = 'Complete';
-		// jsonData = JSON.serialize(viewModel);
-
-		didRun = portalRemotingMethods.submitApplicationItem(jsonData, '', '', '');
-		System.assertEquals(true, didRun);		
 		Test.stopTest();
 
 	}
+        //added by PowerFluence req_dt:03/29/2022 ref email from Clayton ends
 
-	
 	public static testMethod void testGetSubmitApplicationItemDetails2()
 	{
 		Application__c app = [SELECT Id FROM Application__c LIMIT 1];		

@@ -1356,7 +1356,8 @@ public without sharing class apexMockDataUtility
             for(c2g__codaGeneralLedgerAccount__c glAccount: glAccounts)
             {
                 if(glAccount.Name == '2099 - Accounts Payable')
-                    payableAccount = glAccount.Id;
+                     payableAccount = glAccount.Id;
+            
                 else if(glAccount.Name == '1110 - Student Receivables')
                     receivableAccount = glAccount.Id;
             }
@@ -1411,6 +1412,7 @@ public without sharing class apexMockDataUtility
         accounts.clear();
         counter = 1;
         accounts = [SELECT Id, Name, Institution__c FROM Account WHERE Institution__c IN: homeInstitutions];
+        //system.debug('accounts..'+accounts);
         for(Account acct: accounts)
         {
             acct.Institution_Type__c = 'Public';
@@ -1423,6 +1425,7 @@ public without sharing class apexMockDataUtility
         Contact ctc = contacts.get(0);
         Contact ctc2 = contacts.get(1);
         Contact ctc3 = contacts.get(2);
+        //system.debug('123c'+ctc+ctc2+ctc3);
         ctc.Program_Approver__c = true;
         ctc.Transcript_Recipient__c = true;
         ctc2.Program_Approver__c = true;
@@ -1440,10 +1443,11 @@ public without sharing class apexMockDataUtility
         returnMap.put('advisorContact2', ctc2);
         returnMap.put('advisorContact3', ctc3);
         
-        User advisorUser = apexMockDataUtility.createAdvisor(ctc.Id);
-        returnMap.put('advisorUser1', advisorUser);
-
-        Database.insert(new List<User>{academicAffiarsUser, studentUsr, studentUsr2});
+       // User advisorUser = apexMockDataUtility.createAdvisor(ctc.Id);
+        //returnMap.put('advisorUser1', advisorUser);
+        //system.debug('checkingBeforeInsert'+new List<User>{academicAffiarsUser, studentUsr, studentUsr2});
+        List<User> ur = new List<User>{academicAffiarsUser, studentUsr, studentUsr2};
+        Database.insert(ur);
         //Need to add world, region, country, program, term, hi, because of selective program approval      
 
         Country__c country = apexMockDataUtility.createCountry(international.Id);
