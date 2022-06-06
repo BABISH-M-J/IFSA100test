@@ -8,6 +8,8 @@ public without sharing abstract class studentBaseController extends portalBaseCo
 	protected Contact studentContact {get;set;}
 	protected Account studentAccount {get;set;}
 	protected Application__c application {get;set;}
+	protected Application_Item__c roadMap {get;set;}
+	protected Id roadMapRecordType {get;set;}
 
 
 	protected studentBaseController()
@@ -20,6 +22,8 @@ public without sharing abstract class studentBaseController extends portalBaseCo
 			this.studentContact = (Contact) apexQueryUtility.selectAllFrom('Contact', 'Active_Application__r.Name', 'Id = \'' + this.studentUser.ContactId + '\'').get(0);
 			this.studentAccount = (Account) apexQueryUtility.selectAllFrom('Account', 'Id = \'' + this.studentContact.AccountId + '\'').get(0);
 			this.application = studentBaseController.getActiveApplication(studentContact);
+			this.roadMapRecordType = Schema.SObjectType.Application_Item__c.getRecordTypeInfosByName().get('Roadmap').getRecordTypeId();
+			this.roadMap = (Application_Item__c) apexQueryUtility.selectAllFrom('Application_Item__c', 'Application__c =\'' + this.application.Id + '\' AND RecordTypeId =\'' + roadMapRecordType + '\'').get(0);
 		}
 		catch(Exception e)
 		{

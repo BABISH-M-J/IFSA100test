@@ -257,7 +257,22 @@ angular.module('app.controllers')
                     label: 'Course Load',
                     value: $scope.activeApp.Course_Load
                 });
+                //added by powerfluence babish
+                if($scope.activeApp.Total_Credit == 0.00 || $scope.activeApp.Total_Credit == null){
+                    $scope.activeApp.statistics.push({
+                        label: 'Total U.S. Credits',
+                        value: 'TBD'
+                    });                   
+                }
+                else{
+                    $scope.activeApp.statistics.push({
+                        label: 'Total U.S. Credits',
+                        value: $scope.activeApp.Total_Credit.toFixed(2)
+                    });
+                }
+                //added by powerfluence babish               
             }
+            
             if($scope.activeApp.Host_Transcript_Received){
                 $scope.activeApp.statistics.push({
                     label: 'Host Transcript(s) Received',
