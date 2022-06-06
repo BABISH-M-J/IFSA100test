@@ -1,0 +1,42 @@
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 form-group required1">
+            <label class="control-label" for="oq1">What are you most proud of from your time abroad?</label>
+            <textarea id="oq1" name="oq1" maxlength="750" rows="5" cols="50" required></textarea>
+        </div>        
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 form-group required1">
+            <label class="control-label" for="oq2">What is one thing you learned about yourself during your time abroad? </label>
+            <textarea id="oq2" name="oq2" maxlength="750" rows="5" cols="50" required></textarea>
+        </div>        
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 form-group required1">
+            <label class="control-label" for="oq3">How will the knowledge, skills, and abilities you developed or deepened while abroad help you accomplish your larger academic, life, or professional goals once you return home?</label>
+            <textarea id="oq3" name="oq3" maxlength="750" rows="5" cols="50" required></textarea>
+        </div>        
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 form-group required1">
+            <label class="control-label" for="oq4">What advice would you give to another student who is going to study abroad in the same location?</label>
+            <textarea id="oq4" name="oq4" maxlength="750" rows="5" cols="50" required></textarea>
+        </div>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <hr/>
+        <!-- <input type="button" class="btn ifsa-btn" value="Back" ng-show="surveyQuestions" ng-click="toggleSurvey(true,2)" ng-disabled="submitted || toggling"/> -->
+        <button class="btn ifsa-btn" ng-click="toggleSurvey(false, 3, 'post')" ng-disabled="toggling">Back</button>
+        <button type="submit" class="btn ifsa-btn" ng-disabled="toggling">
+            Finish <i class="spinner loading icon" ng-if="submitted"></i>
+        </button>
+    </div>
+</div>

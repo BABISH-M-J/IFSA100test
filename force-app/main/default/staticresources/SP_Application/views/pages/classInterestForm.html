@@ -42,10 +42,10 @@
                 <i class="arrow right icon"></i>
                 Next
             </button>
-            <!-- <button class="ui huge right floated inverted green button" ng-class="{ 'loading' : savingForLater}" ng-click="saveForm(true)" ng-if="view.apiName != 'introduction'">
+            <button class="ui huge right floated inverted green button" ng-class="{ 'loading' : savingForLater}" ng-click="saveForm(true)" ng-if="view.apiName != 'introduction'">
                 <i class="save icon"></i>
                 Save for later
-            </button> -->
+            </button>
             <button class="ui huge right floated right labeled green icon button" ng-class="{ 'loading' : saving}" ng-click="submitForm()" ng-disabled="numberOfRemainingCourses() > 0 || numberOfRemainingAlternates() > 0 || !checkRules()" ng-if="view.apiName == 'sign'">
                 <i class="check icon"></i>
                 Submit

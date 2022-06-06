@@ -176,6 +176,7 @@ angular.module('app.controllers')
                     value: $scope.activeApp.Course_Load
                 });
             }
+            
             if($scope.activeApp.Host_Transcript_Received){
                 $scope.activeApp.statistics.push({
                     label: 'Host Transcript(s) Received',

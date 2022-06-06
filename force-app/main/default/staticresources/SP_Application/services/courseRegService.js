@@ -36,7 +36,6 @@ angular.module('app.services')
     }
 
     this.submitCourseRegistrations = function(crs) {
-        console.log('submitCourseRegistration Start');
         console.log('--- submitCourseRegistrations before angular.toJson ---');
         var courses = angular.toJson((crs))
         var deferred = $q.defer();
@@ -53,7 +52,6 @@ angular.module('app.services')
                 }
             }
         );
-        console.log('submitCourseRegistration End');
         return deferred.promise;
     }
 
@@ -221,7 +219,6 @@ angular.module('app.services')
 
     this.updateCourseReg = function(ChId)
     {
-        console.log('updateCourseReg Start');
         var deferred = $q.defer();
         portalOnSiteRemotingMethods.modifyCourseRegistration(
             ChId,
@@ -235,15 +232,13 @@ angular.module('app.services')
                     deferred.reject(event);
                 }
             }
-        );   
-        console.log('updateCourseReg End'); 
+        );    
         return deferred.promise;
     }
 
     //Call for creation of Course Registration
     this.createCourseRegistration = function(newCourse, appId)
     {
-        console.log('createCourseRegistration Start');
 
         var deferred = $q.defer();
         console.log('name => ' + newCourse.courseName);
@@ -264,7 +259,6 @@ angular.module('app.services')
             // Added by powerfluence - req dt.02/09/2022 - 001 - starts
              //something
         });
-        console.log('createCourseRegistration End');
         return deferred.promise;
     }
 

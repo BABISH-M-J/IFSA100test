@@ -1,0 +1,44 @@
+    <!-- Page Content -->
+    <div class="content-panel-primary">
+        <section id="road-map">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- <progressbar class="ifsa-progress ifsa-progress-bar" value="percentComplete"></progressbar> -->
+                    <h2 class="content-title">Road Map</h2>
+                    <hr class="hr-gold"/>
+                        <div class="col-md-12" ng-if="isComplete">
+                            <div class="ui tiny top attached icon message">
+                                <i class="green circular check icon"></i>
+                                <div class="content">
+                                    <div class="header">
+                                        {{appItem.name}} Completed
+                                    </div>
+                                    <p>Your road map has been submitted. If you'd like to make any changes, please get in touch with your program advisor, {{appItem.advisorFirstName}} {{appItem.advisorLastName}} ({{appItem.advisorEmail}}).</p>
+                                </div>
+                            </div>
+                            <!-- <div class="ui center aligned bottom attached very padded segment" ng-if="appItem.pdf">
+                                <h2 class="ui icon header">
+                                    <i class="red pdf file outline icon"></i>
+                                    {{ appItem.pdf.Name }}
+                                </h2>
+                                <p>Completed on {{ appItem.pdf.CreatedDate | date:'MM/dd/yyyy' }}</p>
+                                <a class="ui huge primary button" ng-class="{ 'loading' : pdfLoading }" ng-href="/studentportal/servlet/servlet.FileDownload?file={{appItem.pdf.Id}}" target="_blank"><i class="download icon"></i> Download</a>	
+                            </div> -->
+                        </div>
+                    <div ng-if="loading">
+                        <h3>Loading data....</h3>
+                        <i class="spinner big loading icon"></i>
+                    </div>
+                    <div ng-if="!loading && !isComplete">
+                        <p><small><span class="asterisk"><strong>*</strong></span> = required field</small></p>
+                        <form ng-submit="submit()" name="appForm" id="theForm" ng-include="roadMapPage">
+                            <!-- Dynamic content here -->
+                            <div class="col-md-8 col-lg-9">
+                                <!-- <ng-include src="view.templateUrl"></ng-include> -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- END OF PRIMARY CONTENT -->

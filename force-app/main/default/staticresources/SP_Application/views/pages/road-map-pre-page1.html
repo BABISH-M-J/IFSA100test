@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-6"> <!-- Half column -->
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <p>Study abroad can be a life-changing experience, but in the busyness of preparation and adjusting to daily life in a new country, it’s easy to lose sight of the bigger picture. Having a sense of what your goals or intentions are for your time abroad will allow you to dig more deeply into your experiences and harness what you are learning—in and out of the classroom—to support your future success.<br> 
+
+                    The following multiple-choice questions are intended to prompt reflection on your experiences with intercultural experiences, knowledge, and skills.  There are no right or wrong answers, just select the answer you feel best fits your experience. You’ll answer these same questions again at the end of the program, so we (and YOU) can see how you’ve grown.<br>
+                    
+                    After the multiple-choice section, there are 4 open-ended prompts to elicit your plans and hopes for your time abroad. This is space for you to think through what you’d like to explore or accomplish while abroad. IFSA resident staff will also review these responses to learn a little more about you and your goals, so they can better support you. And we understand that things change—especially once you’ve been able to actually experience life in country—so don’t worry if things change, just share what you are thinking about right now.  
+                </p>                
+            </div>
+        </div>       
+    </div>    
+</div>
+<div class="row text-center">
+    <div class="col-xs-12" ng-hide="surveyQuestions">
+        <hr/>
+        <button type="button" class="btn ifsa-btn" ng-show="!submitted" ng-click=" toggleSurvey(false, 2, 'pre')" ng-hide="surveyQuestions" ng-disabled="appForm.$invalid || toggling">
+            Next <i class="spinner loading icon" ng-if="toggling"></i>
+        </button>
+        <!--
+        <div class="row top-buffer">
+            <div class="col-xs-12">
+                <input type="submit" class="btn btn-conf btn-highlight" value="Save Information" ng-show="!submitted"/>
+                
+            </div>
+        </div>
+        -->
+    </div>
+</div>

@@ -88,7 +88,6 @@ angular.module('app.controllers')
     }
 
     $scope.getCoursesFromForm = function(){
-        console.log('getCoursesFromForm Start');
         var courseIds = [];
         if($scope.appItem.form.formData.formRules){
             for (let index = 0; index < $scope.appItem.form.formData.formRules.length; index++) {
@@ -347,7 +346,6 @@ angular.module('app.controllers')
         }, function(result){
             errorModalService.openErrorModal('An Error has occured loading course data', 'There was an error loading course data. Please try again. If you continue to have problems, contact IFSA.');
         });
-        console.log('getCoursesFromForm End');
     }
 
     $scope.classSearch = function(course, aFor){
@@ -458,7 +456,6 @@ angular.module('app.controllers')
             }
             $scope.loadingForm = false;
         }
-        console.log('numberOfRemainingCourses => ' + value);
         return value;
     }
 
@@ -516,7 +513,6 @@ angular.module('app.controllers')
 
     $scope.submitForm = function()
     {
-        console.log('submitForm Start');
         var modalInstance = $modal.open({
             animation: true,
             size: 'lg',
@@ -533,12 +529,9 @@ angular.module('app.controllers')
         }, function() {
             // modal dismissed
         });
-        console.log('submitForm End');
     }
 
     $scope.saveForm = function(saveForLater){
-        console.log('saveForm Start');
-        console.log('saveForLater => ' + saveForLater);
         // insert / update course registrations
         if(saveForLater){
             $scope.savingForLater = true;
@@ -560,8 +553,6 @@ angular.module('app.controllers')
                     element.courseRegistration.fulfillsDegreeRequirement = element.fulfillsDegreeRequirement ? element.fulfillsDegreeRequirement : false;
                     element.courseRegistration.selectedDepartment = element.selectedDepartment;
                     courseRegs.push(element.courseRegistration);
-                    console.log('element.alternateCourse => ' + element.alternateCourse);
-                    console.log('element.alternateCourse.courseRegistration => ' + element.alternateCourse.courseRegistration);
                     if(element.alternateCourse && element.alternateCourse.courseRegistration)
                     {
                         element.alternateCourse.courseRegistration.courseStatus = saveForLater ? 'CIF - Draft' : 'CIF - Submitted';
@@ -604,16 +595,7 @@ angular.module('app.controllers')
             deptPromise = classInterestService.saveDepartmentsChoices($scope.appItem.form.formData.departments.selectedDepartments);
         }
         
-        console.log('courseRegs start');
-        for(item in courseRegs){
-            console.log('item start');
-            for(key in item){
-                console.log(key + ' => ' + item[key]);
-            }
-            console.log('item end');
-
-        }
-        console.log('courseRegs end');
+        console.log(courseRegs);
         if(courseRegs.length){
             var promise = courseRegService.submitCourseRegistrations(courseRegs);
             promise.then(function(result){
@@ -631,7 +613,6 @@ angular.module('app.controllers')
         else {
             $scope.saveApplicationItem(saveForLater);
         }
-        console.log('submitForm End');
     }
     $scope.saveApplicationItem = function(saveForLater) {
         $scope.appItem.status = saveForLater ? 'Started' : 'Complete';
@@ -666,7 +647,6 @@ angular.module('app.controllers')
         }
     }
     $scope.submitApplicationItem = function(saveForLater) {
-        console.log('submitApplicationItem Start');
         var promise = applicationItemService.submitApplicationItem(angular.toJson($scope.appItem), '', '', '');
         promise.then(function(result){
             console.log('Saved Application Item');
@@ -686,7 +666,6 @@ angular.module('app.controllers')
             $scope.savingForLater = false;
             $scope.saving = false;
         });
-        console.log('submitApplicationItem End');
     }
 
     $scope.selectFromRules = function(ruleItem, rule){
@@ -826,9 +805,7 @@ angular.module('app.controllers')
         if($scope.appItem && $scope.appItem.form && $scope.appItem.form.formData.formRules && $scope.appItem.form.formData.formRules.length){
             for (let index = 0; index < $scope.appItem.form.formData.formRules.length; index++) {
                 const rule = $scope.appItem.form.formData.formRules[index];
-                console.log('rule.completed => ' + rule.completed);
                 if((rule.ruleName == 'Must_Select_Course_X' || rule.ruleName == 'Must_Select_n_Courses') && !rule.completed){
-                    console.log('Rule is not complete.')
                     return false;
                 }
             }
@@ -855,7 +832,6 @@ angular.module('app.controllers')
     }
 
     $scope.addToSelectedWithDesignation = function(deptId, designation){
-        console.log('addToSelectedWithDesignation Start');
         let dept = undefined;
         if(!$scope.clearingDepartments){
             if(deptId){
@@ -898,8 +874,6 @@ angular.module('app.controllers')
                 index = index++;
             });
         }
-        console.log('addToSelectedWithDesignation End');
-
     }
     $scope.addToSelected = function(dept){
         // Add department to selectedDepartments array
@@ -937,7 +911,6 @@ angular.module('app.controllers')
     }
 
     $scope.addOptionalClass = function(){
-        console.log('addOptionalClass Start');
         let index = $scope.numberOfCourses();
         let rank = index + 1;
         var ac;
@@ -953,7 +926,6 @@ angular.module('app.controllers')
             rank: rank,
             isRemoveable: true
         }
-        console.log('addOptionalClass End');
     }
     $scope.removeOptionalClass = function(index){
         delete $scope.courseSelections["Selection" + (index + 1)];

@@ -23,6 +23,7 @@ angular.module('app.controllers')
     // Loads the selected course's details
     $scope.loadCourseDetails = function()
     {
+        console.log('--- loadCourseDetails start ---');
         var promise = courseService.loadCourseDetails($routeParams.courseId);
         promise.then(function(result){
             $scope.selectedCourse = result;
@@ -46,6 +47,7 @@ angular.module('app.controllers')
             $scope.loadErrorModal(result);
             $scope.courseLoading = false;
         });
+        console.log('--- loadCourseDetails end ---');
     }
     
     $scope.printPage = function()
@@ -198,6 +200,12 @@ angular.module('app.controllers')
         return courseService.getCourseCity(course);
     }
    $scope.processRightColDetails = function(){
+       console.log('--- processRightColDetails start ---');
+       console.log('--- selectedCourse items start ---');
+       for(key in $scope.selectedCourse){
+           console.log(key + ' => ' + $scope.selectedCourse[key]);
+       }
+       console.log('--- selectedCourse items end ---');
        let classInfo =[];
        /*Start Class Information */
        // Description
@@ -233,10 +241,10 @@ angular.module('app.controllers')
             });
         }
         // Resources and Readings
-       if($scope.selectedCourse.resourceReadings){
+       if($scope.selectedCourse.resourcesReadings){
             classInfo.push({
                 name: "Resource and Readings",
-                description: $scope.selectedCourse.resourceReadings,
+                description: $scope.selectedCourse.resourcesReadings,
                 isOpen: false
             });
         }
@@ -267,6 +275,8 @@ angular.module('app.controllers')
             });
         }
         $scope.classInfo = classInfo;
+
+        console.log('--- processRightColDetails end ---');
     }
     $scope.processLeftColDetails = function(){
         let classDetails = [];

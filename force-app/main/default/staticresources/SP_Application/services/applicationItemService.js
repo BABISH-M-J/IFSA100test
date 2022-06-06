@@ -18,6 +18,7 @@ angular.module('app.services')
         portalRemotingMethods.getApplicationItemDetails(
             appItemId, 
             function(result, event) {
+                console.log('result => ' + result);
                 if(result)
                 {
                     if(result.recordType == "Learning_Plan")

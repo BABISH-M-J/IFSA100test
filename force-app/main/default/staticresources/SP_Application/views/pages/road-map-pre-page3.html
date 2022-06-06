@@ -1,0 +1,44 @@
+<div class="text-input-set">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="oq1">What are you hoping to learn by participating in this program? This might be information about a specific topic or subject (chemistry, literature, etc.), or might be something you’d like to learn about yourself, the host country/culture, or something else entirely.</label>
+                <textarea id="oq1" name="oq1" maxlength="750" rows="5" cols="50" ng-model="viewModel.preHopeLearnOriginal" required></textarea>
+            </div>        
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="oq2">What do you expect your life to look like day-to-day while you are abroad? What do you anticipate being the greatest challenge? How will you address that challenge if/when it arises?</label>
+                <textarea id="oq2" name="oq2" maxlength="750" rows="5" cols="50" ng-model="viewModel.preDailyLifeOriginal" required></textarea>
+            </div>        
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="oq3">How do you anticipate being different at the end of the program than you are now? What would you like to be able to do (or do better, more fluently, more easily?) at the end of the program?</label>
+                <textarea id="oq3" name="oq3" maxlength="750" rows="5" cols="50" ng-model="viewModel.preEndDifferentOriginal" required></textarea>
+            </div>        
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 form-group required1">
+                <label class="control-label" for="oq4">How does study abroad fit into your personal, academic, and/or professional goals? What would you like to do while abroad to help move you closer to achieving those goals?</label>
+                <textarea id="oq4" name="oq4" maxlength="750" rows="5" cols="50" ng-model="viewModel.preGoalsOriginal" required></textarea>
+            </div>        
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <hr/>
+        <!-- <input type="button" class="btn ifsa-btn" value="Back" ng-show="surveyQuestions" ng-click="toggleSurvey(true,2)" ng-disabled="submitted || toggling"/> -->
+        <button class="btn ifsa-btn" ng-click="toggleSurvey(false, 2, 'pre')" ng-disabled="toggling || roadMapSubmitButtonDisabled">Back</button>
+        <button type="submit" class="btn ifsa-btn" ng-disabled="toggling || roadMapSubmitButtonDisabled">
+            Finish <i class="spinner loading icon" ng-if="submitted"></i>
+        </button>
+    </div>
+</div>

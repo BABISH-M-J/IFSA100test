@@ -36,7 +36,7 @@
         </div>
     </accordion>
     <div class="row">
-        <div class="col-xs-12" ng-if="viewModel.attachments.length">
+        <div class="col-xs-12" ng-if="viewModel.files.length">
             <h1 class="mt-small">Linked Resources</h1>
             <hr/>                    
         </div>
@@ -48,15 +48,31 @@
                 </li>
             </ul>
         </div>
+        <div class="col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="file in viewModel.files">
+                    <a ng-href="{{urlService.getPortalURL() + '/sfc/servlet.shepherd/version/download/' + file.ContentDocument.LatestPublishedVersionId}}" target="_blank">{{file.ContentDocument.Title}}</a>
+                    <span ng-if="file.ContentDocument.Description != null"> - {{file.ContentDocument.Description}}</span>
+                </li>
+            </ul>
+        </div>
         <div class="col-xs-12" ng-if="viewModel.files.length">
             <h1 class="mt-small">Personal Files</h1>
             <hr/>
         </div>
         <div class="col-xs-12">
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="file in viewModel.files">
+                <li class="list-group-item" ng-repeat="file in viewModel.app_files">
                     <a ng-href="{{urlService.getPortalURL() + '/sfc/servlet.shepherd/version/download/' + file.ContentDocument.LatestPublishedVersionId}}" target="_blank">{{file.ContentDocument.Title}}</a>
                     <span ng-if="file.ContentDocument.Description != null"> - {{file.ContentDocument.Description}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="attachment in viewModel.app_attachments">
+                    <a ng-href="{{urlService.getPortalURL() + '/servlet/servlet.FileDownload?file=' + attachment.Id}}" target="_blank">{{attachment.Name}}</a>
+                    <span ng-if="attachment.description != null"> - {{attachment.Description}</span>
                 </li>
             </ul>
         </div>

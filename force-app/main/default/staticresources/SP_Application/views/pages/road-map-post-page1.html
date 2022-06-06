@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-6"> <!-- Half column -->
+        <div class="row top-buffer">
+            <div class="col-md-10 col-md-offset-1 form-group">
+                <p>Congratulations! You’re nearly at the end of your IFSA program. We hope your time abroad has been full of exciting and challenging experiences—from navigating daily life in a new country, learning new things in your classes, and connecting with new and interesting people. The following questions will ask you to reflect on your time abroad to help you and IFSA better understand how you have changed and grown while on your IFSA program, as well as connect your experiences abroad to your future goals and plans.<br>
+
+                    The following multiple-choice questions are intended to prompt reflection on your experiences with intercultural experiences, knowledge, and skills.  There are no right or wrong answers, just select the answer you feel best fits your experience. You’ll answer these same questions twice. The first time, we’d like you to think back to how you were at the beginning of your study abroad experience. For the second round of multiple-choice questions, please answer them thinking about how you are now, at the end of the program. After the two multiple-choice sections, there are 4 open-ended prompts to reflect more substantially on your experiences and share how your time abroad will contribute to your future success.<br>
+                    
+                    You may remember that you already answered the same multiple-choice questions at the beginning of your program, so why are we asking you to answer them again? We are asking you to reflect on yourself as you were at the beginning of the program because after going abroad people often have a very different perspective on the intercultural skills and behaviors they had when they first arrived. Asking you to reflect on that time gives a more accurate score to compare with your answers about how you are now. And remember, there are no right or wrong answers, just select the answer you feel best fits your experience.  
+                </p>                
+            </div>
+        </div>       
+    </div>    
+</div>
+<div class="row text-center">
+    <div class="col-xs-12" ng-hide="surveyQuestions">
+        <hr/>
+        <button type="button" class="btn ifsa-btn" ng-click=" toggleSurvey(false, 2, 'post')" ng-hide="surveyQuestions" ng-disabled="appForm.$invalid || toggling">
+            Next <i class="spinner loading icon" ng-if="toggling"></i>
+        </button>
+        <!--
+        <div class="row top-buffer">
+            <div class="col-xs-12">
+                <input type="submit" class="btn btn-conf btn-highlight" value="Save Information" ng-show="!submitted"/>
+                
+            </div>
+        </div>
+        -->
+    </div>
+</div>

@@ -206,6 +206,30 @@ li.crfAlert {
     padding: 30px 20px;
 }
 
+.input-radio
+{
+    display: block;
+}
+
+input[type=radio]
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-right: 10px;
+}
+
+.radio-choice
+{
+    display: flex;
+}
+
+.text-input-set
+{
+    display: flex;
+    flex-direction: column;
+}
+
 .overlap
 {
     position:relative;

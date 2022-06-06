@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <!-- if adding a custom class -->        
+        <!-- if adding a custom class -->
         <div id="customClass" ng-if="addCustomClass">
             <div class="ui container">
             <form class="ui huge form" name="newClassForm" ng-submit="submitSelection()" novalidate autocomplete="off">
@@ -112,7 +112,7 @@
                         </select>
                     </div> -->
                 </div>
-                <button type="submit" class="ui right floated green huge button" id="unlistedClassButton" ng-if="addCustomClass" ng-disabled="newClassForm.$invalid || !newCourse.hostInstitutionId || unListedClassSubmitButtonDisable">Add Class</button>
+                <button type="submit" class="ui right floated green huge button" ng-if="addCustomClass" ng-disabled="newClassForm.$invalid || !newCourse.hostInstitutionId">Add Class</button>
                 <button class="ui right floated huge button" ng-click="newClass()">Cancel</button>
             </form>
             </div>
@@ -121,5 +121,5 @@
 	<div class="modal-footer" ng-if="!addCustomClass">
         <!-- <button class="ui left floated huge grey button" ng-click="newClass()" ng-if="addCustomClass"><i class="left arrow icon"></i> Search</button> -->
         <button class="ui huge button" ng-click="close()">Cancel</button>
-	</div>    
+	</div>
 </div>

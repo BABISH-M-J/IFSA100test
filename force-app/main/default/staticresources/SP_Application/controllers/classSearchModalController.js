@@ -8,8 +8,6 @@
 angular.module('app.controllers')
 .controller('classSearchModalController', function ($scope, $modalInstance, viewModel, data, classInterestService, errorModalService, courseRegService)
 {
-    $scope.unListedClassSubmitButtonDisable = false;
-
     $scope.init = function(){
         console.log('---classSearchModelController---');
         $scope.data = data;
@@ -60,7 +58,6 @@ angular.module('app.controllers')
     };
 
     $scope.submitSelection = function() {
-        $scope.unListedClassSubmitButtonDisable = true;
         if($scope.addCustomClass)
         {
             var index = $scope.institutions.findIndex(inst => inst.Id == $scope.newCourse.hostInstitutionId);
@@ -137,11 +134,6 @@ angular.module('app.controllers')
         }
         $scope.classResults = results;
             
-    }
-
-    $scope.disableUnlistedClassSubmitButton = function() {
-        console.log('clicked for add');
-        //$scope.unListedClassSubmitButtonDisable = true;
     }
 
     /* $scope.populateLocationOfInstruction = function(){

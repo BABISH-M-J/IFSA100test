@@ -122,11 +122,33 @@ angular.module('app.controllers')
         }
     }
 
-    $scope.viewAppItem = function (item) {
+    // Original viewAppItem
+    /*$scope.viewAppItem = function (item) {
         item.loading = true;
         if(item.recordTypeName != 'Class Interest Form')
         {
             location.assign('#/ApplicationItem/' + item.id);
+        }
+        else
+        {
+            location.assign('#/ClassInterestForm/' + item.id);
+        }
+    }*/
+    
+    $scope.viewAppItem = function (item) {
+        console.log('viewAppItem => ' + item.recordTypeName);
+        item.loading = true;
+        if(item.recordTypeName != 'Class Interest Form' && item.recordTypeName != 'Roadmap')
+        {
+            location.assign('#/ApplicationItem/' + item.id);
+        }
+        else if(item.recordTypeName == 'Roadmap')
+        {
+            console.log('---- RoadMap ----');
+            location.assign('#/RoadMap/' + item.id);
+            //$location.path(urlService.getBaseResourceURL() + '/views/pages/cif-complete.html');
+            //$location.path('/views/pages/roadMap.html');
+
         }
         else
         {
