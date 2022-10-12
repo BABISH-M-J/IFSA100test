@@ -3,6 +3,7 @@
 public class ScheduledCSPPurgeTest {
 	@TestSetup
 	static void makeData(){
+		BaseTriggerHandler.bypass('applicationItemTriggerHandler');
 		Map<String, SObject> testInfo = apexMockDataUtility.createIfsaDataCollection();
 	}
     

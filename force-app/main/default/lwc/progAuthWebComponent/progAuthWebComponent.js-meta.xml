@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="progAuthWebComponent">
+    <apiVersion>50.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Program Authorization View</masterLabel>
+    <description>Allows internal users to manage program authorizations for home institutions</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+        <property name="recordId" type="String" label="Record ID" description="Should be set to {!recordId}"/>
+        <objects>
+            <object>Account</object>
+        </objects>
+        <supportedFormFactors>
+            <supportedFormFactor type="Large" />
+        </supportedFormFactors>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

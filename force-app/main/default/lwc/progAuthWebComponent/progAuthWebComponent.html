@@ -1,0 +1,258 @@
+<template>
+    <template if:true={saving}>
+        <lightning-spinner alternative-text="Loading" variant="inverse"></lightning-spinner>
+    </template>
+    <template if:true={loading}>
+        <lightning-spinner alternative-text="Loading" variant="inverse"></lightning-spinner>
+    </template>
+    <lightning-card title="Program Authorizations" icon-name="standard:radio_button">
+        <!--Search Box and Button-->
+        <lightning-layout>
+            <lightning-layout-item padding="horizontal-small" size="3" flexibility="auto">
+                <!-- <lightning-input type="search" label="Search" variant="label-hidden" value={searchTerm} onchange={updateSearchTerm} is-loading={loading} disabled={loading}></lightning-input> -->
+                <span data-key="searchdiv" class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                    <input type="search" value={searchTerm} onsearch={searchProgs}
+                        onchange={updateSearchTerm} class="slds-input slds-combobox__input slds-has-focus"
+                        id="combobox-id-2" aria-autocomplete="list" aria-controls="listbox-id-2" role="textbox"
+                        placeholder="Search..." />
+                    <template if:false={loading}>
+                        <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                            <lightning-icon
+                            icon-name="utility:search"
+                            size="xx-Small"
+                            class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                            aria-hidden="true"
+                            ></lightning-icon>
+                        </span>
+                    </template>
+                    <template if:true={loading}>
+                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                            <div role="status" class="slds-spinner slds-spinner_brand slds-spinner_x-small slds-input__spinner">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>                  
+                    </template>
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="1" flexibility="auto, no-grow">
+                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" title="Refresh" onclick={refreshProgs} disabled={loading}></lightning-button-icon>
+            </lightning-layout-item>
+            <lightning-layout-item padding="horizontal-small" size="8" flexibility="auto">
+                <template if:false={isUpdatingAll}>
+                    <template if:false={isReadOnly}>
+                        <lightning-button-group>
+                            <lightning-button-stateful
+                                label-when-off="Mark Approves All Semester"
+                                label-when-hover="Unmark Approves All Semester"
+                                label-when-on="Approves All Semester"
+                                icon-name-when-off="utility:add"
+                                icon-name-when-on="utility:check"
+                                icon-name-when-hover="utility:close"
+                                selected={semesterSelected}
+                                onclick={handleApproveAllSemesterClick}>
+                            </lightning-button-stateful>
+                            <lightning-button-stateful
+                                label-when-off="Mark Approves All Summer"
+                                label-when-hover="Unmark Approves All Summer"
+                                label-when-on="Approves All Summer"
+                                icon-name-when-off="utility:add"
+                                icon-name-when-on="utility:check"
+                                icon-name-when-hover="utility:close"
+                                selected={summerSelected}
+                                onclick={handleApproveAllSummerClick}>
+                            </lightning-button-stateful>
+                            <lightning-button-stateful
+                                label-when-off="Mark Approves All Winter"
+                                label-when-hover="Unmark Approves All Winter"
+                                label-when-on="Approves All Winter"
+                                icon-name-when-off="utility:add"
+                                icon-name-when-on="utility:check"
+                                icon-name-when-hover="utility:close"
+                                selected={winterSelected}
+                                onclick={handleApproveAllWinterClick}>
+                            </lightning-button-stateful>
+
+                   <!--Power Fluence add by vinod (10a) Starting-->
+                            <lightning-button-stateful
+                                label-when-off="Mark Approves All Programs"
+                                label-when-hover="Unmark Approves All Programs"
+                                label-when-on="Approves All Programs"
+                                icon-name-when-off="utility:add"
+                                icon-name-when-on="utility:check"
+                                icon-name-when-hover="utility:close"
+                                selected={approvesSelected}
+                                onclick={handleApproveAllProgramsClick}>
+                            </lightning-button-stateful>
+                    <!--Power Fluence Add by Vinod(10a) Ending.-->
+                    
+
+                            <template if:false={isReadOnly}>
+                                <lightning-button icon-name="utility:save" label="Submit" onclick={updateProgAuths} disabled={loading}></lightning-button>
+                            </template>
+                        </lightning-button-group>
+                    </template>
+                    <template if:true={isReadOnly}>
+                        <span>
+                            <template if:true={semesterSelected}>
+                                <lightning-icon icon-name="utility:check" alternative-text="Approves All Semester" title="Approves All Semester"></lightning-icon>
+                            </template>
+                            <template if:false={semesterSelected}>
+                                <lightning-icon icon-name="utility:close" alternative-text="Approves All Semester" title="Approves All Semester"></lightning-icon>
+                            </template>
+                            Approves All Semester
+                        </span>
+                        <span>
+                            <template if:true={summerSelected}>
+                                <lightning-icon icon-name="utility:check" alternative-text="Approves All Summer" title="Approves All Summer"></lightning-icon>
+                            </template>
+                            <template if:false={summerSelected}>
+                                <lightning-icon icon-name="utility:close" alternative-text="Approves All Summer" title="Approves All Summer"></lightning-icon>
+                            </template>
+                            Approves All Summer
+                        </span>
+                        <span>
+                            <template if:true={winterSelected}>
+                                <lightning-icon icon-name="utility:check" alternative-text="Approves All Winter" title="Approves All Winter"></lightning-icon>
+                            </template>
+                            <template if:false={winterSelected}>
+                                <lightning-icon icon-name="utility:close" alternative-text="Approves All Winter" title="Approves All Winter"></lightning-icon>
+                            </template>
+                            Approves All Winter
+                        </span>
+                    <!--Power Fluence add by vinod (10a) starting.-->
+                        <span>
+                            <template if:true={ApprovesSelected}>
+                                <lightning-icon icon-name="utility:check" alternative-text="Approves All Programs" title="Approves All Programs"></lightning-icon>
+                            </template>
+                            <template if:false={ApprovesSelected}>
+                                <lightning-icon icon-name="utility:close" alternative-text="Approves All Programs" title="Approves All Programs"></lightning-icon>
+                            </template>
+                            Approves All Programs
+                        </span>
+                    <!--Power Fluence add by Vinod (10a) Ending.-->
+
+                    </template>
+                </template>
+                <template if:true={isUpdatingAll}>
+                    <!-- <lightning-spinner alternative-text="Updating Program Authorizations" size="medium"></lightning-spinner> -->
+                    <p>Updating Program Authorizations</p>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+        <!--Displays upon initiation and successful search-->
+        <template if:true={progWrap}>
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item padding="around-small" size="12">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer" >
+                        <!--Update all Button and Parent Checkboxes-->
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                            <!-- <td>&nbsp;</td> -->
+                            <template if:true={progWrap.parentCheckboxes}>
+                                <template for:each={progWrap.parentCheckboxes} for:item="parentCheckbox">
+                                    <td key={parentCheckbox.section}>
+                                        <lightning-input label="Top row checkbox" variant="label-hidden" type="checkbox" value={parentCheckbox.section} onchange={updateColumn} checked ={parentCheckbox.checked} disabled={areChecksDisabled} 
+                                         ></lightning-input></td>
+                               </template>
+                            </template>
+                            <td></td>
+                        </tr>
+                        <!--Table Headers-->
+                        <tr>
+                            <th width="18%" onclick={sortByProgram}><b>Program Name </b><lightning-icon id="programChevron" icon-name={programChevron} size="XX-Small"></lightning-icon></th>
+                            <th onclick={sortByCountry}><b>Country </b><lightning-icon id="countryChevron" icon-name={countryChevron} size="XX-Small"></lightning-icon></th>
+                            <template if:true={progWrap.modifiedSections}>
+                               <template for:each={progWrap.modifiedSections} for:item="section">
+                                    <th key={section}><b>{section}</b></th> 
+                                </template> 
+                            </template>
+                            <th class="" scope="col" style="width:3.25rem">
+                                <div class="slds-truncate slds-assistive-text" title="Actions">Actions</div>
+                            </th>
+                        </tr>
+                        <!--Displays all program Authorizations in pageView-->
+                        <template if:true={pageView}>
+                            <template for:each={pageView} for:item="prog">
+                                <tr key={prog.progAuth.Id} >
+                                    <td role="gridcell">
+                                        <div class="slds-grid slds-grid_vertical-align-center">
+                                            <template if:true={prog.shownInCHART}>
+                                                <div class="slds-icon_container slds-m-left_x-small slds-m-right_xx-small">
+                                                    <lightning-icon icon-name="action:preview" size="xx-small" alternative-text="Temporary CHART Access Granted" title="Temporary CHART Access Granted"></lightning-icon>
+                                                </div>
+                                            </template>
+                                            <div class="slds-truncate" title={prog.programName}> {prog.programName}</div>
+                                        </div>
+                                    </td>
+                                    <td role="gridcell">{prog.programCountry}</td>
+                                    <template if:true={prog.checkboxes}>
+                                        <template for:each={prog.checkboxes} for:item="checkbox"> 
+                                            <template if:true={checkbox.visible}> 
+                                                <td role="gridcell" key={checkbox.section}>
+                                                    <!-- The below line commented by powerfluence. the code was retrieved after IFSA refresh -->
+                                                    <!-- <lightning-input label={checkbox.section} variant="label-hidden" type="checkbox" value={checkbox.section} checked={checkbox.checked} data-prog-name ={prog.programName} onchange={handleCheckboxChange}  disabled={areChecksDisabled}></lightning-input></td> -->
+                                                    <lightning-input data-id={checkbox.section} variant="label-hidden" label={checkbox.section}  type="checkbox" value={checkbox.section} checked={checkbox.checked} data-prog-name ={prog.programName} onchange={handleCheckboxChange}  disabled={areChecksDisabled} ></lightning-input></td>
+                                            </template> 
+                                            <template if:false={checkbox.visible}>
+                                                <td role="gridcell" key={checkbox.section}>-</td>
+                                            </template>
+                                        </template>
+                                    </template>
+                                    <td role="gridcell">
+                                        <template if:true={prog.recordUrl}>
+                                            <lightning-formatted-url value={prog.recordUrl} target="_blank" label="View Program Authorization" tooltip="Opens record in a new tab"></lightning-formatted-url>
+                                            <!-- <a href="\/{prog.progAuth.Id}" target="_blank">View Program Authorization</a> -->
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </table>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="9">
+                    <!--Submit, records per page, paginator-->
+                    <lightning-button-group>
+                        <template if:false={isReadOnly}>
+                            <lightning-button icon-name="utility:save" label="Submit" onclick={updateProgAuths} disabled={loading}></lightning-button>
+                        </template>
+                        <lightning-button-menu alternative-text="Records per page" label={recordPerPageLabel} variant="border" menu-alignment="auto" onselect={handleOnSelect}>
+                            <lightning-menu-item value="10" label="10"></lightning-menu-item>
+                            <lightning-menu-item value="15" label="15"></lightning-menu-item>
+                            <lightning-menu-item value="25" label="25"></lightning-menu-item>
+                            <lightning-menu-item value="50" label="50"></lightning-menu-item>
+                        </lightning-button-menu>
+                    </lightning-button-group>
+                    &nbsp;Current Page: {currentPage}&nbsp;
+                    <template if:true={pageArray}>
+                        <lightning-button-group>
+                            <lightning-button-icon icon-name="utility:chevronleft" onclick={previousPage} disabled={firstPage}></lightning-button-icon>
+                            <template for:each={pageArray} for:item="pageNum">
+                                <lightning-button key={pageNum} name="pageButton" label={pageNum} value={pageNum} onclick={selectPage}></lightning-button>
+                            </template>
+                            <lightning-button-icon icon-name="utility:chevronright" onclick={nextPage} disabled={lastPage}></lightning-button-icon>
+                        </lightning-button-group>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="3">
+                    <div class="slds-text-body_small">
+                        <lightning-icon icon-name="action:preview" size="xx-small" alternative-text="Temporary CHART Access Granted" title="Temporary CHART Access Granted"></lightning-icon> progam with temporary CHART access.
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+        <!--Displays on a failed search term-->
+        <template if:false={progWrap}>
+            <template if:false={loading}>
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <p>Unable to find any Programs or Countries that match that criteria.</p>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </template> 
+    </lightning-card>
+</template>

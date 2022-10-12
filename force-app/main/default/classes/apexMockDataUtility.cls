@@ -1553,10 +1553,13 @@ public without sharing class apexMockDataUtility
         Schema.DescribeSObjectResult R = Application_Item__c.SObjectType.getDescribe();
         List<Application_Item__c> appItems = apexMockDataUtility.createListApplicationItem(studentApplication.Id, R.getRecordTypeInfos());              
         returnMap.put('applicationItem', appItems.get(0));
-        for(Application_Item__c appItem: appItems)
-        {
-            objectsToAdd.add(appItem);
-        }
+        System.debug('sizeeeee'+appItems.size());
+        System.debug('detailss '+R);
+        Id jobId = sObjectBatchUpdater.batchUpdate(appItems, 50, sObjectBatchUpdater.dmlTypes.dmlInsert);
+        // for(Application_Item__c appItem: appItems)
+        // {
+        //     objectsToAdd.add(appItem);
+        // }
         if(options.contains('Support_Personnel'))
         {
             Support_Personnel__c supportPersonnel = apexMockDataUtility.createSupportPersonnel(accounts.get(0), ctc.Id);

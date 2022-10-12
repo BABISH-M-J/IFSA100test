@@ -1,0 +1,9 @@
+.failedLoad{
+    color: darkred;
+    margin-left: 50px;
+}
+
+.succesfullLoad{
+    color: rgb(23, 160, 92);
+    margin-left: 50px;
+}
